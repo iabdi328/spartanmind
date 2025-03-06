@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<level width="20" height="15" tilewidth="48" tileheight="48">
+	<declarations>
+		<given id="i3ad" width="48" height="48" image="ad.png" value="0" />
+		<letter id="i3al" width="48" height="48" image="al.png" value="0" />
+		<given id="i3bd" width="48" height="48" image="bd.png" value="1" />
+		<letter id="i3bl" width="48" height="48" image="bl.png" value="1" />
+		<given id="i3cd" width="48" height="48" image="cd.png" value="2" />
+		<letter id="i3cl" width="48" height="48" image="cl.png" value="2" />
+		<given id="i3dd" width="48" height="48" image="dd.png" value="3" />
+		<letter id="i3dl" width="48" height="48" image="dl.png" value="3" />
+		<given id="i3ed" width="48" height="48" image="ed.png" value="4" />
+		<letter id="i3el" width="48" height="48" image="el.png" value="4" />
+		<given id="i3fd" width="48" height="48" image="fd.png" value="5" />
+		<letter id="i3fl" width="48" height="48" image="fl.png" value="5" />
+		<given id="i3gd" width="48" height="48" image="gd.png" value="6" />
+		<letter id="i3gl" width="48" height="48" image="gl.png" value="6" />
+		<given id="i3hd" width="48" height="48" image="hd.png" value="7" />
+		<letter id="i3hl" width="48" height="48" image="hl.png" value="7" />
+		<given id="i3id" width="48" height="48" image="id.png" value="8" />
+		<letter id="i3il" width="48" height="48" image="il.png" value="8" />
+		<given id="i3jd" width="48" height="48" image="jd.png" value="9" />
+		<letter id="i3jl" width="48" height="48" image="jl.png" value="9" />
+		<given id="i3kd" width="48" height="48" image="kd.png" value="10" />
+		<letter id="i3kl" width="48" height="48" image="kl.png" value="10" />
+		<given id="i3ld" width="48" height="48" image="ld.png" value="11" />
+		<letter id="i3ll" width="48" height="48" image="ll.png" value="11" />
+		<given id="i3md" width="48" height="48" image="md.png" value="12" />
+		<letter id="i3ml" width="48" height="48" image="ml.png" value="12" />
+		<given id="i3nd" width="48" height="48" image="nd.png" value="13" />
+		<letter id="i3nl" width="48" height="48" image="nl.png" value="13" />
+		<given id="i3od" width="48" height="48" image="od.png" value="14" />
+		<letter id="i3ol" width="48" height="48" image="ol.png" value="14" />
+		<given id="i3pd" width="48" height="48" image="pd.png" value="15" />
+		<letter id="i3pl" width="48" height="48" image="pl.png" value="15" />
+		<given id="i3qd" width="48" height="48" image="qd.png" value="16" />
+		<letter id="i3ql" width="48" height="48" image="ql.png" value="16" />
+		<given id="i3rd" width="48" height="48" image="rd.png" value="17" />
+		<letter id="i3rl" width="48" height="48" image="rl.png" value="17" />
+		<given id="i3sd" width="48" height="48" image="sd.png" value="18" />
+		<letter id="i3sl" width="48" height="48" image="sl.png" value="18" />
+		<given id="i3td" width="48" height="48" image="td.png" value="19" />
+		<letter id="i3tl" width="48" height="48" image="tl.png" value="19" />
+		<given id="i3ud" width="48" height="48" image="ud.png" value="20" />
+		<letter id="i3ul" width="48" height="48" image="ul.png" value="20" />
+		<given id="i3vd" width="48" height="48" image="vd.png" value="21" />
+		<letter id="i3vl" width="48" height="48" image="vl.png" value="21" />
+		<given id="i3wd" width="48" height="48" image="wd.png" value="22" />
+		<letter id="i3wl" width="48" height="48" image="wl.png" value="22" />
+		<given id="i3xd" width="48" height="48" image="xd.png" value="23" />
+		<letter id="i3xl" width="48" height="48" image="xl.png" value="23" />
+		<given id="i3yd" width="48" height="48" image="yd.png" value="24" />
+		<letter id="i3yl" width="48" height="48" image="yl.png" value="24" />
+		<given id="i3zd" width="48" height="48" image="zd.png" value="25" />
+		<letter id="i3zl" width="48" height="48" image="zl.png" value="25" />
+		<given id="i3-d" width="48" height="48" image="-d.png" value="-20" />
+		<letter id="i3-l" width="48" height="48" image="-l.png" value="-20" />
+		<player id="i382" width="96" height="96" front="2" head-pivot-angle="0.8" head-pivot-x="30" head-pivot-y="86" image1="chest.png" image2="chest-lid.png" mouth-pivot-angle="1" mouth-pivot-x="96" mouth-pivot-y="35" target-x="72" target-y="24" />
+		<tray id="i384" width="144" height="144" image="tray.png" capacity="4" />
+		<background id="i389" width="960" height="720" image="background0.png" />
+	</declarations>
+	<game col="7" row="4" length="6">18 15 0 17 19 24</game>
+	<items>
+		<background id="i389" col="0.0" row="14.0" />
+		<tray id="i384" col="16.5" row="2.5" />
+		<letter id="i3ql" col="5" row="10" /> 
+		<letter id="i3wl" col="6" row="10" /> 
+		<letter id="i3el" col="7" row="10" /> 
+		<letter id="i3rl" col="8" row="10" /> 
+		<letter id="i3tl" col="9" row="10" />
+		<letter id="i3yl" col="10" row="10" />
+		<letter id="i3ul" col="11" row="10" />
+		<letter id="i3il" col="12" row="10" />
+		<letter id="i3ol" col="13" row="10" />
+		<letter id="i3pl" col="14" row="10" />
+		<letter id="i3al" col="5.5" row="11" />
+		<letter id="i3sl" col="6.5" row="11" />
+		<letter id="i3dl" col="7.5" row="11" />
+		<letter id="i3fl" col="8.5" row="11" />
+		<letter id="i3gl" col="9.5" row="11" />
+		<letter id="i3hl" col="10.5" row="11" />
+		<letter id="i3jl" col="11.5" row="11" />
+		<letter id="i3kl" col="12.5" row="11" />
+		<letter id="i3ll" col="13.5" row="11" />
+		<letter id="i3zl" col="6" row="12" />
+		<letter id="i3xl" col="7" row="12" />
+		<letter id="i3cl" col="8" row="12" />
+		<letter id="i3vl" col="9" row="12" />
+		<letter id="i3bl" col="10" row="12" />
+		<letter id="i3nl" col="11" row="12" />
+		<letter id="i3ml" col="12" row="12" />
+		<letter id="i3-l" col="13" row="12" />
+		<given id="i3sd" col="7" row="4" />
+		<given id="i3pd" col="8" row="4" />
+		<given id="i3rd" col="10" row="4" />
+		<given id="i3td" col="11" row="4" />
+		<given id="i3yd" col="12" row="4" />
+		<player id="i382" col="9" row="8" />
+	</items>
+</level>

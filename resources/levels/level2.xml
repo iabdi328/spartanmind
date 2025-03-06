@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<level width="30" height="20" tilewidth="48" tileheight="48">
+	<declarations>
+		<given id="i2ad" width="48" height="48" image="ad.png" value="0" />
+		<letter id="i2al" width="48" height="48" image="al.png" value="0" />
+		<given id="i2bd" width="48" height="48" image="bd.png" value="1" />
+		<letter id="i2bl" width="48" height="48" image="bl.png" value="1" />
+		<given id="i2cd" width="48" height="48" image="cd.png" value="2" />
+		<letter id="i2cl" width="48" height="48" image="cl.png" value="2" />
+		<given id="i2dd" width="48" height="48" image="dd.png" value="3" />
+		<letter id="i2dl" width="48" height="48" image="dl.png" value="3" />
+		<given id="i2ed" width="48" height="48" image="ed.png" value="4" />
+		<letter id="i2el" width="48" height="48" image="el.png" value="4" />
+		<given id="i2fd" width="48" height="48" image="fd.png" value="5" />
+		<letter id="i2fl" width="48" height="48" image="fl.png" value="5" />
+		<given id="i2gd" width="48" height="48" image="gd.png" value="6" />
+		<letter id="i2gl" width="48" height="48" image="gl.png" value="6" />
+		<given id="i2hd" width="48" height="48" image="hd.png" value="7" />
+		<letter id="i2hl" width="48" height="48" image="hl.png" value="7" />
+		<given id="i2id" width="48" height="48" image="id.png" value="8" />
+		<letter id="i2il" width="48" height="48" image="il.png" value="8" />
+		<given id="i2jd" width="48" height="48" image="jd.png" value="9" />
+		<letter id="i2jl" width="48" height="48" image="jl.png" value="9" />
+		<given id="i2kd" width="48" height="48" image="kd.png" value="10" />
+		<letter id="i2kl" width="48" height="48" image="kl.png" value="10" />
+		<given id="i2ld" width="48" height="48" image="ld.png" value="11" />
+		<letter id="i2ll" width="48" height="48" image="ll.png" value="11" />
+		<given id="i2md" width="48" height="48" image="md.png" value="12" />
+		<letter id="i2ml" width="48" height="48" image="ml.png" value="12" />
+		<given id="i2nd" width="48" height="48" image="nd.png" value="13" />
+		<letter id="i2nl" width="48" height="48" image="nl.png" value="13" />
+		<given id="i2od" width="48" height="48" image="od.png" value="14" />
+		<letter id="i2ol" width="48" height="48" image="ol.png" value="14" />
+		<given id="i2pd" width="48" height="48" image="pd.png" value="15" />
+		<letter id="i2pl" width="48" height="48" image="pl.png" value="15" />
+		<given id="i2qd" width="48" height="48" image="qd.png" value="16" />
+		<letter id="i2ql" width="48" height="48" image="ql.png" value="16" />
+		<given id="i2rd" width="48" height="48" image="rd.png" value="17" />
+		<letter id="i2rl" width="48" height="48" image="rl.png" value="17" />
+		<given id="i2sd" width="48" height="48" image="sd.png" value="18" />
+		<letter id="i2sl" width="48" height="48" image="sl.png" value="18" />
+		<given id="i2td" width="48" height="48" image="td.png" value="19" />
+		<letter id="i2tl" width="48" height="48" image="tl.png" value="19" />
+		<given id="i2ud" width="48" height="48" image="ud.png" value="20" />
+		<letter id="i2ul" width="48" height="48" image="ul.png" value="20" />
+		<given id="i2vd" width="48" height="48" image="vd.png" value="21" />
+		<letter id="i2vl" width="48" height="48" image="vl.png" value="21" />
+		<given id="i2wd" width="48" height="48" image="wd.png" value="22" />
+		<letter id="i2wl" width="48" height="48" image="wl.png" value="22" />
+		<given id="i2xd" width="48" height="48" image="xd.png" value="23" />
+		<letter id="i2xl" width="48" height="48" image="xl.png" value="23" />
+		<given id="i2yd" width="48" height="48" image="yd.png" value="24" />
+		<letter id="i2yl" width="48" height="48" image="yl.png" value="24" />
+		<given id="i2zd" width="48" height="48" image="zd.png" value="25" />
+		<letter id="i2zl" width="48" height="48" image="zl.png" value="25" />
+		<given id="i2-d" width="48" height="48" image="-d.png" value="-20" />
+		<letter id="i2-l" width="48" height="48" image="-l.png" value="-20" />
+		<tray id="i244" width="144" height="144" image="tray.png" capacity="5" />
+		<background id="i246" width="1440" height="960" image="background2.png" />
+		<container id="i247" width="141" height="80" image="present.png" front="present-front.png" />
+		<player id="i250" width="96" height="96" front="1" head-pivot-angle="1.5" head-pivot-x="40" head-pivot-y="86" image1="sparty.png" image2="sparty-mouth.png" mouth-pivot-angle="0.5" mouth-pivot-x="30" mouth-pivot-y="65" target-x="72" target-y="24" />
+	</declarations>
+	<!-- <game col="10" row="6" length="10">0 11 6 14 17 8 19 7 12 18</game> -->
+	<game col="11" row="6" length="8">12 8 2 7 8 6 0 13</game>
+	<items>
+		<background id="i246" col="0.0" row="19.0" />
+		<tray id="i244" col="4" row="7" />
+		<letter id="i2ql" col="10" row="12" />  
+		<letter id="i2wl" col="11" row="12" />  
+		<letter id="i2el" col="12" row="12" />  
+		<letter id="i2rl" col="13" row="12" />  
+		<letter id="i2tl" col="14" row="12" />  
+		<letter id="i2yl" col="15" row="12" />  
+		<letter id="i2ul" col="16" row="12" />  
+		<letter id="i2il" col="17" row="12" />  
+		<letter id="i2ol" col="18" row="12" />  
+		<letter id="i2pl" col="19" row="12" />  
+		<letter id="i2al" col="10.5" row="13" />
+		<letter id="i2sl" col="11.5" row="13" />
+		<letter id="i2dl" col="12.5" row="13" />
+		<letter id="i2fl" col="13.5" row="13" />
+		<letter id="i2gl" col="14.5" row="13" />
+		<letter id="i2hl" col="15.5" row="13" />
+		<letter id="i2jl" col="16.5" row="13" />
+		<letter id="i2kl" col="17.5" row="13" />
+		<letter id="i2ll" col="18.5" row="13" />
+		<letter id="i2zl" col="11" row="14" />  
+		<letter id="i2xl" col="12" row="14" />
+		<letter id="i2cl" col="13" row="14" />
+		<letter id="i2vl" col="14" row="14" />
+		<letter id="i2bl" col="15" row="14" />
+		<letter id="i2nl" col="16" row="14" />
+		<letter id="i2ml" col="17" row="14" />
+		<letter id="i2-l" col="18" row="14" />
+		<given id="i2cd" col="13" row="6" />
+		<container id="i247" col="23.5" row="14">
+			<letter id="i2ul" col="25" row="12.7" />
+			<letter id="i2ol" col="24.8" row="12.9" />
+			<letter id="i2il" col="24.6" row="13.1" />
+			<letter id="i2el" col="25.4" row="13" />
+			<letter id="i2al" col="25.2" row="13.2" />
+		</container>
+		<player id="i250" col="4.5" row="7" />
+	</items>
+</level>

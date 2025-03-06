@@ -1,7 +1,11 @@
-#include <iostream>
+/**
+ * @file main.cpp
+ * @author Raj Ambekar
+ *
+ * wxWidgets Main Function
+ */
 
-int main()
-{
-    std::cout << "Hello, WorlD!" << "Project 1 hi" << std::endl;
-    return 0;
-}
+#include "pch.h"
+#include "SpartanmindApp.h"
+
+wxIMPLEMENT_APP(SpartanmindApp);
