@@ -1,6 +1,6 @@
 /**
  * @file ids.h
- * @author ismail
+ * @author Ismail Abdi
  *
  *
  */

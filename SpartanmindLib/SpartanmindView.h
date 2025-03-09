@@ -9,6 +9,7 @@
 #define PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H
 
 #include "Spartanmind.h"
+#include "Game.h"
 
 /**
  * View class for displaying the Spartanmind game
@@ -19,7 +20,10 @@ private:
 	/// An object that describes our game
 	Spartanmind  mSpartanmind;
 
+	Game mGame; // New: a Game object that handles virtual pixels.
+
 	void OnPaint(wxPaintEvent& event);
+	void OnLeftDown(wxMouseEvent& event);
 public:
 	/**
 	 * Initialize the view

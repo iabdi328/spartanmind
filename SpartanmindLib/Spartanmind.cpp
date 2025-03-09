@@ -1,6 +1,6 @@
 /**
  * @file Spartanmind.cpp
- * @author Raj Ambekar
+ * @author Raj Ambekar, Ismail Abdi
  */
 
 #include "pch.h"

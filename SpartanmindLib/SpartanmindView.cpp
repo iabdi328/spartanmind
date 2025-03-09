@@ -1,6 +1,6 @@
 /**
  * @file SpartanmindView.cpp
- * @author Raj Ambekar
+ * @author Raj Ambekar, Ismail Abdi
  */
 
 #include "pch.h"
@@ -8,15 +8,19 @@
 #include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
+#include <wx/graphics.h>
+
 
 /**
  * Initialize the Spartanmind view class.
  * @param parent The parent window for this class
  */
 void SpartanmindView::Initialize(wxFrame* parent) {
-    Create(parent, wxID_ANY);
+    // Use the wxFULL_REPAINT_ON_RESIZE style.
+    Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     Bind(wxEVT_PAINT, &SpartanmindView::OnPaint, this);
+    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnLeftDown, this);
 }
 
 /**
@@ -25,10 +29,23 @@ void SpartanmindView::Initialize(wxFrame* parent) {
  */
 void SpartanmindView::OnPaint(wxPaintEvent& event) {
     wxAutoBufferedPaintDC dc(this);
-    wxBrush background(*wxWHITE);
+    wxBrush background(*wxBLACK);
     dc.SetBackground(background);
     dc.Clear();
-    mSpartanmind.OnDraw(&dc);
+
+    std::shared_ptr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+    if (!gc) return;
+
+    wxRect rect = GetRect();
+    mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
+}
+
+
+
+void SpartanmindView::OnLeftDown(wxMouseEvent& event) {
+    int x = event.GetX();
+    int y = event.GetY();
+    mGame.OnLeftDown(x, y);
 }
 
 /**
@@ -45,14 +62,12 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
         return false;
     }
 
-    // Validate root element
     wxXmlNode* root = xmlDoc.GetRoot();
     if (root->GetName() != "level") {
         wxLogError("Invalid level file format: %s", filename);
         return false;
     }
 
-    // Extract and log level info
     long width, height, tileWidth, tileHeight;
     root->GetAttribute("width", "0").ToLong(&width);
     root->GetAttribute("height", "0").ToLong(&height);
@@ -62,12 +77,13 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
     wxLogMessage("Loaded level %s: %ldx%ld tiles (%ldx%ld pixels per tile)",
                  filename, width, height, tileWidth, tileHeight);
 
-    // Compute the total pixel dimensions for the level
     int totalWidth = static_cast<int>(width * tileWidth);
     int totalHeight = static_cast<int>(height * tileHeight);
 
-    // Resize this view to match the level dimensions.
     SetSize(totalWidth, totalHeight);
+
+    // Update the virtual dimensions for the game.
+    mGame.SetVirtualDimensions(totalWidth, totalHeight);
 
     // Look for the background element in the <declarations> node.
     wxXmlNode* declarationsNode = root->GetChildren();
@@ -79,10 +95,11 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
                     wxString bgImage = child->GetAttribute("image", "");
                     if (!bgImage.IsEmpty()) {
                         wxString fullBgPath = "resources/images/" + bgImage;
-                        mSpartanmind.SetBackground(fullBgPath);
+                        mSpartanmind.SetBackground(fullBgPath);  // Update Spartanmind's background.
+                        mGame.SetBackground(fullBgPath);           // Also update the Game's background.
                         wxLogMessage("Background updated to: %s", fullBgPath);
                     }
-                    break; // Found background node; exit inner loop.
+                    break;
                 }
                 child = child->GetNext();
             }
@@ -90,15 +107,7 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
         declarationsNode = declarationsNode->GetNext();
     }
 
-    // Force a complete redraw of the view.
     Refresh();
-
-    // Optionally log the level content (if relevant)
-    wxXmlNode* layerNode = root->GetChildren();
-    while (layerNode) {
-        wxLogMessage("Layer name: %s", layerNode->GetName());
-        layerNode = layerNode->GetNext();
-    }
-
     return true;
 }
+
