@@ -15,7 +15,7 @@ Spartanmind::Spartanmind()
 }
 
 /**
- * Draw the aquarium
+ * Draw the Game
  * @param dc The device context to draw on
  */
 void Spartanmind::OnDraw(wxDC *dc)
