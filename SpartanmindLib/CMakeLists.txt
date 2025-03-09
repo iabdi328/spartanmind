@@ -13,7 +13,10 @@ set(SOURCE_FILES
         Game.cpp
         Game.cpp
         Item.cpp
-        Item.h)
+        Item.h
+        Player.cpp
+        Player.h
+)
 
 set(wxBUILD_PRECOMP OFF)
 find_package(wxWidgets COMPONENTS core base xrc html xml REQUIRED)
