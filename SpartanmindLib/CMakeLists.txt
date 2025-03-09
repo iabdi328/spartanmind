@@ -7,7 +7,8 @@ set(SOURCE_FILES
         Spartanmind.cpp
         Spartanmind.h
         SpartanmindView.cpp
-        SpartanmindView.h)
+        SpartanmindView.h
+        ids.h)
 
 set(wxBUILD_PRECOMP OFF)
 find_package(wxWidgets COMPONENTS core base xrc html xml REQUIRED)
