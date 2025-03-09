@@ -13,5 +13,17 @@ int main(int argc, char** argv) {
     wxSetWorkingDirectory(L"..");
     wxInitAllImageHandlers();
 
-    return RUN_ALL_TESTS();
+	// Initialize wxWidgets
+	if (!wxInitialize()) {
+		return -1; // Failed to initialize wxWidgets
+	}
+
+
+	// Run all tests
+	int result = RUN_ALL_TESTS();
+
+	// Uninitialize wxWidgets
+	wxUninitialize();
+	return result;
+
 }

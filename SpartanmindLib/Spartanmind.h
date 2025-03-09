@@ -21,6 +21,9 @@ public:
     Spartanmind();
     void OnDraw(wxDC *dc);
 
+
+	void SetBackground(const wxString& imagePath);
+
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_SPARTANMIND_H

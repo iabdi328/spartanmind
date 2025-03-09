@@ -59,15 +59,39 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
     root->GetAttribute("tilewidth", "48").ToLong(&tileWidth);
     root->GetAttribute("tileheight", "48").ToLong(&tileHeight);
 
-    wxLogMessage("Loaded level %s: %ldx%ld tiles (%ldx%ld pixels per tile)", filename, width, height, tileWidth, tileHeight);
+    wxLogMessage("Loaded level %s: %ldx%ld tiles (%ldx%ld pixels per tile)",
+                 filename, width, height, tileWidth, tileHeight);
 
     // Compute the total pixel dimensions for the level
     int totalWidth = static_cast<int>(width * tileWidth);
     int totalHeight = static_cast<int>(height * tileHeight);
 
     // Resize this view to match the level dimensions.
-    // Note: If this view is managed by a sizer, the sizer might override this size.
     SetSize(totalWidth, totalHeight);
+
+    // Look for the background element in the <declarations> node.
+    wxXmlNode* declarationsNode = root->GetChildren();
+    while (declarationsNode) {
+        if (declarationsNode->GetName() == "declarations") {
+            wxXmlNode* child = declarationsNode->GetChildren();
+            while (child) {
+                if (child->GetName() == "background") {
+                    wxString bgImage = child->GetAttribute("image", "");
+                    if (!bgImage.IsEmpty()) {
+                        wxString fullBgPath = "resources/images/" + bgImage;
+                        mSpartanmind.SetBackground(fullBgPath);
+                        wxLogMessage("Background updated to: %s", fullBgPath);
+                    }
+                    break; // Found background node; exit inner loop.
+                }
+                child = child->GetNext();
+            }
+        }
+        declarationsNode = declarationsNode->GetNext();
+    }
+
+    // Force a complete redraw of the view.
+    Refresh();
 
     // Optionally log the level content (if relevant)
     wxXmlNode* layerNode = root->GetChildren();

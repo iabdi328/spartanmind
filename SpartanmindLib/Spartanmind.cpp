@@ -20,6 +20,21 @@ Spartanmind::Spartanmind()
  */
 void Spartanmind::OnDraw(wxDC *dc)
 {
-    dc->DrawBitmap(*mBackground, 0, 0);
+	// Clear the entire area
+	dc->Clear();
 
+	// Draw the background bitmap at (0,0).
+	// If your background image is smaller than the window, it might not cover all of it.
+	// For a quick fix, ensure your background images match the level dimensions,
+	// or use a fill color to cover any gaps.
+	if (mBackground && mBackground->IsOk())
+	{
+		dc->DrawBitmap(*mBackground, 0, 0, false);
+	}
+	// Additional drawing code...
+}
+
+void Spartanmind::SetBackground(const wxString& imagePath)
+{
+	mBackground = std::make_unique<wxBitmap>(imagePath, wxBITMAP_TYPE_ANY);
 }
