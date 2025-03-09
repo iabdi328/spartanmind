@@ -9,6 +9,8 @@
 #define ITEM_H
 #include <string>
 #include <wx/image.h>
+#include <memory>
+
 
 class wxDC;
 class Spartanmind;
