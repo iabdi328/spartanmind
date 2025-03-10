@@ -2,9 +2,10 @@
 * @file Sparty.cpp
  * @author Emmanuel Koshy
  */
+#include "pch.h"
 #include "Sparty.h"
 #include <cstdio>
-#include "Spartanmind.h"
+
 
 
 Sparty::Sparty(Spartanmind* gameWorld)

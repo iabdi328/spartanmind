@@ -4,6 +4,7 @@
  *
  *
  */
+#include "pch.h"
 #include "Player.h"
 #include <wx/graphics.h>
 #include <wx/geometry.h>
