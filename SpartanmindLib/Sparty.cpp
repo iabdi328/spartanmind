@@ -16,7 +16,10 @@ Sparty::Sparty(Spartanmind* gameWorld)
 
     mAuxAngle = 0; //initialize to zero
 }
-
+void Sparty::move(int x, int y) {
+    // Directly set Sparty's position to the clicked coordinates
+    mLocation = wxPoint2DDouble(x, y);
+}
 
 void Sparty::Headbutt() {
     if (!mIsHeadbutting) {

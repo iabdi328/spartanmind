@@ -35,6 +35,7 @@ private:
     static constexpr double EatingAngle = 1;  // Max mouth open angle
 public:
     Sparty(Spartanmind* gameWorld);
+    void move(int x, int y);
 
     void Update(double elapsedTime) override;  // Update Sparty movement and headbutt
     void Headbutt() override;  // Perform headbutt action
