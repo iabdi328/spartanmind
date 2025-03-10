@@ -1,26 +1,45 @@
 /**
  * @file SpartanmindView.cpp
- * @author Raj Ambekar, Ismail Abdi
+ * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  */
 
 #include "pch.h"
 #include "SpartanmindView.h"
+#include "Spartanmind.h"
 #include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 
+#include "Sparty.h"
 
+// SpartanmindView constructor updated to accept a reference to Spartanmind
+SpartanmindView::SpartanmindView(wxFrame* parent, Spartanmind& spartanmind)
+    : wxWindow(parent, wxID_ANY), mSpartanmind(spartanmind)  // Initialize mSpartanmind with a reference
+{
+    mGameTimer = new wxTimer(this, 1); // Create timer
+
+    Bind(wxEVT_TIMER, &SpartanmindView::OnTimer, this); // Bind timer event
+
+    mGameTimer->Start(16);
+
+    Initialize(parent);
+}
+
+void SpartanmindView::OnTimer(wxTimerEvent& event) {
+    mSpartanmind.Update(0.016);  // Update the game with 16ms, ~60 FPS
+    Refresh();  // Trigger a redraw of the screen
+}
 /**
  * Initialize the Spartanmind view class.
  * @param parent The parent window for this class
  */
 void SpartanmindView::Initialize(wxFrame* parent) {
-    // Use the wxFULL_REPAINT_ON_RESIZE style.
     Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     Bind(wxEVT_PAINT, &SpartanmindView::OnPaint, this);
-    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnLeftDown, this);
+    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnLeftDown, this);  // Mouse left-click event
+    Bind(wxEVT_KEY_DOWN, &SpartanmindView::OnKeyDown, this);    // Spacebar event
 }
 
 /**
@@ -37,15 +56,39 @@ void SpartanmindView::OnPaint(wxPaintEvent& event) {
     if (!gc) return;
 
     wxRect rect = GetRect();
-    mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
+    mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());  // Draw the game world
+    // 2. Draw Sparty (the player character) on top of the background
+    if (mSpartanmind.GetPlayer()) {
+        mSpartanmind.GetPlayer()->Draw(gc.get());  // Draw Sparty using the graphics context
+    }
 }
 
-
-
+/**
+ * Mouse Left Click event - moves Sparty to the clicked position
+ */
 void SpartanmindView::OnLeftDown(wxMouseEvent& event) {
     int x = event.GetX();
     int y = event.GetY();
-    mGame.OnLeftDown(x, y);
+
+    // Update Sparty's target position based on mouse click
+    mSpartanmind.GetPlayer()->SetTarget(x, y);  // Set the new target for Sparty
+
+    // We don't call Update immediately; instead, it will be called during the game loop
+    Refresh();  // Refresh the view to update Sparty's position
+}
+
+/**
+ * Key Down event - handles spacebar for headbutt action
+ */
+void SpartanmindView::OnKeyDown(wxKeyEvent& event) {
+    if (event.GetKeyCode() == WXK_SHIFT) {  // If shift is pressed
+        mSpartanmind.GetPlayer()->Headbutt();  // Perform the headbutt action
+    }
+    else if (event.GetKeyCode() == WXK_SPACE) {
+        mSpartanmind.GetPlayer()->Eat();
+
+    }
+    event.Skip();  // Continue processing other key events
 }
 
 /**
@@ -110,4 +153,3 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
     Refresh();
     return true;
 }
-

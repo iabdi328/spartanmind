@@ -1,11 +1,40 @@
+/**
+* @file Sparty.cpp
+ * @author Emmanuel Koshy
+ */
 #include "Sparty.h"
 #include <cstdio>
+#include "Spartanmind.h"
+
 
 Sparty::Sparty(Spartanmind* gameWorld)
     : Player(gameWorld, L"resources/images/sparty.png", L"resources/images/sparty-mouth.png") {
     // Initialize any Sparty-specific properties
     mBasePivot = wxPoint2DDouble(40, 86);  // Example base pivot (can be adjusted based on XML data)
-    mAuxPivot = wxPoint2DDouble(30, 65);   // Example mouth pivot
+    mAuxPivot = wxPoint2DDouble(30, 65);
+    mLocation = wxPoint2DDouble(100, 100);
+
+    mAuxAngle = 0; //initialize to zero
+}
+
+
+void Sparty::Headbutt() {
+    if (!mIsHeadbutting) {
+        mIsHeadbutting = true;
+        mHeadbuttTimer = HeadbuttDuration;
+        mBaseAngle = HeadbuttAngle;
+        printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
+    }
+}
+
+
+void Sparty::Eat() {
+    if (!mIsEating) {
+        mIsEating = true;
+        mEatingTimer = EatingDuration;
+        mAuxAngle = EatingAngle;  // Rotate the mouth to the max open position
+        printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
+    }
 }
 
 void Sparty::Update(double elapsedTime) {
@@ -22,19 +51,20 @@ void Sparty::Update(double elapsedTime) {
             mIsHeadbutting = false;
         }
     }
-}
 
-void Sparty::Headbutt() {
-    if (!mIsHeadbutting) {
-        mIsHeadbutting = true;
-        mHeadbuttTimer = HeadbuttDuration;
-        printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
+    // Handle Eating Animation (Mouth Opening)
+    if (mIsEating) {
+        mEatingTimer -= elapsedTime;
+        if (mEatingTimer > 0) {
+            mEatingAngle = EatingAngle * (1 - mEatingTimer / EatingDuration);  // Open mouth during eating
+        } else {
+            mEatingAngle = 0;  // Reset mouth angle after eating
+            mIsEating = false;
+            mAuxAngle = 0; // Reset mouth to the closed position after eating
+        }
     }
 }
-
 void Sparty::Draw(wxGraphicsContext* graphics) {
-    // Draw Sparty with the headbutt rotation logic
-
     // First, apply rotation for the entire character (using the base pivot for headbutt)
     graphics->PushState();
 

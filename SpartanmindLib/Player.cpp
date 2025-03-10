@@ -1,3 +1,9 @@
+/**
+* @file Player.cpp
+ * @author  Emmanuel Koshy
+ *
+ *
+ */
 #include "Player.h"
 #include <wx/graphics.h>
 #include <wx/geometry.h>
@@ -17,27 +23,26 @@ void Player::Update(double elapsedTime) {
     // Calculate the vector from the current position to the target
     wxPoint2DDouble direction = mTarget - mLocation;
 
-    // Calculate the length of the direction vector manually
+    // Calculate the distance to the target manually using std::sqrt
     double distanceToTarget = std::sqrt(direction.m_x * direction.m_x + direction.m_y * direction.m_y);
 
+    // If there's distance left to the target
     if (distanceToTarget > 0) {
-        // Normalize the direction to a unit vector (scale to 1)
-        direction.Normalize();
+        // Calculate how far Sparty should move this frame (based on max speed and elapsed time)
+        double moveLength = MaxSpeed * elapsedTime;
 
-        // Calculate the movement per frame based on MaxSpeed and elapsedTime
-        wxPoint2DDouble move = direction * MaxSpeed * elapsedTime;
-
-        // Manually calculate the length of the move vector
-        double moveLength = std::sqrt(move.m_x * move.m_x + move.m_y * move.m_y);
-
-        // Move the player if there's distance left to cover
-        if (distanceToTarget > moveLength) {
-            mLocation += move;  // Move towards the target
+        // If the move length is greater than or equal to the distance to the target, just move to the target
+        if (moveLength >= distanceToTarget) {
+            mLocation = mTarget;  // Set the player at the target position directly
         } else {
-            mLocation = mTarget;  // Set the player at the target position
+            // Otherwise, move towards the target by the calculated move length
+            direction.Normalize();  // Normalize direction to get a unit vector
+            mLocation += direction * moveLength;  // Move Sparty in the direction towards the target
         }
     }
 }
+
+
 
 void Player::Draw(wxGraphicsContext* graphics) {
     // First, apply rotation for the headbutt (using the base pivot)
@@ -81,4 +86,8 @@ void Player::SetTarget(double x, double y) {
 
 void Player::SetPosition(double x, double y) {
     mLocation = wxPoint2DDouble(x, y);  // Set the current position of the player
+}
+void Player::Eat() {
+    // Base implementation (if any)
+    // In this case, we might leave it empty, assuming Sparty will handle the eating logic
 }
