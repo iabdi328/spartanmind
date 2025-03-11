@@ -17,6 +17,9 @@ set(SOURCE_FILES
         Player.cpp
         Player.h
         Sparty.cpp
+        Scoreboard.h
+        Scoreboard.cpp
+        Scoreboard.cpp
 )
 
 set(wxBUILD_PRECOMP OFF)

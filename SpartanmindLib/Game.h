@@ -11,6 +11,7 @@
 #include <wx/graphics.h>   // For wxGraphicsContext
 #include <wx/bitmap.h>     // For wxBitmap
 #include <wx/string.h>     // For wxString
+#include "Scoreboard.h"
 
 /**
  * @class Game
@@ -64,6 +65,8 @@ public:
      */
     void SetBackground(const wxString& imagePath);
 
+    void UpdateScoreboard(double deltaSeconds);
+
 private:
     double mScale;         ///< Scale factor from virtual to screen coordinates.
     double mXOffset;       ///< X offset (screen pixels) to center the playing area.
@@ -71,6 +74,8 @@ private:
     int mVirtualWidth;     ///< Virtual width (e.g., level width in tiles * tile width).
     int mVirtualHeight;    ///< Virtual height (e.g., level height in tiles * tile height).
     std::unique_ptr<wxBitmap> mBackground; ///< Background image for the level.
+
+    Scoreboard mScoreboard;  // The scoreboard instance.
 };
 
 #endif // GAME_H

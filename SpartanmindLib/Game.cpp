@@ -61,6 +61,8 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     // Insert additional drawing code here if needed.
 
     gc->PopState();
+
+    mScoreboard.Draw(gc);
 }
 
 void Game::OnLeftDown(int x, int y) {
@@ -68,4 +70,8 @@ void Game::OnLeftDown(int x, int y) {
     double virtualX = (x - mXOffset) / mScale;
     double virtualY = (y - mYOffset) / mScale;
     wxLogMessage("Mouse clicked at virtual coordinates: (%.2f, %.2f)", virtualX, virtualY);
+}
+
+void Game::UpdateScoreboard(double deltaSeconds) {
+    mScoreboard.Update(deltaSeconds);
 }

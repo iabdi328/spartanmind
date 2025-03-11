@@ -28,6 +28,11 @@ SpartanmindView::SpartanmindView(wxFrame* parent, Spartanmind& spartanmind)
 
 void SpartanmindView::OnTimer(wxTimerEvent& event) {
     mSpartanmind.Update(0.016);  // Update the game with 16ms, ~60 FPS
+
+    // Update the scoreboard (0.016 seconds elapsed).
+    mGame.UpdateScoreboard(0.016);
+
+
     Refresh();  // Trigger a redraw of the screen
 }
 /**
