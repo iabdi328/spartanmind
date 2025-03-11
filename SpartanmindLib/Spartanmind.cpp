@@ -1,17 +1,27 @@
 /**
- * @file Spartanmind.cpp
- * @author Raj Ambekar, Ismail Abdi
+* @file Spartanmind.cpp
+ * @author Raj Ambekar, Emmanuel Koshy
+ *
+ *
  */
-
 #include "pch.h"
 #include "Spartanmind.h"
+#include "Sparty.h"  // Include Sparty header
 
 /**
  * Spartanmind Constructor
  */
 Spartanmind::Spartanmind()
 {
-    mBackground = std::make_unique<wxBitmap>(L"resources/images/background.png", wxBITMAP_TYPE_ANY);
+	mBackground = std::make_unique<wxBitmap>(L"resources/images/background.png", wxBITMAP_TYPE_ANY);
+	mPlayer = new Sparty(this);  // Initialize Sparty (the player character)
+}
+
+/**
+ * Spartanmind Destructor
+ */
+Spartanmind::~Spartanmind() {
+	delete mPlayer;  // Clean up Sparty instance when Spartanmind is destroyed
 }
 
 /**
@@ -24,16 +34,35 @@ void Spartanmind::OnDraw(wxDC *dc)
 	dc->Clear();
 
 	// Draw the background bitmap at (0,0).
-	// If your background image is smaller than the window, it might not cover all of it.
-	// For a quick fix, ensure your background images match the level dimensions,
-	// or use a fill color to cover any gaps.
 	if (mBackground && mBackground->IsOk())
 	{
 		dc->DrawBitmap(*mBackground, 0, 0, false);
 	}
-	// Additional drawing code...
+
+	// Create a wxGraphicsContext from the wxDC
+	wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
+
+	if (gc)
+	{
+		// Draw Sparty on top of the background using wxGraphicsContext
+		mPlayer->Draw(gc);  // Ensure Sparty is drawn after the background
+		delete gc;  // Clean up the wxGraphicsContext
+	}
 }
 
+/**
+ * Update the Game State
+ * @param elapsedTime The time elapsed since the last frame
+ */
+void Spartanmind::Update(double elapsedTime)
+{
+	mPlayer->Update(elapsedTime);  // Update Sparty’s state (movement, actions)
+}
+
+/**
+ * Set the background image for the game
+ * @param imagePath The path to the new background image
+ */
 void Spartanmind::SetBackground(const wxString& imagePath)
 {
 	mBackground = std::make_unique<wxBitmap>(imagePath, wxBITMAP_TYPE_ANY);

@@ -16,6 +16,7 @@ set(SOURCE_FILES
         Item.h
         Player.cpp
         Player.h
+        Sparty.cpp
 )
 
 set(wxBUILD_PRECOMP OFF)

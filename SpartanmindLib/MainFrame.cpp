@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "MainFrame.h"
 #include "SpartanmindView.h"
+#include "Spartanmind.h"
 #include "ids.h"
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
@@ -47,12 +48,12 @@ void MainFrame::Initialize() {
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
 
-    // wxIcon icon;
-    // icon.LoadFile("images/Spartanmind.ico", wxBITMAP_TYPE_ICO);
-    // SetIcon(icon);
+    // Create Spartanmind instance as a member of MainFrame
+    mSpartanmind = new Spartanmind();  // Create the Spartanmind object and store it as a member
 
-    mSpartanmindView = new SpartanmindView();
-    mSpartanmindView->Initialize(this);
+    // Create SpartanmindView and pass the Spartanmind object (not pointer) to it
+    mSpartanmindView = new SpartanmindView(this, *mSpartanmind);  // Pass spartanmind by reference
+    mSpartanmindView->Initialize(this);  // Pass the parent frame
     sizer->Add(mSpartanmindView, 1, wxEXPAND | wxALL);
 
     SetSizer(sizer);
@@ -71,7 +72,6 @@ void MainFrame::Initialize() {
     // Adding levels 0 to 3 based on XML files and setting help strings for hover status text.
     for (int i = 0; i <= 3; i++) {
         wxString levelLabel = wxString::Format("Level %d", i);
-        // The third parameter sets the help string that appears in the status bar.
         levelsMenu->Append(IDM_LOAD_LEVEL0 + i, levelLabel, wxString::Format("Load %s", levelLabel));
     }
 

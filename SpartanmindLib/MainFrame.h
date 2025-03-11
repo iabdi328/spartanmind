@@ -17,6 +17,7 @@
 class MainFrame : public wxFrame
 {
 private:
+	Spartanmind* mSpartanmind = nullptr;
 	SpartanmindView* mSpartanmindView = nullptr;
 
 public:
