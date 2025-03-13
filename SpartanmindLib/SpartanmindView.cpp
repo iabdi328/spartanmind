@@ -11,6 +11,7 @@
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 
+#include "Letter.h"
 #include "Sparty.h"
 
 // SpartanmindView constructor updated to accept a reference to Spartanmind
@@ -65,6 +66,20 @@ void SpartanmindView::OnPaint(wxPaintEvent& event) {
     // 2. Draw Sparty (the player character) on top of the background
     if (mSpartanmind.GetPlayer()) {
         mSpartanmind.GetPlayer()->Draw(gc.get());  // Draw Sparty using the graphics context
+    }
+
+    // Draw all letters stored in Spartanmind
+    int x = 200;
+    int y = 300;
+    for (const auto& letter : mSpartanmind.GetLetters()) {
+        letter->SetLocation(x, y);
+        letter->Draw(&dc);
+        x += 50;
+        if (x == 700)
+        {
+            y += 50;
+            x = 300;
+        }
     }
 }
 
@@ -148,6 +163,20 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
                         wxLogMessage("Background updated to: %s", fullBgPath);
                     }
                     break;
+                } else if (child->GetName() == "letter")
+                {
+                    wxString letterId = child->GetAttribute("id", "");
+                    wxString letterWidth = child->GetAttribute("width", "");
+                    wxString letterHeight = child->GetAttribute("height", "");
+                    wxString letterImage = child->GetAttribute("image", "");
+                    wxString letterValue = child->GetAttribute("value", "");
+                    if (!letterImage.IsEmpty())
+                    {
+                        wxString fullLetterPath = "resources/images/" + letterImage;
+                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
+                        Letter* letter = new Letter(&mSpartanmind, fullLetterPathw, letterId, letterWidth, letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
+                        mSpartanmind.AddLetter(letter);
+                    }
                 }
                 child = child->GetNext();
             }

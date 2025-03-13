@@ -30,7 +30,7 @@ private:
     /// The spartanmind this item is contained in
     Spartanmind   *mSpartanmind;
 
-    // Item location in the aquarium
+    // Item location in the spartanmind
     double  mX = 0;     ///< X location for the center of the item
     double  mY = 0;     ///< Y location for the center of the item
 public:
@@ -68,8 +68,8 @@ public:
 
     /**
    * Test this item to see if it has been clicked on
-   * @param x X location on the aquarium to test in pixels
-   * @param y Y location on the aquarium to test in pixels
+   * @param x X location on the spartanmind to test in pixels
+   * @param y Y location on the spartanmind to test in pixels
    * @return true if clicked on
    */
     bool HitTest(int x, int y);

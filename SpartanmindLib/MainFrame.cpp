@@ -96,6 +96,7 @@ void MainFrame::Initialize() {
  */
 void MainFrame::OnLoadLevel(wxCommandEvent& event)
 {
+    mSpartanmind->ClearLetters();
     int levelIndex = event.GetId() - IDM_LOAD_LEVEL0;
     wxString levelFile = wxString::Format("resources/levels/level%d.xml", levelIndex);
 

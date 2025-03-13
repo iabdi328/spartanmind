@@ -18,12 +18,10 @@ int main(int argc, char** argv) {
 		return -1; // Failed to initialize wxWidgets
 	}
 
-
 	// Run all tests
 	int result = RUN_ALL_TESTS();
 
 	// Uninitialize wxWidgets
 	wxUninitialize();
 	return result;
-
 }

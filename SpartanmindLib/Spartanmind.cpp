@@ -6,6 +6,8 @@
  */
 #include "pch.h"
 #include "Spartanmind.h"
+
+#include "Letter.h"
 #include "Sparty.h"  // Include Sparty header
 
 /**
@@ -66,4 +68,14 @@ void Spartanmind::Update(double elapsedTime)
 void Spartanmind::SetBackground(const wxString& imagePath)
 {
 	mBackground = std::make_unique<wxBitmap>(imagePath, wxBITMAP_TYPE_ANY);
+}
+
+void Spartanmind::AddLetter(Letter* letter)
+{
+	mLetters.push_back(letter);
+}
+
+void Spartanmind::ClearLetters()
+{
+	mLetters.clear();
 }

@@ -20,6 +20,8 @@ set(SOURCE_FILES
         Scoreboard.h
         Scoreboard.cpp
         Scoreboard.cpp
+        Letter.cpp
+        Letter.h
 )
 
 set(wxBUILD_PRECOMP OFF)

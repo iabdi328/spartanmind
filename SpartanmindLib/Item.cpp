@@ -18,9 +18,9 @@ Item::~Item()
 
 /**
  * Constructor
- * @param aquarium The aquarium this item is a member of
+ * @param spartanmind The spartanmind this item is a member of
  */
-Item::Item(Spartanmind *aquarium, const std::wstring &filename) : mSpartanmind(aquarium)
+Item::Item(Spartanmind *spartanmind, const std::wstring &filename) : mSpartanmind(spartanmind)
 {
     mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
     mItemBitmap = make_unique<wxBitmap>(*mItemImage);
@@ -62,6 +62,7 @@ bool Item::HitTest(int x, int y)
  */
 void Item::Draw(wxDC *dc)
 {
+    // cout << "Drawing letters" << endl;
     double wid = mItemBitmap->GetWidth();
     double hit = mItemBitmap->GetHeight();
     dc->DrawBitmap(*mItemBitmap,

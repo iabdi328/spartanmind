@@ -8,6 +8,7 @@
 #ifndef PROJECT1_SPARTANMINDLIB_SPARTANMIND_H
 #define PROJECT1_SPARTANMINDLIB_SPARTANMIND_H
 
+class Letter;
 class Sparty;
 
 /**
@@ -18,7 +19,7 @@ class Spartanmind
 private:
     /// Background image to use
     std::unique_ptr<wxBitmap> mBackground;
-
+    std::vector<Letter*> mLetters;
     Sparty* mPlayer;
 
 public:
@@ -30,7 +31,9 @@ public:
     void Update(double elapsedTime);
 
     void SetBackground(const wxString& imagePath);
-
+    std::vector<Letter*> GetLetters() { return mLetters; }
+    void AddLetter(Letter* letter);
+    void ClearLetters();
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_SPARTANMIND_H

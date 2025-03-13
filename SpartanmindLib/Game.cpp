@@ -59,7 +59,6 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     }
 
     // Insert additional drawing code here if needed.
-
     gc->PopState();
 
     mScoreboard.Draw(gc);
