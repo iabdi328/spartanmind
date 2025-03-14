@@ -24,6 +24,8 @@ set(SOURCE_FILES
         Letter.h
         Chest.cpp
         Chest.h
+        Given.cpp
+        Given.h
 )
 
 set(wxBUILD_PRECOMP OFF)

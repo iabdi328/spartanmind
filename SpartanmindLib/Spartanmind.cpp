@@ -7,6 +7,7 @@
 #include "pch.h"
 #include "Spartanmind.h"
 
+#include "Given.h"
 #include "Letter.h"
 #include "Sparty.h"  // Include Sparty header
 
@@ -78,4 +79,14 @@ void Spartanmind::AddLetter(Letter* letter)
 void Spartanmind::ClearLetters()
 {
 	mLetters.clear();
+}
+
+void Spartanmind::AddGiven(Given* given)
+{
+	mGivens.push_back(given);
+}
+
+void Spartanmind::ClearGivens()
+{
+	mGivens.clear();
 }

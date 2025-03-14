@@ -11,9 +11,11 @@
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 
+#include "Given.h"
 #include "Letter.h"
 #include "Sparty.h"
 
+class Given;
 // SpartanmindView constructor updated to accept a reference to Spartanmind
 SpartanmindView::SpartanmindView(wxFrame* parent, Spartanmind& spartanmind)
     : wxWindow(parent, wxID_ANY), mSpartanmind(spartanmind)  // Initialize mSpartanmind with a reference
@@ -66,6 +68,18 @@ void SpartanmindView::OnPaint(wxPaintEvent& event) {
     for (const auto& letter : mSpartanmind.GetLetters()) {
         letter->SetLocation(x, y);
         letter->Draw(&dc);
+        x += 50;
+        if (x == 700)
+        {
+            y += 50;
+            x = 300;
+        }
+    }
+    int givenX = 200;
+    int givenY = 100;
+    for (const auto& given : mSpartanmind.GetGivens()) {
+        given->SetLocation(x, y);
+        given->Draw(&dc);
         x += 50;
         if (x == 700)
         {
@@ -182,6 +196,20 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
                         Letter* letter = new Letter(&mSpartanmind, fullLetterPathw, letterId, letterWidth, letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
                         mSpartanmind.AddLetter(letter);
+                    }
+                } else if (child->GetName() == "given")
+                {
+                    wxString letterId = child->GetAttribute("id", "");
+                    wxString letterWidth = child->GetAttribute("width", "");
+                    wxString letterHeight = child->GetAttribute("height", "");
+                    wxString letterImage = child->GetAttribute("image", "");
+                    wxString letterValue = child->GetAttribute("value", "");
+                    if (!letterImage.IsEmpty())
+                    {
+                        wxString fullLetterPath = "resources/images/" + letterImage;
+                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
+                        Given* given = new Given(&mSpartanmind, fullLetterPathw, letterId, letterWidth, letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
+                        mSpartanmind.AddGiven(given);
                     }
                 }
                 child = child->GetNext();
