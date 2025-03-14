@@ -137,9 +137,6 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
     root->GetAttribute("tilewidth", "48").ToLong(&tileWidth);
     root->GetAttribute("tileheight", "48").ToLong(&tileHeight);
 
-    wxLogMessage("Loaded level %s: %ldx%ld tiles (%ldx%ld pixels per tile)",
-                 filename, width, height, tileWidth, tileHeight);
-
     int totalWidth = static_cast<int>(width * tileWidth);
     int totalHeight = static_cast<int>(height * tileHeight);
 
@@ -160,7 +157,6 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
                         wxString fullBgPath = "resources/images/" + bgImage;
                         mSpartanmind.SetBackground(fullBgPath);  // Update Spartanmind's background.
                         mGame.SetBackground(fullBgPath);           // Also update the Game's background.
-                        wxLogMessage("Background updated to: %s", fullBgPath);
                     }
                     break;
                 } else if (child->GetName() == "letter")

@@ -1,13 +1,11 @@
 /**
  * @file Item.cpp
  * @author Daniel Conti
+ * @author Raj Ambekar
  */
+
 #include "pch.h"
 #include "Item.h"
-
-
-
-
 
 using namespace std;
 

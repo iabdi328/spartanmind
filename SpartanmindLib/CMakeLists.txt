@@ -22,6 +22,8 @@ set(SOURCE_FILES
         Scoreboard.cpp
         Letter.cpp
         Letter.h
+        Chest.cpp
+        Chest.h
 )
 
 set(wxBUILD_PRECOMP OFF)

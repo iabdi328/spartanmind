@@ -88,7 +88,9 @@ void Player::SetTarget(double x, double y) {
 void Player::SetPosition(double x, double y) {
     mLocation = wxPoint2DDouble(x, y);  // Set the current position of the player
 }
+/*
 void Player::Eat() {
     // Base implementation (if any)
     // In this case, we might leave it empty, assuming Sparty will handle the eating logic
 }
+*/

@@ -6,7 +6,8 @@
  */
 #ifndef PLAYER_H
 #define PLAYER_H
-#pragma once
+
+#include "Item.h"
 #include <wx/geometry.h>
 #include <string>
 #include <wx/graphics.h>
@@ -41,7 +42,7 @@ public:
 
     virtual void Update(double elapsedTime);  // Updates position based on movement
     virtual void Draw(wxGraphicsContext* graphics) = 0;  // Pure virtual for drawing player
-    virtual void Eat();  // Virtual Eat method to be overridden by derived class
+    virtual void Eat() = 0;  // Virtual Eat method to be overridden by derived class
     virtual void Headbutt() = 0;  // Method to perform headbutt animation
 
     // Movement methods
