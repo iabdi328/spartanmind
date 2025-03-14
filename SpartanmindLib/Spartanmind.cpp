@@ -6,10 +6,10 @@
  */
 #include "pch.h"
 #include "Spartanmind.h"
-
 #include "Given.h"
 #include "Letter.h"
-#include "Sparty.h"  // Include Sparty header
+#include "Sparty.h"
+#include "Chest.h"
 
 /**
  * Spartanmind Constructor
@@ -18,6 +18,7 @@ Spartanmind::Spartanmind()
 {
 	mBackground = std::make_unique<wxBitmap>(L"resources/images/background.png", wxBITMAP_TYPE_ANY);
 	mPlayer = new Sparty(this);  // Initialize Sparty (the player character)
+    mChestPlayer = new Chest(this);
 }
 
 /**
@@ -25,6 +26,7 @@ Spartanmind::Spartanmind()
  */
 Spartanmind::~Spartanmind() {
 	delete mPlayer;  // Clean up Sparty instance when Spartanmind is destroyed
+    delete mChestPlayer;
 }
 
 /**
@@ -49,6 +51,7 @@ void Spartanmind::OnDraw(wxDC *dc)
 	{
 		// Draw Sparty on top of the background using wxGraphicsContext
 		mPlayer->Draw(gc);  // Ensure Sparty is drawn after the background
+        mChestPlayer->Draw(gc);
 		delete gc;  // Clean up the wxGraphicsContext
 	}
 }
@@ -60,6 +63,7 @@ void Spartanmind::OnDraw(wxDC *dc)
 void Spartanmind::Update(double elapsedTime)
 {
 	mPlayer->Update(elapsedTime);  // Update Sparty’s state (movement, actions)
+    mChestPlayer->Update(elapsedTime);
 }
 
 /**
@@ -89,4 +93,19 @@ void Spartanmind::AddGiven(Given* given)
 void Spartanmind::ClearGivens()
 {
 	mGivens.clear();
+}
+
+/**
+ * Creates the appropriate player based on the current level
+ * @param level The current game level
+ * @return A pointer to the created player
+ */
+std::shared_ptr<Player> Spartanmind::CreatePlayer(int level) {
+    if (level == 2) {
+        // Create a chest for level 2
+        return std::make_shared<Chest>(this);
+    } else {
+        // Default to Sparty for other levels
+        return std::make_shared<Sparty>(this);
+    }
 }
