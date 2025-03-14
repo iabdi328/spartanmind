@@ -96,6 +96,8 @@ void SpartanmindView::OnTimer(wxTimerEvent& event) {
 void SpartanmindView::OnLeftDown(wxMouseEvent& event) {
     int x = event.GetX();
     int y = event.GetY();
+    // Invert y coordinate because window origin is top-left
+    int gameY = GetClientSize().GetHeight() - y;
 
     // Update Sparty's target position based on mouse click
     mSpartanmind.GetPlayer()->SetTarget(x, y);  // Set the new target for Sparty

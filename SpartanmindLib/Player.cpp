@@ -82,7 +82,7 @@ void Player::Draw(wxGraphicsContext* graphics) {
 
 void Player::SetTarget(double x, double y) {
     // Adjust the target based on target-x and target-y offsets
-    mTarget = wxPoint2DDouble(x - mTargetXOffset, y + (mLocation.m_y - mTargetYOffset));
+    mTarget = wxPoint2DDouble(x - mTargetXOffset, y - mTargetYOffset);
 }
 
 void Player::SetPosition(double x, double y) {
