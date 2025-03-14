@@ -8,15 +8,18 @@
 #ifndef PROJECT1_SPARTANMINDLIB_CHEST_H
 #define PROJECT1_SPARTANMINDLIB_CHEST_H
 
+#include "Player.h"
 
+class Spartanmind;
 /**
  * Class for the Chest Player
  */
-class Chest
+class Chest : public Player
 {
 private:
 
 public:
+    Chest(Spartanmind* gameWorld);
 
 };
 

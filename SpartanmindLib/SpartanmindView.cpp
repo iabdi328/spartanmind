@@ -27,15 +27,7 @@ SpartanmindView::SpartanmindView(wxFrame* parent, Spartanmind& spartanmind)
     Initialize(parent);
 }
 
-void SpartanmindView::OnTimer(wxTimerEvent& event) {
-    mSpartanmind.Update(0.016);  // Update the game with 16ms, ~60 FPS
 
-    // Update the scoreboard (0.016 seconds elapsed).
-    mGame.UpdateScoreboard(0.016);
-
-
-    Refresh();  // Trigger a redraw of the screen
-}
 /**
  * Initialize the Spartanmind view class.
  * @param parent The parent window for this class
@@ -84,7 +76,22 @@ void SpartanmindView::OnPaint(wxPaintEvent& event) {
 }
 
 /**
+ * Defines the timer scoreboard
+ * @param event timerEvent
+ */
+void SpartanmindView::OnTimer(wxTimerEvent& event) {
+    mSpartanmind.Update(0.016);  // Update the game with 16ms, ~60 FPS
+
+    // Update the scoreboard (0.016 seconds elapsed).
+    mGame.UpdateScoreboard(0.016);
+
+
+    Refresh();  // Trigger a redraw of the screen
+}
+
+/**
  * Mouse Left Click event - moves Sparty to the clicked position
+ * @param event
  */
 void SpartanmindView::OnLeftDown(wxMouseEvent& event) {
     int x = event.GetX();
@@ -99,6 +106,7 @@ void SpartanmindView::OnLeftDown(wxMouseEvent& event) {
 
 /**
  * Key Down event - handles spacebar for headbutt action
+ * @param event
  */
 void SpartanmindView::OnKeyDown(wxKeyEvent& event) {
     if (event.GetKeyCode() == WXK_SHIFT) {  // If shift is pressed
@@ -131,14 +139,14 @@ bool SpartanmindView::LoadFromXML(const wxString& filename) {
         return false;
     }
 
-    long width, height, tileWidth, tileHeight;
-    root->GetAttribute("width", "0").ToLong(&width);
-    root->GetAttribute("height", "0").ToLong(&height);
-    root->GetAttribute("tilewidth", "48").ToLong(&tileWidth);
-    root->GetAttribute("tileheight", "48").ToLong(&tileHeight);
+    double width, height, tileWidth, tileHeight;
+    root->GetAttribute("width", "0").ToDouble(&width);
+    root->GetAttribute("height", "0").ToDouble(&height);
+    root->GetAttribute("tilewidth", "48").ToDouble(&tileWidth);
+    root->GetAttribute("tileheight", "48").ToDouble(&tileHeight);
 
-    int totalWidth = static_cast<int>(width * tileWidth);
-    int totalHeight = static_cast<int>(height * tileHeight);
+    int totalWidth = (int)(width * tileWidth);
+    int totalHeight = (int)(height * tileHeight);
 
     SetSize(totalWidth, totalHeight);
 

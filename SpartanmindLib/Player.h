@@ -16,7 +16,9 @@ class Spartanmind;
 
 class Player {
 protected:
+    /// Game
     Spartanmind* mGameWorld;
+
     wxPoint2DDouble mLocation;  // Current position of the player
     wxPoint2DDouble mTarget;    // Target position of the player
     const double MaxSpeed = 400.0;  // Movement speed in pixels per second
@@ -37,7 +39,7 @@ protected:
     double mAuxAngle = 0;   // Auxiliary angle
 
 public:
-    Player(Spartanmind* gameWorld, const std::wstring& image1, const std::wstring& image2);
+    Player(Spartanmind* gameWorld, const wxString& image1, const wxString& image2);
     virtual ~Player() {}
 
     virtual void Update(double elapsedTime);  // Updates position based on movement

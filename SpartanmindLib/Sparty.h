@@ -28,11 +28,11 @@ private:
     wxPoint2DDouble mBasePivot;  // Pivot for whole character during headbutt
     double mBaseAngle = 0;  // Base angle for headbutt
 
-    static constexpr double HeadbuttDuration = 0.5; // Headbutt duration (seconds)
-    static constexpr double HeadbuttAngle = 0.5; // Max angle for headbutt
+    const double HeadbuttDuration = 0.5; // Headbutt duration (seconds)
+    const double HeadbuttAngle = 0.5; // Max angle for headbutt
 
-    static constexpr double EatingDuration = 0.5;  // Eating lasts 0.5s
-    static constexpr double EatingAngle = 1;  // Max mouth open angle
+    const double EatingDuration = 0.5;  // Eating lasts 0.5s
+    const double EatingAngle = 1;  // Max mouth open angle
 public:
     Sparty(Spartanmind* gameWorld);
     void move(int x, int y);
