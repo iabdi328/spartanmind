@@ -2,9 +2,10 @@
 * @file Scoreboard.cpp
  * @author ismail
  */
+
+#include "pch.h"
 #include "Scoreboard.h"
 #include <wx/font.h>
-#include <wx/colour.h>
 
 Scoreboard::Scoreboard()
     : mElapsedTime(0.0)
