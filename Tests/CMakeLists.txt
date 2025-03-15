@@ -7,6 +7,7 @@ set(TEST_FILES
         PlayerTest.cpp
         ScoreboardTest.cpp
         EmptyTest.cpp
+        LevelLoaderTest.cpp
 
 )
 
