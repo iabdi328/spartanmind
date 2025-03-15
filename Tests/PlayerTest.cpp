@@ -55,11 +55,7 @@ protected:
     TestPlayer* mTestPlayer;
 };
 
-/**
- * Test for Player constructor
- */
 TEST_F(PlayerTest, Constructor) {
-    // Verify initial state after construction
     ASSERT_EQ(mTestPlayer->GetLocation().m_x, 0.0);
     ASSERT_EQ(mTestPlayer->GetLocation().m_y, 0.0);
     ASSERT_EQ(mTestPlayer->GetTarget().m_x, 0.0);
@@ -70,16 +66,11 @@ TEST_F(PlayerTest, Constructor) {
     ASSERT_FALSE(mTestPlayer->WasHeadbutted());
 }
 
-/**
- * Test for Player::SetPosition method
- */
 TEST_F(PlayerTest, SetPosition)
 {
-    // Set player to specific position
     double x = 100.0;
     double y = 200.0;
     mTestPlayer->SetPosition(x, y);
 
-    // Verify position was set correctly
     ASSERT_DOUBLE_EQ(mTestPlayer->GetLocation().m_x, x);
 }

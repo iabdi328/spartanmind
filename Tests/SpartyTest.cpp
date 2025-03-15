@@ -13,7 +13,6 @@ using namespace std;
 class SpartyTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Create the game
         mGame = new Spartanmind();
     }
 
@@ -24,9 +23,6 @@ protected:
     Spartanmind* mGame;
 };
 
-/**
- * Test for Sparty constructor
- */
 TEST_F(SpartyTest, Constructor) {
     Sparty* sparty = mGame->GetPlayer();
 
