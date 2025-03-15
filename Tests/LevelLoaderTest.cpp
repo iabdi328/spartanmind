@@ -6,9 +6,9 @@
 #include <pch.h>
 #include "gtest/gtest.h"
 
-#include "LoadLevel.h"
-#include "Spartanmind.h"
-#include "Game.h"
+#include <LoadLevel.h>
+#include <Spartanmind.h>
+#include <Game.h>
 
 using namespace std;
 
