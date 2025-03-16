@@ -23,7 +23,7 @@ void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
  // Convert elapsed time into minutes and seconds.
  int minutes = static_cast<int>(mElapsedTime) / 60;
  int seconds = static_cast<int>(mElapsedTime) % 60;
- wxString timeStr = wxString::Format("%02d:%02d", minutes, seconds);
+ wxString timeStr = wxString::Format("%d:%02d", minutes, seconds);
 
  // Draw the time at the fixed virtual position (ScoreboardTopLeft).
  gc->DrawText(timeStr, ScoreboardTopLeft.x, ScoreboardTopLeft.y);
