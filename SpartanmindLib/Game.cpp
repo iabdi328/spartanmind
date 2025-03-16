@@ -34,8 +34,8 @@ void Game::SetBackground(const wxString& imagePath) {
 
 void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) {
     // Calculate scale factors based on the virtual dimensions.
-    double scaleX = static_cast<double>(width) / mVirtualWidth;
-    double scaleY = static_cast<double>(height) / mVirtualHeight;
+    double scaleX = (double)(width) / mVirtualWidth;
+    double scaleY = (double)(height) / mVirtualHeight;
     mScale = std::min(scaleX, scaleY);
 
     // Calculate offsets to center the virtual playing area.

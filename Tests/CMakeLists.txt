@@ -2,6 +2,12 @@ project(Tests)
 
 set(TEST_FILES
         gtest_main.cpp
+        SpartanmindTest.cpp
+        SpartyTest.cpp
+        PlayerTest.cpp
+        ScoreboardTest.cpp
+        EmptyTest.cpp
+        LevelLoaderTest.cpp
 
 )
 

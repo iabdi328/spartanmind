@@ -9,7 +9,6 @@
 #define LETTER_H
 
 #include "Item.h"
-#include "pch.h"
 
 class Letter : public Item {
 public:

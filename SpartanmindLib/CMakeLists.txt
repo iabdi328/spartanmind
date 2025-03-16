@@ -26,6 +26,8 @@ set(SOURCE_FILES
         Chest.h
         Given.cpp
         Given.h
+        LoadLevel.cpp
+        LoadLevel.h
 )
 
 set(wxBUILD_PRECOMP OFF)

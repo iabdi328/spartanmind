@@ -2,7 +2,8 @@
  * @file Letter.cpp
  * @author Daniel Conti
  */
- 
+
+#include "pch.h"
 #include "Letter.h"
 
 
@@ -14,5 +15,5 @@ Letter::Letter(Spartanmind* spartanmind, const std::wstring& filename,
       mId(id), mWidth(width), mHeight(height),
       mImagePath(image), mValue(value), mCol(col), mRow(row)
 {
-    std::cout << "Letter created: " << mValue << std::endl;
+    //std::cout << "Letter created: " << mValue << std::endl;
 }

@@ -40,8 +40,8 @@ void MainFrame::Initialize() {
         }
     }
 
-    int totalWidth = static_cast<int>(width * tileWidth);
-    int totalHeight = static_cast<int>(height * tileHeight);
+    int totalWidth = (int)(width * tileWidth);
+    int totalHeight = (int)(height * tileHeight);
 
     // Create the main frame with the calculated level dimensions.
     Create(nullptr, wxID_ANY, "Spartanmind", wxDefaultPosition, wxSize(totalWidth, totalHeight));
@@ -117,8 +117,8 @@ void MainFrame::OnLoadLevel(wxCommandEvent& event)
                 root->GetAttribute("tileheight", "48").ToLong(&tileHeight);
             }
         }
-        int totalWidth = static_cast<int>(width * tileWidth);
-        int totalHeight = static_cast<int>(height * tileHeight);
+        int totalWidth = (int)(width * tileWidth);
+        int totalHeight = (int)(height * tileHeight);
 
         // Update the client size of the main frame to match the level's dimensions.
         SetClientSize(totalWidth, totalHeight);
