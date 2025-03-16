@@ -28,6 +28,12 @@ set(SOURCE_FILES
         Given.h
         LoadLevel.cpp
         LoadLevel.h
+        Tray.cpp
+        Tray.h
+        Container.cpp
+        Container.h
+        ItemVisitor.cpp
+        ItemVisitor.h
 )
 
 set(wxBUILD_PRECOMP OFF)

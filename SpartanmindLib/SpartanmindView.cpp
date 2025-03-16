@@ -13,6 +13,7 @@
 #include "Given.h"
 #include "Letter.h"
 #include "Sparty.h"
+#include "Tray.h"
 
 /**
  * Constructor. Creates the wxWindow and starts the game timer.
@@ -96,6 +97,19 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     {
         given->SetLocation(x, y);
         given->Draw(&dc);
+        x += 50;
+        if (x == 700)
+        {
+            y += 50;
+            x = 300;
+        }
+    }
+    x = 800;
+    y = 144;
+    for (const auto& tray : mSpartanmind->GetTray())
+    {
+        tray->SetLocation(x, y);
+        tray->Draw(&dc);
         x += 50;
         if (x == 700)
         {
@@ -263,6 +277,39 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                         mSpartanmind->AddGiven(given);
                     }
                 }
+                else if (child->GetName() == "tray")
+                {
+                    wxString trayId = child->GetAttribute("id", "");
+                    wxString trayWidth = child->GetAttribute("width", "");
+                    wxString trayHeight = child->GetAttribute("height", "");
+                    wxString trayImage = child->GetAttribute("image", "");
+                    wxString trayValue = child->GetAttribute("capacity", "");
+                    if(!trayImage.IsEmpty())
+                    {
+                        wxString fullTrayPath = "resources/images/" + trayImage;
+                        std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
+                        Tray *tray = new Tray(mSpartanmind, fullTrayPathw, trayId, trayWidth,
+                                              trayHeight, fullTrayPath, trayValue, trayWidth, trayWidth);
+                        mSpartanmind->AddTray(tray);
+                    }
+                }
+                else if (child->GetName() == "container")
+                {
+                    wxString containerId = child->GetAttribute("id", "");
+                    wxString containerWidth = child->GetAttribute("width", "");
+                    wxString containerHeight = child->GetAttribute("height", "");
+                    wxString containerImage = child->GetAttribute("image", "");
+                    wxString containerValue = child->GetAttribute("capacity", "");
+                    if(!containerImage.IsEmpty())
+                    {
+                        wxString fullcontainerPath = "resources/images/" + containerImage;
+                        std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
+                        Container *container = new Container(mSpartanmind, fullcontainerPathw, containerId, containerWidth,
+                                              containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
+                        mSpartanmind->AddContainer(container);
+                    }
+                }
+
                 child = child->GetNext();
             }
         }

@@ -23,7 +23,7 @@ wxEND_EVENT_TABLE()
  */
 void MainFrame::Initialize() {
     // Default level file (level0) to determine the initial window size.
-    wxString level0File = "resources/levels/level0.xml";
+    wxString level0File = "resources/levels/level1.xml";
     long width = 20, height = 15, tileWidth = 48, tileHeight = 48; // Default values
     {
         wxXmlDocument xmlDoc;
@@ -98,6 +98,8 @@ void MainFrame::OnLoadLevel(wxCommandEvent& event)
 {
     mSpartanmind->ClearLetters();
     mSpartanmind->ClearGivens();
+    mSpartanmind->ClearTrays();
+    mSpartanmind->ClearContainers();
     int levelIndex = event.GetId() - IDM_LOAD_LEVEL0;
     wxString levelFile = wxString::Format("resources/levels/level%d.xml", levelIndex);
 

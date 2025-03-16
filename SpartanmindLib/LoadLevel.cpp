@@ -7,6 +7,8 @@
 #include "LoadLevel.h"
 #include "Letter.h"
 #include "Given.h"
+#include "Tray.h"
+#include "Container.h"
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 
@@ -91,6 +93,36 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                         Given* given = new Given(&mSpartanmind, fullLetterPathw, letterId, letterWidth,
                                                  letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
                         mSpartanmind.AddGiven(given);
+                    }
+                }
+                else if (child->GetName() == "tray") {
+                    wxString trayId = child->GetAttribute("id", "");
+                    wxString trayWidth = child->GetAttribute("width", "");
+                    wxString trayHeight = child->GetAttribute("height", "");
+                    wxString trayImage = child->GetAttribute("image", "");
+                    wxString trayCapacity = child->GetAttribute("capacity", "");
+                    if (!trayImage.IsEmpty()) {
+                        wxString fullTrayPath = "resources/images/" + trayImage;
+                        std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
+                        Tray* tray = new Tray(&mSpartanmind, fullTrayPathw, trayId, trayWidth,
+                                                 trayHeight, fullTrayPath, trayCapacity, trayWidth, trayWidth);
+                        mSpartanmind.AddTray(tray);
+                    }
+                }
+                else if (child->GetName() == "container")
+                {
+                    wxString containerId = child->GetAttribute("id", "");
+                    wxString containerWidth = child->GetAttribute("width", "");
+                    wxString containerHeight = child->GetAttribute("height", "");
+                    wxString containerImage = child->GetAttribute("image", "");
+                    wxString containerValue = child->GetAttribute("capacity", "");
+                    if(!containerImage.IsEmpty())
+                    {
+                        wxString fullcontainerPath = "resources/images/" + containerImage;
+                        std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
+                        Container *container = new Container(&mSpartanmind, fullcontainerPathw, containerId, containerWidth,
+                                                             containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
+                        mSpartanmind.AddContainer(container);
                     }
                 }
                 child = child->GetNext();

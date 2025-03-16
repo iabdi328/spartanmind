@@ -90,3 +90,19 @@ void Spartanmind::ClearGivens()
 {
 	mGivens.clear();
 }
+void Spartanmind::AddTray(Tray* tray)
+{
+    mTray.push_back(tray);
+}
+void Spartanmind::ClearTrays()
+{
+    mTray.clear();
+}
+void Spartanmind::AddContainer(Container* container)
+{
+    mContainer.push_back(container);
+}
+void Spartanmind::ClearContainers()
+{
+    mGivens.clear();
+}
