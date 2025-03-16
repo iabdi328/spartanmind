@@ -1,6 +1,8 @@
 /**
- * @file SpartanmindView.cpp
+* @file SpartanmindView.cpp
+ * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  */
+
 
 #include "pch.h"
 #include "SpartanmindView.h"

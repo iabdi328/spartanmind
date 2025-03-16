@@ -1,6 +1,6 @@
 /**
 * @file Scoreboard.cpp
- * @author ismail
+ * @author Ismail Abdi
  */
 #include "Scoreboard.h"
 #include <wx/font.h>

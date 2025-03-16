@@ -1,6 +1,6 @@
 /**
  * @file Scoreboard.h
- * @author ismail
+ * @author Ismail Abdi
  *
  *
  */
