@@ -15,9 +15,14 @@ Game::Game()
     : mScale(1.0),
       mXOffset(0),
       mYOffset(0),
-      mVirtualWidth(960),   // Default virtual size (e.g., level0: 20 * 48)
-      mVirtualHeight(720)   // Default virtual size (e.g., level0: 15 * 48)
+      mVirtualWidth(1150),   // Updated default width.
+      mVirtualHeight(800)    // Updated default height.
 {
+    Initialize();
+}
+
+void Game::Initialize() {
+    // (You can add additional initialization here if needed.)
 }
 
 void Game::SetVirtualDimensions(int virtualWidth, int virtualHeight) {
@@ -34,8 +39,8 @@ void Game::SetBackground(const wxString& imagePath) {
 
 void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) {
     // Calculate scale factors based on the virtual dimensions.
-    double scaleX = (double)(width) / mVirtualWidth;
-    double scaleY = (double)(height) / mVirtualHeight;
+    double scaleX = static_cast<double>(width) / mVirtualWidth;
+    double scaleY = static_cast<double>(height) / mVirtualHeight;
     mScale = std::min(scaleX, scaleY);
 
     // Calculate offsets to center the virtual playing area.
@@ -48,7 +53,6 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
 
     // Draw the background image if available.
     if (mBackground && mBackground->IsOk()) {
-        // Draw the background image to cover the entire virtual playing area.
         gc->DrawBitmap(*mBackground, 0, 0, mVirtualWidth, mVirtualHeight);
     }
     else {
@@ -57,8 +61,6 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
         gc->SetBrush(brush);
         gc->DrawRectangle(0, 0, mVirtualWidth, mVirtualHeight);
     }
-
-    // Insert additional drawing code here if needed.
     gc->PopState();
 
     mScoreboard.Draw(gc);

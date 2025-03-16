@@ -15,6 +15,7 @@ wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MainFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
     EVT_MENU_RANGE(IDM_LOAD_LEVEL0, IDM_LOAD_LEVEL0 + 3, MainFrame::OnLoadLevel)
+    EVT_CLOSE(MainFrame::OnClose)
 wxEND_EVENT_TABLE()
 
 /**
@@ -40,8 +41,8 @@ void MainFrame::Initialize() {
         }
     }
 
-    int totalWidth = (int)(width * tileWidth);
-    int totalHeight = (int)(height * tileHeight);
+    int totalWidth = static_cast<int>(width * tileWidth);
+    int totalHeight = static_cast<int>(height * tileHeight);
 
     // Create the main frame with the calculated level dimensions.
     Create(nullptr, wxID_ANY, "Spartanmind", wxDefaultPosition, wxSize(totalWidth, totalHeight));
@@ -53,7 +54,6 @@ void MainFrame::Initialize() {
 
     // Create SpartanmindView and pass the Spartanmind object (not pointer) to it
     mSpartanmindView = new SpartanmindView(this, *mSpartanmind);  // Pass spartanmind by reference
-    mSpartanmindView->Initialize(this);  // Pass the parent frame
     sizer->Add(mSpartanmindView, 1, wxEXPAND | wxALL);
 
     SetSizer(sizer);
@@ -117,8 +117,8 @@ void MainFrame::OnLoadLevel(wxCommandEvent& event)
                 root->GetAttribute("tileheight", "48").ToLong(&tileHeight);
             }
         }
-        int totalWidth = (int)(width * tileWidth);
-        int totalHeight = (int)(height * tileHeight);
+        int totalWidth = static_cast<int>(width * tileWidth);
+        int totalHeight = static_cast<int>(height * tileHeight);
 
         // Update the client size of the main frame to match the level's dimensions.
         SetClientSize(totalWidth, totalHeight);

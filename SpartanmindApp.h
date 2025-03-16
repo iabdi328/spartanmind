@@ -1,6 +1,6 @@
 /**
- * @file SpartanmindApp.h
- * @author Raj Ambekar
+* @file SpartanmindApp.h
+ * @author Raj Ambekar, Ismail Abdi
  *
  *
  */
@@ -13,7 +13,8 @@ class SpartanmindApp : public wxApp
 private:
 
 public:
-    bool OnInit() override;
+	bool OnInit() override;
+	int OnExit();
 
 };
 

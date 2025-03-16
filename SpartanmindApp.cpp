@@ -1,6 +1,6 @@
 /**
- * @file SpartanmindApp.cpp
- * @author Raj Ambekar
+* @file SpartanmindApp.cpp
+ * @author Raj Ambekar, Ismail Abdi
  */
 
 #include "pch.h"
@@ -13,15 +13,20 @@
  */
 bool SpartanmindApp::OnInit()
 {
-    if (!wxApp::OnInit())
-        return false;
+	if (!wxApp::OnInit())
+		return false;
 
-    // Add image type handlers
-    wxInitAllImageHandlers();
+	// Add image type handlers
+	wxInitAllImageHandlers();
 
-    auto frame = new MainFrame();
-    frame->Initialize();
-    frame->Show(true);
+	MainFrame* frame = new MainFrame();
+	frame->Initialize();
+	frame->Show(true);
 
-    return true;
+	return true;
+}
+
+int SpartanmindApp::OnExit()
+{
+	return wxApp::OnExit();
 }

@@ -32,6 +32,9 @@ private:
 public:
     /// Constructor
     Game();
+    ~Game() = default;
+
+    void Initialize();
 
     /**
      * This function draws the background image (or a fallback red rectangle if unavailable)
