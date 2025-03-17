@@ -110,7 +110,7 @@ bool Sparty::HitTest(int x, int y) const {
     //    p_world = mLocation + R(mHeadAngle) * (p_local + mBasePivot) - mBasePivot
     // We invert this process.
 
-    // Compute the vector from Sparty's position (world space) to the hit point.
+    // lol Compute the vector from Sparty's position (world space) to the hit point.
     double qx = x - mLocation.m_x;
     double qy = y - mLocation.m_y;
 

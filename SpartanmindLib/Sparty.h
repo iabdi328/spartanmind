@@ -40,7 +40,7 @@ public:
     void Headbutt() override;  // Perform headbutt action
     void Eat() override;      // Perform eating action
     void Draw(wxGraphicsContext* graphics) override;  // Draw Sparty
-    bool HitTest(int x, int y) const;
+    bool HitTest(int x, int y) const; // hittest
 };
 
 
