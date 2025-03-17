@@ -104,3 +104,29 @@ void Sparty::Draw(wxGraphicsContext* graphics) {
     // Restore the overall graphics state
     graphics->PopState();
 }
+bool Sparty::HitTest(int x, int y) const {
+    // To test for a hit, we reverse the transformations applied in Draw().
+    // Forward transformation:
+    //    p_world = mLocation + R(mHeadAngle) * (p_local + mBasePivot) - mBasePivot
+    // We invert this process.
+
+    // Compute the vector from Sparty's position (world space) to the hit point.
+    double qx = x - mLocation.m_x;
+    double qy = y - mLocation.m_y;
+
+    // Apply the inverse rotation: R(-mHeadAngle)
+    // Note: cos(-a) = cos(a) and sin(-a) = -sin(a)
+    double cosAngle = cos(mHeadAngle);
+    double sinAngle = sin(mHeadAngle);
+
+    // Shift the point by mBasePivot before rotating, then undo the pivot shift
+    double localX = cosAngle * (qx + mBasePivot.m_x) + sinAngle * (qy + mBasePivot.m_y) - mBasePivot.m_x;
+    double localY = -sinAngle * (qx + mBasePivot.m_x) + cosAngle * (qy + mBasePivot.m_y) - mBasePivot.m_y;
+
+    // Now check if the resulting local coordinates lie within the head image's rectangle
+    // (assumed to be at (0,0) with width and height 96)
+    if (localX >= 0 && localX <= 96 && localY >= 0 && localY <= 96) {
+        return true;
+    }
+    return false;
+}
