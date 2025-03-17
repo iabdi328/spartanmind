@@ -1,6 +1,6 @@
 /**
  * @file SpartyTest.cpp
- * @author Raj Ambekar
+ * @author raj, Emmanuel koshy
  */
 
 #include <pch.h>
