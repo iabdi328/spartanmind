@@ -4,8 +4,6 @@ set(SOURCE_FILES
         pch.h
         MainFrame.cpp
         MainFrame.h
-        Spartanmind.cpp
-        Spartanmind.h
         SpartanmindView.cpp
         SpartanmindView.h
         ids.h

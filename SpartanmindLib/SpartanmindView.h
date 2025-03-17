@@ -6,7 +6,6 @@
 #define PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H
 
 #include <wx/wx.h>
-#include "Spartanmind.h"
 #include "Game.h"
 #include <wx/stopwatch.h>
 

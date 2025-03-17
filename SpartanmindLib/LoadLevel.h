@@ -9,7 +9,6 @@
 #define PROJECT1_SPARTANMINDLIB_LOADLEVEL_H
 
 #include <wx/string.h>
-#include "Spartanmind.h"
 #include "Game.h"
 
 /**

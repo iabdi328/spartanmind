@@ -6,7 +6,6 @@
 #include "pch.h"
 #include "MainFrame.h"
 #include "SpartanmindView.h"
-#include "Spartanmind.h"
 #include "ids.h"
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
