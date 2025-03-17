@@ -5,6 +5,7 @@
  *
  */
 
+/*
 #ifndef PROJECT1_SPARTANMINDLIB_SPARTANMIND_H
 #define PROJECT1_SPARTANMINDLIB_SPARTANMIND_H
 
@@ -14,10 +15,13 @@
 
 class Letter;
 class Sparty;
+*/
 
 /**
  * Detailing the General Base App
  */
+
+/*
 class Spartanmind
 {
 private:
@@ -53,3 +57,4 @@ public:
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_SPARTANMIND_H
+*/

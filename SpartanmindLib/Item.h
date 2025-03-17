@@ -13,6 +13,7 @@
 
 class wxDC;
 class Spartanmind;
+class Game;
 
 class Item {
 
@@ -24,13 +25,13 @@ private:
  std::unique_ptr<wxBitmap> mItemBitmap;
 
  /// The spartanmind this item is contained in
- Spartanmind   *mSpartanmind;
+ Game* mGame;
 
  /// Item location in the spartanmind
  double  mX = 0;     ///< X location for the center of the item
  double  mY = 0;     ///< Y location for the center of the item
 protected:
- Item(Spartanmind* spartanmind, const std::wstring &filename);
+ Item(Game* spartanmind, const std::wstring &filename);
 
 public:
 

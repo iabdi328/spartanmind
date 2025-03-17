@@ -1,6 +1,6 @@
 /**
  * @file Game.h
- * @author Ismail Abdi
+ * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  *
  */
 
@@ -12,14 +12,21 @@
 #include <wx/bitmap.h>
 #include <wx/string.h>
 #include "Scoreboard.h"
+#include "Given.h"
+#include "Tray.h"
+#include "Container.h"
+
+class Letter;
+class Sparty;
 
 /**
  * This class is responsible for drawing the game world using a virtual coordinate system,
- * scaling the view appropriately, and handling mouse input.
+ * scaling the view appropriately, handling mouse input, and managing game state.
  */
 class Game
 {
 private:
+    // Display and scaling properties
     double mScale;         ///< Scale factor from virtual to screen coordinates.
     double mXOffset;       ///< X offset (screen pixels) to center the playing area.
     double mYOffset;       ///< Y offset (screen pixels) to center the playing area.
@@ -27,14 +34,31 @@ private:
     int mVirtualHeight;    ///< Virtual height (e.g., level height in tiles * tile height).
     std::unique_ptr<wxBitmap> mBackground; ///< Background image for the level.
 
-    Scoreboard mScoreboard;  // The scoreboard instance.
+    // Game components
+    Scoreboard mScoreboard;  ///< The scoreboard instance.
+    Sparty* mPlayer;         ///< The player character (Sparty)
+
+    // Game elements collections
+    std::vector<Letter*> mLetters;     ///< Collection of letters in the game
+    std::vector<Given*> mGivens;       ///< Collection of given letters/clues
+    std::vector<Tray*> mTray;          ///< Collection of letter trays
+    std::vector<Container*> mContainer; ///< Collection of containers
 
 public:
-    /// Constructor
+    /// Constructor and Destructor
     Game();
-    ~Game() = default;
+    ~Game();
 
+    /**
+     * Initialize the game components
+     */
     void Initialize();
+
+    /**
+     * Update the Game State
+     * @param deltaSeconds The time elapsed since the last frame
+     */
+    void Update(double deltaSeconds);
 
     /**
      * This function draws the background image (or a fallback red rectangle if unavailable)
@@ -45,13 +69,6 @@ public:
      * @param height Height of the window.
      */
     void OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height);
-
-    /**
-     * This function converts screen coordinates to virtual coordinates and logs the click.
-     * @param x X location of the mouse click.
-     * @param y Y location of the mouse click.
-     */
-    void OnLeftDown(int x, int y);
 
     /**
      * Set Virtual Pixels
@@ -72,6 +89,31 @@ public:
      */
     void UpdateScoreboard(double deltaSeconds);
 
+    /**
+     * Get the player character
+     * @return Pointer to the Sparty object
+     */
+    Sparty* GetPlayer() { return mPlayer; }
+
+    // Letter management methods
+    std::vector<Letter*> GetLetters() { return mLetters; }
+    void AddLetter(Letter* letter);
+    void ClearLetters();
+
+    // Given management methods
+    std::vector<Given*> GetGivens() { return mGivens; }
+    void AddGiven(Given* given);
+    void ClearGivens();
+
+    // Tray management methods
+    std::vector<Tray*> GetTray() { return mTray; }
+    void AddTray(Tray* tray);
+    void ClearTrays();
+
+    // Container management methods
+    std::vector<Container*> GetContainer() { return mContainer; }
+    void AddContainer(Container* container);
+    void ClearContainers();
 };
 
 #endif // GAME_H

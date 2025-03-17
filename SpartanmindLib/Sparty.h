@@ -8,8 +8,7 @@
 #define SPARTY_H
 #pragma once
 #include "Player.h"
-#include "Spartanmind.h"
-class Spartanmind;
+#include "Game.h"
 
 class Sparty : public Player
 {
@@ -34,7 +33,7 @@ private:
     const double EatingDuration = 0.5;  // Eating lasts 0.5s
     const double EatingAngle = 1;  // Max mouth open angle
 public:
-    Sparty(Spartanmind* gameWorld);
+    Sparty(Game* gameWorld);
     void move(int x, int y);
 
     void Update(double elapsedTime) override;  // Update Sparty movement and headbutt

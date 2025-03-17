@@ -27,7 +27,7 @@ private:
 
 public:
 
-    Container(Spartanmind* spartanmind, const std::wstring& filename,
+    Container(Game* game, const std::wstring& filename,
     const wxString& id, wxString width, wxString height,
     const wxString& image, wxString value, wxString col, wxString row);
 };

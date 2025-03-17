@@ -15,7 +15,7 @@ const wxString chestLidImage = L"resources/images/chest-lid.png";
  * Constructor
  * @param gameWorld game the Chest is member of
  */
-Chest::Chest(Spartanmind* gameWorld) : Player(gameWorld, chestBodyImage, chestLidImage)
+Chest::Chest(Game* gameWorld) : Player(gameWorld, chestBodyImage, chestLidImage)
 {
 
 }

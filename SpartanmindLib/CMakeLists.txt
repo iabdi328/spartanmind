@@ -34,6 +34,8 @@ set(SOURCE_FILES
         Container.h
         ItemVisitor.cpp
         ItemVisitor.h
+        Declaration.cpp
+        Declaration.h
 )
 
 set(wxBUILD_PRECOMP OFF)

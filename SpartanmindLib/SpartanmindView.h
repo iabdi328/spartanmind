@@ -17,8 +17,8 @@ class SpartanmindView : public wxWindow
 {
 private:
 	wxTimer* mGameTimer = nullptr; ///< Timer for periodic updates
-	Game mGame;                    ///< Game object for virtual-pixel handling
-	Spartanmind* mSpartanmind;     ///< Pointer to the Spartanmind game logic
+	Game* mGame;                    ///< Game object for virtual-pixel handling
+	//Spartanmind* mSpartanmind;     ///< Pointer to the Spartanmind game logic
 
 	// Event handlers
 	void OnPaint(wxPaintEvent& event);
@@ -33,7 +33,7 @@ public:
 	 * @param parent The parent window.
 	 * @param spartanmind Reference to the Spartanmind game logic.
 	 */
-	SpartanmindView(wxWindow* parent, Spartanmind& spartanmind);
+	SpartanmindView(wxWindow* parent, Game& game);
 
 	/**
 	 * Destructor. Stops and cleans up the timer.

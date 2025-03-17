@@ -11,14 +11,14 @@
 #ifndef PROJECT1_SPARTANMINDLIB_MAINFRAME_H
 #define PROJECT1_SPARTANMINDLIB_MAINFRAME_H
 
-class SpartanmindView;
+//class SpartanmindView;
 /**
  * The top-level (main) frame of the application
  */
 class MainFrame : public wxFrame
 {
 private:
-	Spartanmind* mSpartanmind;       // Pointer to the game logic object
+	Game* mGame;       // Pointer to the game logic object
 	SpartanmindView* mSpartanmindView; // Pointer to the game view
 
 public:

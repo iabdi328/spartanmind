@@ -8,7 +8,7 @@
 
 
 
-Sparty::Sparty(Spartanmind* gameWorld)
+Sparty::Sparty(Game* gameWorld)
     : Player(gameWorld, L"resources/images/sparty.png", L"resources/images/sparty-mouth.png") {
     // Initialize any Sparty-specific properties
     mBasePivot = wxPoint2DDouble(40, 86);  // Example base pivot (can be adjusted based on XML data)

@@ -20,9 +20,9 @@
  * @param parent The parent window.
  * @param spartanmind Reference to the Spartanmind game logic.
  */
-SpartanmindView::SpartanmindView(wxWindow* parent, Spartanmind& spartanmind)
+SpartanmindView::SpartanmindView(wxWindow* parent, Game& game)
     : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
-      mSpartanmind(&spartanmind)
+      mGame(&game)
 {
     // Set the background style for smooth painting
     SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -67,18 +67,18 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
 
     wxRect rect = GetRect();
     // 1. Draw the game world (background, scoreboard, etc.)
-    mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
+    mGame->OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
     // 2. Draw Sparty (the player character) if valid
-    if (mSpartanmind && mSpartanmind->GetPlayer())
+    if (mGame && mGame->GetPlayer())
     {
-        mSpartanmind->GetPlayer()->Draw(gc.get());
+        mGame->GetPlayer()->Draw(gc.get());
     }
 
     // 3. Draw all letters stored in Spartanmind
     int x = 200;
     int y = 300;
-    for (const auto& letter : mSpartanmind->GetLetters())
+    for (const auto& letter : mGame->GetLetters())
     {
         letter->SetLocation(x, y);
         letter->Draw(&dc);
@@ -93,7 +93,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     // 4. Draw all givens
     x = 200;
     y = 100;
-    for (const auto& given : mSpartanmind->GetGivens())
+    for (const auto& given : mGame->GetGivens())
     {
         given->SetLocation(x, y);
         given->Draw(&dc);
@@ -106,7 +106,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     }
     x = 800;
     y = 144;
-    for (const auto& tray : mSpartanmind->GetTray())
+    for (const auto& tray : mGame->GetTray())
     {
         tray->SetLocation(x, y);
         tray->Draw(&dc);
@@ -125,7 +125,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
  */
 void SpartanmindView::OnTimer(wxTimerEvent& event)
 {
-    if (!mSpartanmind) return;
+    if (!mGame) return;
 
     // Get elapsed time in milliseconds since the stopwatch was started.
     long deltaMs = mStopWatch.Time();
@@ -134,8 +134,8 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     double deltaSeconds = deltaMs / 1000.0;
 
     // Update game logic and scoreboard using the actual elapsed time.
-    mSpartanmind->Update(deltaSeconds);
-    mGame.UpdateScoreboard(deltaSeconds);
+    mGame->Update(deltaSeconds);
+    mGame->UpdateScoreboard(deltaSeconds);
 
     Refresh();
 }
@@ -147,7 +147,7 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
  */
 void SpartanmindView::OnLeftDown(wxMouseEvent& event)
 {
-    if (!mSpartanmind) return;
+    if (!mGame) return;
 
     int x = event.GetX();
     int y = event.GetY();
@@ -155,9 +155,9 @@ void SpartanmindView::OnLeftDown(wxMouseEvent& event)
     int gameY = GetClientSize().GetHeight() - y;
 
     // Update Sparty's target
-    if (mSpartanmind->GetPlayer())
+    if (mGame->GetPlayer())
     {
-        mSpartanmind->GetPlayer()->SetTarget(x, y);
+        mGame->GetPlayer()->SetTarget(x, y);
     }
     Refresh();
 }
@@ -168,9 +168,9 @@ void SpartanmindView::OnLeftDown(wxMouseEvent& event)
  */
 void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 {
-    if (!mSpartanmind) return;
+    if (!mGame) return;
 
-    auto player = mSpartanmind->GetPlayer();
+    auto player = mGame->GetPlayer();
     if (!player) return;
 
     if (event.GetKeyCode() == WXK_SHIFT)
@@ -192,7 +192,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
  */
 bool SpartanmindView::LoadFromXML(const wxString& filename)
 {
-    if (!mSpartanmind) return false;
+    if (!mGame) return false;
 
     wxXmlDocument xmlDoc;
     wxFileInputStream inputStream(filename);
@@ -222,7 +222,7 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
     SetSize(totalWidth, totalHeight);
 
     // Update the virtual dimensions in our Game object
-    mGame.SetVirtualDimensions(totalWidth, totalHeight);
+    mGame->SetVirtualDimensions(totalWidth, totalHeight);
 
     // Parse <declarations> to set background, letters, givens, etc.
     wxXmlNode* declarationsNode = root->GetChildren();
@@ -239,8 +239,8 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     if (!bgImage.IsEmpty())
                     {
                         wxString fullBgPath = "resources/images/" + bgImage;
-                        mSpartanmind->SetBackground(fullBgPath);
-                        mGame.SetBackground(fullBgPath);
+                        //mSpartanmind->SetBackground(fullBgPath);
+                        mGame->SetBackground(fullBgPath);
                     }
                 }
                 else if (child->GetName() == "letter")
@@ -254,10 +254,10 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Letter* letter = new Letter(mSpartanmind, fullLetterPathw, letterId,
+                        Letter* letter = new Letter(mGame, fullLetterPathw, letterId,
                                                     letterWidth, letterHeight, fullLetterPath,
                                                     letterValue, letterWidth, letterWidth);
-                        mSpartanmind->AddLetter(letter);
+                        mGame->AddLetter(letter);
                     }
                 }
                 else if (child->GetName() == "given")
@@ -271,10 +271,10 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Given* given = new Given(mSpartanmind, fullLetterPathw, letterId,
+                        Given* given = new Given(mGame, fullLetterPathw, letterId,
                                                  letterWidth, letterHeight, fullLetterPath,
                                                  letterValue, letterWidth, letterWidth);
-                        mSpartanmind->AddGiven(given);
+                        mGame->AddGiven(given);
                     }
                 }
                 else if (child->GetName() == "tray")
@@ -288,9 +288,9 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullTrayPath = "resources/images/" + trayImage;
                         std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
-                        Tray *tray = new Tray(mSpartanmind, fullTrayPathw, trayId, trayWidth,
+                        Tray *tray = new Tray(mGame, fullTrayPathw, trayId, trayWidth,
                                               trayHeight, fullTrayPath, trayValue, trayWidth, trayWidth);
-                        mSpartanmind->AddTray(tray);
+                        mGame->AddTray(tray);
                     }
                 }
                 else if (child->GetName() == "container")
@@ -304,9 +304,9 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullcontainerPath = "resources/images/" + containerImage;
                         std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
-                        Container *container = new Container(mSpartanmind, fullcontainerPathw, containerId, containerWidth,
+                        Container *container = new Container(mGame, fullcontainerPathw, containerId, containerWidth,
                                               containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
-                        mSpartanmind->AddContainer(container);
+                        mGame->AddContainer(container);
                     }
                 }
 

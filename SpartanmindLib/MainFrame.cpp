@@ -50,10 +50,11 @@ void MainFrame::Initialize() {
     auto sizer = new wxBoxSizer(wxVERTICAL);
 
     // Create Spartanmind instance as a member of MainFrame
-    mSpartanmind = new Spartanmind();  // Create the Spartanmind object and store it as a member
+    //mGame = new Spartanmind();  // Create the Spartanmind object and store it as a member
+    mGame = new Game();
 
     // Create SpartanmindView and pass the Spartanmind object (not pointer) to it
-    mSpartanmindView = new SpartanmindView(this, *mSpartanmind);  // Pass spartanmind by reference
+    mSpartanmindView = new SpartanmindView(this, *mGame);  // Pass spartanmind by reference
     sizer->Add(mSpartanmindView, 1, wxEXPAND | wxALL);
 
     SetSizer(sizer);
@@ -96,10 +97,10 @@ void MainFrame::Initialize() {
  */
 void MainFrame::OnLoadLevel(wxCommandEvent& event)
 {
-    mSpartanmind->ClearLetters();
-    mSpartanmind->ClearGivens();
-    mSpartanmind->ClearTrays();
-    mSpartanmind->ClearContainers();
+    mGame->ClearLetters();
+    mGame->ClearGivens();
+    mGame->ClearTrays();
+    mGame->ClearContainers();
     int levelIndex = event.GetId() - IDM_LOAD_LEVEL0;
     wxString levelFile = wxString::Format("resources/levels/level%d.xml", levelIndex);
 

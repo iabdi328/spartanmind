@@ -12,7 +12,7 @@
 
 class Letter : public Item {
 public:
-    Letter(Spartanmind* spartanmind, const std::wstring& filename,
+    Letter(Game* game, const std::wstring& filename,
                const wxString& id, wxString width, wxString height,
                const wxString& image, wxString value, wxString col, wxString row);
 

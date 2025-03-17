@@ -1,7 +1,6 @@
 /**
  * @file Game.cpp
- * @author Ismail Abdi
- * @brief Implementation of the Game class.
+ * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  *
  */
 
@@ -10,19 +9,31 @@
 #include <algorithm>
 #include <wx/log.h>
 #include <wx/graphics.h>
+#include "Sparty.h"
 
 Game::Game()
     : mScale(1.0),
       mXOffset(0),
       mYOffset(0),
       mVirtualWidth(1150),   // Updated default width.
-      mVirtualHeight(800)    // Updated default height.
+      mVirtualHeight(800),   // Updated default height.
+      mPlayer(nullptr)
 {
     Initialize();
 }
 
+Game::~Game() {
+    delete mPlayer;  // Clean up Sparty instance when Game is destroyed
+}
+
 void Game::Initialize() {
-    // (You can add additional initialization here if needed.)
+    mBackground = std::make_unique<wxBitmap>(L"resources/images/background.png", wxBITMAP_TYPE_ANY);
+    mPlayer = new Sparty(this);  // Initialize Sparty (the player character)
+}
+
+void Game::Update(double deltaSeconds) {
+    mPlayer->Update(deltaSeconds);  // Update Sparty's state (movement, actions)
+    UpdateScoreboard(deltaSeconds);
 }
 
 void Game::SetVirtualDimensions(int virtualWidth, int virtualHeight) {
@@ -66,13 +77,42 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     mScoreboard.Draw(gc);
 }
 
-void Game::OnLeftDown(int x, int y) {
-    // Convert screen coordinates to virtual coordinates.
-    double virtualX = (x - mXOffset) / mScale;
-    double virtualY = (y - mYOffset) / mScale;
-    wxLogMessage("Mouse clicked at virtual coordinates: (%.2f, %.2f)", virtualX, virtualY);
-}
-
 void Game::UpdateScoreboard(double deltaSeconds) {
     mScoreboard.Update(deltaSeconds);
+}
+
+// Letter management methods
+void Game::AddLetter(Letter* letter) {
+    mLetters.push_back(letter);
+}
+
+void Game::ClearLetters() {
+    mLetters.clear();
+}
+
+// Given management methods
+void Game::AddGiven(Given* given) {
+    mGivens.push_back(given);
+}
+
+void Game::ClearGivens() {
+    mGivens.clear();
+}
+
+// Tray management methods
+void Game::AddTray(Tray* tray) {
+    mTray.push_back(tray);
+}
+
+void Game::ClearTrays() {
+    mTray.clear();
+}
+
+// Container management methods
+void Game::AddContainer(Container* container) {
+    mContainer.push_back(container);
+}
+
+void Game::ClearContainers() {
+    mContainer.clear();  // Note: Fixed from original where it was clearing mGivens instead
 }

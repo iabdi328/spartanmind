@@ -11,13 +11,12 @@
 #include <wx/geometry.h>
 #include <string>
 #include <wx/graphics.h>
-
-class Spartanmind;
+#include "Game.h"
 
 class Player {
 protected:
     /// Game
-    Spartanmind* mGameWorld;
+    Game* mGameWorld;
 
     wxPoint2DDouble mLocation;  // Current position of the player
     wxPoint2DDouble mTarget;    // Target position of the player
@@ -39,7 +38,7 @@ protected:
     double mAuxAngle = 0;   // Auxiliary angle
 
 public:
-    Player(Spartanmind* gameWorld, const wxString& image1, const wxString& image2);
+    Player(Game* gameWorld, const wxString& image1, const wxString& image2);
     virtual ~Player() {}
 
     virtual void Update(double elapsedTime);  // Updates position based on movement

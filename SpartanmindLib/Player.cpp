@@ -10,7 +10,7 @@
 #include <wx/geometry.h>
 #include <cstdio>
 
-Player::Player(Spartanmind* gameWorld, const wxString &image1, const wxString &image2)
+Player::Player(Game* gameWorld, const wxString &image1, const wxString &image2)
     : mGameWorld(gameWorld), mImage1(image1), mImage2(image2), mLocation(0, 0), mTarget(0, 0) {
     // Initialize target offsets, pivots, angles, etc.
     mTargetXOffset = 72;  // Example value, based on XML attributes

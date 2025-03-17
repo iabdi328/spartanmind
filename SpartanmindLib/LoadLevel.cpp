@@ -65,7 +65,7 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                     wxString bgImage = child->GetAttribute("image", "");
                     if (!bgImage.IsEmpty()) {
                         wxString fullBgPath = "resources/images/" + bgImage;
-                        mSpartanmind.SetBackground(fullBgPath);  // Update Spartanmind's background.
+                        //mSpartanmind.SetBackground(fullBgPath);  // Update Spartanmind's background.
                         mGame.SetBackground(fullBgPath);         // Also update the Game's background.
                     }
                 } else if (child->GetName() == "letter") {
@@ -77,9 +77,9 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                     if (!letterImage.IsEmpty()) {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Letter* letter = new Letter(&mSpartanmind, fullLetterPathw, letterId, letterWidth,
+                        Letter* letter = new Letter(&mGame, fullLetterPathw, letterId, letterWidth,
                                                     letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
-                        mSpartanmind.AddLetter(letter);
+                        mGame.AddLetter(letter);
                     }
                 } else if (child->GetName() == "given") {
                     wxString letterId = child->GetAttribute("id", "");
@@ -90,9 +90,9 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                     if (!letterImage.IsEmpty()) {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Given* given = new Given(&mSpartanmind, fullLetterPathw, letterId, letterWidth,
+                        Given* given = new Given(&mGame, fullLetterPathw, letterId, letterWidth,
                                                  letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
-                        mSpartanmind.AddGiven(given);
+                        mGame.AddGiven(given);
                     }
                 }
                 else if (child->GetName() == "tray") {
@@ -104,9 +104,9 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                     if (!trayImage.IsEmpty()) {
                         wxString fullTrayPath = "resources/images/" + trayImage;
                         std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
-                        Tray* tray = new Tray(&mSpartanmind, fullTrayPathw, trayId, trayWidth,
+                        Tray* tray = new Tray(&mGame, fullTrayPathw, trayId, trayWidth,
                                                  trayHeight, fullTrayPath, trayCapacity, trayWidth, trayWidth);
-                        mSpartanmind.AddTray(tray);
+                        mGame.AddTray(tray);
                     }
                 }
                 else if (child->GetName() == "container")
@@ -120,9 +120,9 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                     {
                         wxString fullcontainerPath = "resources/images/" + containerImage;
                         std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
-                        Container *container = new Container(&mSpartanmind, fullcontainerPathw, containerId, containerWidth,
+                        Container *container = new Container(&mGame, fullcontainerPathw, containerId, containerWidth,
                                                              containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
-                        mSpartanmind.AddContainer(container);
+                        mGame.AddContainer(container);
                     }
                 }
                 child = child->GetNext();

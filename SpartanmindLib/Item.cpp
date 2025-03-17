@@ -18,7 +18,7 @@ Item::~Item()
  * Constructor
  * @param spartanmind The spartanmind this item is a member of
  */
-Item::Item(Spartanmind *spartanmind, const std::wstring &filename) : mSpartanmind(spartanmind)
+Item::Item(Game *spartanmind, const std::wstring &filename) : mGame(spartanmind)
 {
     mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
     mItemBitmap = make_unique<wxBitmap>(*mItemImage);
