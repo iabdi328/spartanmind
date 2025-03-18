@@ -82,7 +82,7 @@ Item(Game *game, const std::wstring &filename1 = L"None", const std::wstring
   * Draw this item
   * @param dc Device context to draw on
   */
- void Draw(std::shared_ptr<wxGraphicsContext> dc);
+ void Draw(const std::shared_ptr<wxGraphicsContext>& );
 };
 
 #endif //ITEM_H

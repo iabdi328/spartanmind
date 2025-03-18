@@ -10,7 +10,7 @@
 #include <wx/geometry.h>
 #include <cstdio>
 
-const wstring loc = L"../images/";
+
 
 
 Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : Item(game, headImage, mouthImage)
@@ -24,16 +24,17 @@ Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : I
     mSpeed = 0;
     mX = 0;
     mY = 0;
-    mSpartyImage = std::make_unique<wxBitmap>("../images/" +headImage, wxBITMAP_TYPE_ANY);
-    mMouthImage = std::make_unique<wxBitmap>("../images/" +mouthImage, wxBITMAP_TYPE_ANY);
+    const wstring loc = L"../images/";
+    mSpartyImage = std::make_unique<wxBitmap>(loc+headImage, wxBITMAP_TYPE_ANY);
+    mMouthImage = std::make_unique<wxBitmap>(loc+mouthImage, wxBITMAP_TYPE_ANY);
 
-    if (!mSpartyImage->IsOk()) {
-        std::cerr << "You Failed to load head image: " << loc + headImage << std::endl;
-    }
-
-    if (!mMouthImage->IsOk()) {
-        std::cerr << "You Failed to load mouth image: " << loc + mouthImage << std::endl;
-    }
+//    if (!mSpartyImage->IsOk()) {
+//        std::cerr << "You Failed to load head image: " << loc + headImage << std::endl;
+//    }
+//
+//    if (!mMouthImage->IsOk()) {
+//        std::cerr << "You Failed to load mouth image: " << loc + mouthImage << std::endl;
+//    }
 }
 
 // Update method
@@ -65,7 +66,7 @@ void Player::SetStartingLocation(double x, double y){
     mY = y;
 }
 
-void Player::Draw(wxGraphicsContext* graphics) {
+void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics) {
     // First, apply rotation for the headbutt (using the base pivot)
     graphics->PushState();
     
@@ -78,9 +79,17 @@ void Player::Draw(wxGraphicsContext* graphics) {
     graphics->Translate(mLocation.m_x, mLocation.m_y);
     
     // Draw image1 (the main body/head) at (0, 0)
-    wxBitmap bmp1(mImage1, wxBITMAP_TYPE_PNG);
-    if (bmp1.IsOk()) {
-        graphics->DrawBitmap(bmp1, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
+//    wxBitmap bmp1(mImage1, wxBITMAP_TYPE_PNG);
+//    if (bmp1.IsOk()) {
+//        graphics->DrawBitmap(bmp1, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
+//    }
+    if (mSpartyImage != nullptr && !mHeadbutt)
+    {
+        graphics->DrawBitmap(*mSpartyImage, mX, mY, wid,hit);
+    }
+    if (mMouthImage != nullptr && !mEating)
+    {
+        graphics->DrawBitmap(*mMouthImage, 0, 0, wid,hit);
     }
 
     // Now, apply the mouth (or lid) animation (with auxiliary pivot)
@@ -90,10 +99,10 @@ void Player::Draw(wxGraphicsContext* graphics) {
     graphics->Translate(-mAuxPivot.m_x, -mAuxPivot.m_y);
 
     // Draw image2 (the mouth or lid)
-    wxBitmap bmp2(mImage2, wxBITMAP_TYPE_PNG);
-    if (bmp2.IsOk()) {
-        graphics->DrawBitmap(bmp2, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
-    }
+//    wxBitmap bmp2(mImage2, wxBITMAP_TYPE_PNG);
+//    if (bmp2.IsOk()) {
+//        graphics->DrawBitmap(bmp2, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
+//    }
     graphics->PopState();
 
     // Restore graphics state
@@ -108,12 +117,7 @@ void Player::SetTarget(double x, double y) {
 void Player::SetPosition(double x, double y) {
     mLocation = wxPoint2DDouble(x, y);  // Set the current position of the player
 }
-/*
-void Player::Eat() {
-    // Base implementation (if any)
-    // In this case, we might leave it empty, assuming Sparty will handle the eating logic
-}
-*/
+
 
 void Player::Headbutt() {
     if (!mHeadbutt) {

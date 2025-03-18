@@ -64,6 +64,12 @@ private:
     /// Y location of player
     double mY = 0;
 
+    /// width of sparty
+    double wid = 96;
+
+    /// height of sparty
+    double hit = 96;
+
     // Pivot points for headbutt and mouth (or lid)
     wxPoint2DDouble mBasePivot;  // Base pivot for headbutt rotation
     double mBaseAngle = 0;  // Headbutt angle
@@ -106,7 +112,7 @@ public:
     virtual ~Player() {}
 
     void Update(double elapsedTime);  // Updates position based on movement
-    void Draw(wxGraphicsContext* graphics);  // Pure virtual for drawing player
+    void Draw(std::shared_ptr<wxGraphicsContext> graphics);  // Pure virtual for drawing player
     void Eat();  // Virtual Eat method to be overridden by derived class
     void Headbutt();  // Method to perform headbutt animation
 

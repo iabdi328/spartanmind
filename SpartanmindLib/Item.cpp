@@ -78,7 +78,7 @@ bool Item::HitTest(int x, int y)
  * Draw this item
  * @param dc Device context to draw on
  */
-void Item::Draw(shared_ptr<wxGraphicsContext> gc)
+void Item::Draw(const std::shared_ptr<wxGraphicsContext>& gc)
 {
     // cout << "Drawing letters" << endl;
     double mImageWidth = mItemBitmap->GetWidth();

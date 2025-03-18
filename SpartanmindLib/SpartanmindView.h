@@ -47,6 +47,7 @@ public:
     void OnLevelOne(wxCommandEvent &event);
     void OnLevelTwo(wxCommandEvent &event);
     void OnLevelThree(wxCommandEvent &event);
+    void LoadNewLevel(const wxString &filename, int levelNumber); /// Load a new level
 };
 
 #endif // PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H

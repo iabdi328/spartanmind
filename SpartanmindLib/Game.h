@@ -85,7 +85,7 @@ public:
      * @param width Width of the window.
      * @param height Height of the window.
      */
-    void OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height);
+    void OnDraw(std::shared_ptr<wxGraphicsContext>gc, int width, int height);
 
     /**
      * Set Virtual Pixels

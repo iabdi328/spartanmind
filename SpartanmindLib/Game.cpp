@@ -66,6 +66,7 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     {
         item->Draw(gc);
     }
+    mPlayer->Draw(gc);
 
     gc->PopState();
 
