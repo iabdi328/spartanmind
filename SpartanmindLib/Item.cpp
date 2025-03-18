@@ -18,10 +18,30 @@ Item::~Item()
  * Constructor
  * @param spartanmind The spartanmind this item is a member of
  */
-Item::Item(Game *spartanmind, const std::wstring &filename) : mGame(spartanmind)
+//Item::Item(Game *spartanmind, const std::wstring &filename) : mGame(spartanmind)
+//{
+//    mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
+//    mItemBitmap = make_unique<wxBitmap>(*mItemImage);
+//}
+
+
+/**
+ * Constructor
+ * @param game The game this item is a member of
+ */
+Item::Item(Game *game, const std::wstring &filename, const std::wstring &filename2) : mGame (game)
 {
-    mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
-    mItemBitmap = make_unique<wxBitmap>(*mItemImage);
+    if (filename != L"None")
+    {
+        mFirstImage = true;
+        mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
+        mItemBitmap = make_unique<wxBitmap>(*mItemImage);}
+
+    if (filename2 != L"None"){
+        mSecondImage = true;
+        mItemImage2 = std::make_unique<wxImage>(filename2, wxBITMAP_TYPE_ANY);
+        mItemBitmap2 = std::make_unique<wxBitmap>(*mItemImage2);
+    }
 }
 
 /**
@@ -58,12 +78,10 @@ bool Item::HitTest(int x, int y)
  * Draw this item
  * @param dc Device context to draw on
  */
-void Item::Draw(wxDC *dc)
+void Item::Draw(shared_ptr<wxGraphicsContext> gc)
 {
     // cout << "Drawing letters" << endl;
-    double wid = mItemBitmap->GetWidth();
-    double hit = mItemBitmap->GetHeight();
-    dc->DrawBitmap(*mItemBitmap,
-     int(GetX() - wid / 2),
-     int(GetY() - hit / 2));
+    double mImageWidth = mItemBitmap->GetWidth();
+    double mImageHeight = mItemBitmap->GetHeight();
+    gc->DrawBitmap(*mItemBitmap, GetX(), GetY(), mImageWidth, mImageHeight);
 }

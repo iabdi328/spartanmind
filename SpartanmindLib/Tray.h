@@ -13,18 +13,29 @@
 class Tray : public Item
 {
 private:
-    wxString mId;
-    wxString mWidth;
-    wxString mHeight;
-    wxString mImagePath;
-    wxString mValue;
-    wxString mCol;
-    wxString mRow;
+    /// Tray Items
+    std::vector<std::shared_ptr<Item>> mTrayItems;
+
+    /// Capacity of xray
+    int mCapacity = 0;
 
 public:
-    Tray(Game* game, const std::wstring& filename,
-    const wxString& id, wxString width, wxString height,
-    const wxString& image, wxString value, wxString col, wxString row);
+    /// Default constructor (disabled)
+    Tray() = delete;
+
+    /// Copy constructor (disabled)
+    Tray(const Tray &) = delete;
+
+    /// Assignment operator
+    void operator=(const Tray &) = delete;
+
+    /**
+     * Constructor
+     * @param game The game this character is a member of
+     * @param capacity The capacity of the xray
+     * @param filename The image for the xray
+     */
+    Tray(Game * game, int capacity, std::wstring &filename);
 
 };
 

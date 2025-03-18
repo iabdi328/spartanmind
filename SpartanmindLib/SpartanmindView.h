@@ -7,6 +7,7 @@
 
 #include <wx/wx.h>
 #include "Game.h"
+#include "LoadLevel.h"
 #include <wx/stopwatch.h>
 
 /**
@@ -16,8 +17,7 @@ class SpartanmindView : public wxWindow
 {
 private:
 	wxTimer* mGameTimer = nullptr; ///< Timer for periodic updates
-	Game* mGame;                    ///< Game object for virtual-pixel handling
-	//Spartanmind* mSpartanmind;     ///< Pointer to the Spartanmind game logic
+	Game mGame;                    ///< Game object for virtual-pixel handling
 
 	// Event handlers
 	void OnPaint(wxPaintEvent& event);
@@ -27,24 +27,26 @@ private:
 	wxStopWatch mStopWatch;
 
 public:
-	/**
-	 * Constructor.
-	 * @param parent The parent window.
-	 * @param spartanmind Reference to the Spartanmind game logic.
+    /**
+	 * Initialize the view
+	 * @param parent Parent window
 	 */
-	SpartanmindView(wxWindow* parent, Game& game);
-
+    void Initialize(wxFrame* parent);
 	/**
 	 * Destructor. Stops and cleans up the timer.
 	 */
-	~SpartanmindView();
+//	~SpartanmindView();
 
 	/**
 	 * Load level data from an XML file.
 	 * @param filename Path to the XML file.
 	 * @return True if loaded successfully, false otherwise.
 	 */
-	bool LoadFromXML(const wxString& filename);
+//	bool LoadFromXML(const wxString& filename);
+
+    void OnLevelOne(wxCommandEvent &event);
+    void OnLevelTwo(wxCommandEvent &event);
+    void OnLevelThree(wxCommandEvent &event);
 };
 
 #endif // PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H

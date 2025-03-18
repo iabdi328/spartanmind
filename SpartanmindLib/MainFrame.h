@@ -26,8 +26,7 @@ public:
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);
-	void OnLoadLevel(wxCommandEvent& event);
-	wxDECLARE_EVENT_TABLE();
+//	void OnLoadLevel(wxCommandEvent& event);
 
 };
 

@@ -10,6 +10,7 @@
 #include <wx/log.h>
 #include <wx/graphics.h>
 #include "Sparty.h"
+#include "Item.h"
 
 Game::Game()
     : mScale(1.0),
@@ -19,33 +20,21 @@ Game::Game()
       mVirtualHeight(800),   // Updated default height.
       mPlayer(nullptr)
 {
-    Initialize();
 }
 
 Game::~Game() {
-    delete mPlayer;  // Clean up Sparty instance when Game is destroyed
+    delete mPlay;  // Clean up Sparty instance when Game is destroyed
 }
 
-void Game::Initialize() {
-    mBackground = std::make_unique<wxBitmap>(L"resources/images/background.png", wxBITMAP_TYPE_ANY);
-    mPlayer = new Sparty(this);  // Initialize Sparty (the player character)
-}
 
 void Game::Update(double deltaSeconds) {
-    mPlayer->Update(deltaSeconds);  // Update Sparty's state (movement, actions)
+//    mPlayer->Update(deltaSeconds);  // Update Sparty's state (movement, actions)
     UpdateScoreboard(deltaSeconds);
 }
 
 void Game::SetVirtualDimensions(int virtualWidth, int virtualHeight) {
     mVirtualWidth = virtualWidth;
     mVirtualHeight = virtualHeight;
-}
-
-void Game::SetBackground(const wxString& imagePath) {
-    mBackground = std::make_unique<wxBitmap>(imagePath, wxBITMAP_TYPE_ANY);
-    if (mBackground && !mBackground->IsOk()) {
-        wxLogError("Failed to load background image: %s", imagePath);
-    }
 }
 
 void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) {
@@ -72,6 +61,12 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
         gc->SetBrush(brush);
         gc->DrawRectangle(0, 0, mVirtualWidth, mVirtualHeight);
     }
+
+    for (auto item : mItems)
+    {
+        item->Draw(gc);
+    }
+
     gc->PopState();
 
     mScoreboard.Draw(gc);
@@ -81,23 +76,23 @@ void Game::UpdateScoreboard(double deltaSeconds) {
     mScoreboard.Update(deltaSeconds);
 }
 
-// Letter management methods
-void Game::AddLetter(Letter* letter) {
-    mLetters.push_back(letter);
-}
+//// Letter management methods
+//void Game::AddLetter(Letter* letter) {
+//    mLetters.push_back(letter);
+//}
+//
+//void Game::ClearLetters() {
+//    mLetters.clear();
+//}
 
-void Game::ClearLetters() {
-    mLetters.clear();
-}
-
-// Given management methods
-void Game::AddGiven(Given* given) {
-    mGivens.push_back(given);
-}
-
-void Game::ClearGivens() {
-    mGivens.clear();
-}
+//// Given management methods
+//void Game::AddGiven(Given* given) {
+//    mGivens.push_back(given);
+//}
+//
+//void Game::ClearGivens() {
+//    mGivens.clear();
+//}
 
 // Tray management methods
 void Game::AddTray(Tray* tray) {
@@ -115,4 +110,15 @@ void Game::AddContainer(Container* container) {
 
 void Game::ClearContainers() {
     mContainer.clear();  // Note: Fixed from original where it was clearing mGivens instead
+}
+
+void Game::Add(std::shared_ptr<Item> item)
+{
+
+    mItems.push_back(item);
+}
+
+void Game::Clear()
+{
+    mItems.clear();
 }

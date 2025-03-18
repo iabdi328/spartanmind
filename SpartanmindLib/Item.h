@@ -18,11 +18,16 @@ class Game;
 class Item {
 
 private:
- /// The underlying fish image
+    /// The first image
+    bool mFirstImage = true;
+    bool mSecondImage = false;
+ /// The underlying item image
  std::unique_ptr<wxImage> mItemImage;
+ std::unique_ptr<wxImage> mItemImage2;
 
- /// The bitmap we can display for this fish
+ /// The bitmap we can display for this item
  std::unique_ptr<wxBitmap> mItemBitmap;
+ std::unique_ptr<wxBitmap> mItemBitmap2;
 
  /// The spartanmind this item is contained in
  Game* mGame;
@@ -30,8 +35,7 @@ private:
  /// Item location in the spartanmind
  double  mX = 0;     ///< X location for the center of the item
  double  mY = 0;     ///< Y location for the center of the item
-protected:
- Item(Game* spartanmind, const std::wstring &filename);
+
 
 public:
 
@@ -41,6 +45,10 @@ public:
  Item(const Item &) = delete;
  /// Assignment operator
  void operator=(const Item &) = delete;
+ /// Constructor
+Item(Game *game, const std::wstring &filename1 = L"None", const std::wstring
+&filename2 = L"None");
+
  virtual ~Item();
 
  /**
@@ -74,7 +82,7 @@ public:
   * Draw this item
   * @param dc Device context to draw on
   */
- void Draw(wxDC *dc);
+ void Draw(std::shared_ptr<wxGraphicsContext> dc);
 };
 
 #endif //ITEM_H

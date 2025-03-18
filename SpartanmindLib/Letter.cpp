@@ -6,14 +6,13 @@
 #include "pch.h"
 #include "Letter.h"
 
+using namespace std;
 
+/// Location for the image resources.
+const wstring loc = L"../images/";
 
-Letter::Letter(Game* game, const std::wstring& filename,
-               const wxString& id, wxString width, wxString height,
-               const wxString& image, wxString value, wxString col, wxString row)
-    : Item(game, filename), // Call the base class constructor
-      mId(id), mWidth(width), mHeight(height),
-      mImagePath(image), mValue(value), mCol(col), mRow(row)
+Letter::Letter(Game * game,int value, const std::wstring &
+filename) : Item(game, filename)
 {
-    //std::cout << "Letter created: " << mValue << std::endl;
+    mValue = value;
 }

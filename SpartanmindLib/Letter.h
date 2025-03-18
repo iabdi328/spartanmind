@@ -8,22 +8,20 @@
 #ifndef LETTER_H
 #define LETTER_H
 
+#include "Game.h"
 #include "Item.h"
 
-class Letter : public Item {
-public:
-    Letter(Game* game, const std::wstring& filename,
-               const wxString& id, wxString width, wxString height,
-               const wxString& image, wxString value, wxString col, wxString row);
-
+class Letter : public Item
+{
 private:
-    wxString mId;
-    wxString mWidth;
-    wxString mHeight;
-    wxString mImagePath;
-    wxString mValue;
-    wxString mCol;
-    wxString mRow;
+
+    int mValue;
+
+public:
+    Letter(Game * game , int Value, const std::wstring&
+    filename);
+
+
 };
 
 

@@ -10,13 +10,30 @@
 #include <wx/geometry.h>
 #include <cstdio>
 
-Player::Player(Game* gameWorld, const wxString &image1, const wxString &image2)
-    : mGameWorld(gameWorld), mImage1(image1), mImage2(image2), mLocation(0, 0), mTarget(0, 0) {
-    // Initialize target offsets, pivots, angles, etc.
-    mTargetXOffset = 72;  // Example value, based on XML attributes
-    mTargetYOffset = 24;  // Example value, based on XML attributes
-    mBasePivot = wxPoint2DDouble(40, 86);  // Example base pivot for headbutt (you can modify as per XML)
-    mAuxPivot = wxPoint2DDouble(30, 65);   // Example mouth pivot
+const wstring loc = L"../images/";
+
+
+Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : Item(game, headImage, mouthImage)
+{
+    mGameWorld = game;
+    mEating = false;
+    mHeadbutt = false;
+    mEatingTimer = 0;
+    mHeadbuttTimer = 0;
+    mDirection = 0;
+    mSpeed = 0;
+    mX = 0;
+    mY = 0;
+    mSpartyImage = std::make_unique<wxBitmap>("../images/" +headImage, wxBITMAP_TYPE_ANY);
+    mMouthImage = std::make_unique<wxBitmap>("../images/" +mouthImage, wxBITMAP_TYPE_ANY);
+
+    if (!mSpartyImage->IsOk()) {
+        std::cerr << "You Failed to load head image: " << loc + headImage << std::endl;
+    }
+
+    if (!mMouthImage->IsOk()) {
+        std::cerr << "You Failed to load mouth image: " << loc + mouthImage << std::endl;
+    }
 }
 
 // Update method
@@ -43,7 +60,10 @@ void Player::Update(double elapsedTime) {
     }
 }
 
-
+void Player::SetStartingLocation(double x, double y){
+    mX = x;
+    mY = y;
+}
 
 void Player::Draw(wxGraphicsContext* graphics) {
     // First, apply rotation for the headbutt (using the base pivot)
@@ -94,3 +114,22 @@ void Player::Eat() {
     // In this case, we might leave it empty, assuming Sparty will handle the eating logic
 }
 */
+
+void Player::Headbutt() {
+    if (!mHeadbutt) {
+        mHeadbutt = true;
+        mHeadbuttTimer = HeadbuttDuration;
+        mBaseAngle = HeadbuttAngle;
+        printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
+    }
+}
+
+
+void Player::Eat() {
+    if (!mEating) {
+        mEating = true;
+        mEatingTimer = EatingDuration;
+        mAuxAngle = EatingAngle;  // Rotate the mouth to the max open position
+        printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
+    }
+}

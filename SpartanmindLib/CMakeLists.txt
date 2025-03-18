@@ -34,6 +34,8 @@ set(SOURCE_FILES
         ItemVisitor.h
         Declaration.cpp
         Declaration.h
+        LLetter.cpp
+        LLetter.h
 )
 
 set(wxBUILD_PRECOMP OFF)

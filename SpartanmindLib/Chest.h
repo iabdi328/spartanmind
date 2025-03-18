@@ -19,7 +19,7 @@ class Chest : public Player
 private:
 
 public:
-    Chest(Game* gameWorld);
+//    Chest(Game* gameWorld);
 
 };
 

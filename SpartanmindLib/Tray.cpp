@@ -6,12 +6,17 @@
 #include "pch.h"
 #include "Tray.h"
 
-Tray::Tray(Game* game, const std::wstring& filename,
-               const wxString& id, wxString width, wxString height,
-               const wxString& image, wxString value, wxString col, wxString row)
-    : Item(game, filename), // Call the base class constructor
-      mId(id), mWidth(width), mHeight(height),
-      mImagePath(image), mValue(value), mCol(col), mRow(row)
+/// Location of images
+const std::wstring loc = L"../images/";
+
+/**
+ * Constructor
+ * @param game The game this character is a member of
+ * @param capacity The capacity of the xray
+ * @param filename The image for the xray
+ */
+Tray::Tray(Game *game, int capacity, std::wstring &filename) : Item (game,
+                                                                     loc+filename)
 {
-    //std::cout << "Tray created: " << mValue << std::endl;
+    mCapacity = capacity;
 }
