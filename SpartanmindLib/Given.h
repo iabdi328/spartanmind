@@ -7,14 +7,29 @@
  
 #ifndef GIVEN_H
 #define GIVEN_H
+
 #include "Letter.h"
+#include "Game.h"
 
 
-class Given : public Letter {
+class Game;
+
+class Given : public Letter
+{
+
 private:
 public:
-    Given(Game* game, const std::wstring& filename, const wxString& id, wxString width, wxString height,
-          const wxString& image, wxString value, wxString col, wxString row);
+    /// Default constructor (disabled)
+    Given() = delete;
+
+    /// Copy constructor (disabled)
+    Given(const Given &) = delete;
+
+    /// Assignment operator
+    void operator=(const Given &) = delete;
+
+    Given(Game *game, int value, std::wstring &
+    filename);
 };
 
 

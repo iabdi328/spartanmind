@@ -14,14 +14,26 @@ Item::~Item()
 
 }
 
+
+
+
 /**
  * Constructor
- * @param spartanmind The spartanmind this item is a member of
+ * @param game The game this item is a member of
  */
-Item::Item(Game *spartanmind, const std::wstring &filename) : mGame(spartanmind)
+Item::Item(Game *game, const std::wstring &filename, const std::wstring &filename2) : mGame (game)
 {
-    mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
-    mItemBitmap = make_unique<wxBitmap>(*mItemImage);
+    if (filename != L"None")
+    {
+        mFirstImage = true;
+        mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
+        mItemBitmap = make_unique<wxBitmap>(*mItemImage);}
+
+    if (filename2 != L"None"){
+        mSecondImage = true;
+        mItemImage2 = std::make_unique<wxImage>(filename2, wxBITMAP_TYPE_ANY);
+        mItemBitmap2 = std::make_unique<wxBitmap>(*mItemImage2);
+    }
 }
 
 /**
@@ -56,15 +68,28 @@ bool Item::HitTest(int x, int y)
 
 /**
  * Draw this item
- * @param gc Graphics context to draw on
+ * @param dc Device context to draw on
  */
-void Item::Draw(std::shared_ptr<wxGraphicsContext> gc)
+void Item::Draw(const std::shared_ptr<wxGraphicsContext>& gc)
 {
-    if (!mItemBitmap || !mItemBitmap->IsOk()) return;  // Safety check
 
-    double wid = mItemBitmap->GetWidth();
-    double hit = mItemBitmap->GetHeight();
+    if(mFirstImage)
+    {
+        double mImageWidth = mItemBitmap->GetWidth();
+        double mImageHeight = mItemBitmap->GetHeight();
+        gc->DrawBitmap(*mItemBitmap, GetX(), GetY(), mImageWidth, mImageHeight);
 
-    // Apply scaling directly in Game::OnDraw(), so use original coordinates here.
-    gc->DrawBitmap(*mItemBitmap, GetX() - wid / 2, GetY() - hit / 2, wid, hit);
+    }
+
+    if(mSecondImage){
+        double wid2 = mItemBitmap2->GetWidth();
+        double hit2 = mItemBitmap2->GetHeight();
+        gc->DrawBitmap(*mItemBitmap2, int(GetX()), int(GetY()), wid2,
+                             hit2);
+    }
+}
+
+void Item::SetLocation(double x, double y) {
+    mX = x;
+    mY = y;
 }

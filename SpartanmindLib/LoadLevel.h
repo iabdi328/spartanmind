@@ -9,6 +9,7 @@
 #define PROJECT1_SPARTANMINDLIB_LOADLEVEL_H
 
 #include <wx/string.h>
+#include <wx/xml/xml.h>
 #include "Game.h"
 
 /**
@@ -17,22 +18,37 @@
 class LoadLevel
 {
 private:
-    Game& mGame;
+    Game * mGame;
 
 public:
-    /**
-     * Constructor
-     * @param spartanmind Reference to Spartanmind game object
-     * @param game Reference to Game object
-     */
-    LoadLevel(Game& game);
+    /// Default constructor (disabled)
+    LoadLevel() = delete;
+
+    /// Copy constructor (disabled)
+    LoadLevel(const LoadLevel &) = delete;
+    /// Assignment operator
+    void operator=(const LoadLevel &) = delete;
 
     /**
-     * Load level data from an XML file
-     * @param filename Path to the XML file
-     * @return True if loaded successfully, false otherwise
+     * Constructor
+     * @param game
      */
-    bool LoadFromXML(const wxString& filename);
+     LoadLevel(Game * game);
+    /**
+     * Load
+     */
+    void Load(const wxString &filename);
+
+    void BackgroundNode(wxXmlNode * node);
+    void LetterNode(wxXmlNode * node);
+    void TrayNode(wxXmlNode *node);
+    void SpartyNode(wxXmlNode * node);
+    void ContainerNode(wxXmlNode * node);
+
+    /**
+     * Clearing the playing area
+     */
+    void Clear();
 
 };
 

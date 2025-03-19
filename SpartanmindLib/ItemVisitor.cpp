@@ -3,4 +3,5 @@
  * @author Terrance Zackery
  */
 
+#include "pch.h"
 #include "ItemVisitor.h"

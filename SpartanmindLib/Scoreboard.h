@@ -30,6 +30,7 @@ public:
 
 private:
  double mElapsedTime; // Total elapsed time in seconds.
+
 };
 
 #endif //SCOREBOARD_H

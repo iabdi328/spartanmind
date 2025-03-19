@@ -2,12 +2,13 @@
 * @file Scoreboard.cpp
  * @author Ismail Abdi
  */
+
+#include "pch.h"
 #include "Scoreboard.h"
 #include <wx/font.h>
 #include <wx/colour.h>
 
 Scoreboard::Scoreboard()
-    : mElapsedTime(0.0)
 {
 }
 
@@ -32,3 +33,4 @@ void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
 double Scoreboard::GetElapsedTime() const {
  return mElapsedTime;
 }
+

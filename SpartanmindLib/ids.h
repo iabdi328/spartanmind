@@ -11,10 +11,9 @@
 // Enum to define custom IDs for levels and other menu items
 enum IDs {
  // Level IDs - used for loading different levels
- IDM_LOAD_LEVEL0 = wxID_HIGHEST + 1,  // Start custom IDs from the highest wxWidgets ID
- IDM_LOAD_LEVEL1,
- IDM_LOAD_LEVEL2,
- IDM_LOAD_LEVEL3,
+    IDM_LEVEL1 = wxID_HIGHEST + 1,
+    IDM_LEVEL2 = wxID_HIGHEST + 2,
+    IDM_LEVEL3 = wxID_HIGHEST + 3,
 
  // Standard Menu Item IDs
  IDM_EXIT,          // ID for the "Exit" menu item

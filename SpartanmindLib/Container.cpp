@@ -6,12 +6,25 @@
 #include "pch.h"
 #include "Container.h"
 
-Container::Container(Game* game, const std::wstring& filename,
-           const wxString& id, wxString width, wxString height,
-           const wxString& image, wxString value, wxString col, wxString row)
-    : Item(game, filename), // Call the base class constructor
-      mId(id), mWidth(width), mHeight(height),
-      mImagePath(image), mValue(value), mCol(col), mRow(row)
+using namespace std;
+
+/// Location of images
+const std::wstring loc = L"images/";
+
+/**
+ * Container constructor
+ * @param game The game this container is a part of.
+ */
+Container::Container(Game * game) : Item(game)
 {
-    //std::cout << "Container created: " << std::endl;
+
+}
+
+/**
+ * Add to Container
+ * @param item Item to add
+ */
+void Container::Add(std::shared_ptr<Item> item)
+{
+    mContainedItems.push_back(item);
 }

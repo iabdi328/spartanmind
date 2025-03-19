@@ -1,37 +1,53 @@
 /**
- * @file SpartanmindView.cpp
+* @file SpartanmindView.cpp
  * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  */
 
+
 #include "pch.h"
+#include "ids.h"
 #include "SpartanmindView.h"
 #include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
-#include <map>
+#include <memory>
+#include "Player.h"
+#include "LoadLevel.h"
 #include "Given.h"
 #include "Letter.h"
-#include "Sparty.h"
 #include "Tray.h"
-#include "LoadLevel.h"  // Include the LoadLevel class
+
+using namespace std;
 
 /**
- * Constructor. Creates the wxWindow and starts the game timer.
- * @param parent The parent window.
- * @param spartanmind Reference to the Spartanmind game logic.
+ * Initialize the Spartanmind view class.
+ * @param parent The parent window for this class
  */
-SpartanmindView::SpartanmindView(wxWindow* parent, Game& game)
-    : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
-      mGame(&game)
+void SpartanmindView::Initialize(wxFrame *parent)
 {
+    Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     // Set the background style for smooth painting
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Bind our event handlers
     Bind(wxEVT_PAINT, &SpartanmindView::OnPaint, this);
-    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnLeftDown, this);
     Bind(wxEVT_KEY_DOWN, &SpartanmindView::OnKeyDown, this);
+    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnMouseClick, this);
+
+    // Bind functions from MainFrame
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelOne, this,
+                 IDM_LEVEL1);
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelTwo, this,
+                 IDM_LEVEL2);
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelThree, this,
+                 IDM_LEVEL3);
+
+    const wxString filename = L"../levels/level1.xml";
+
+    LoadLevel load(&mGame);
+    load.Load(filename);
+
 
     // Create & start the timer for ~60 FPS
     mGameTimer = new wxTimer(this);
@@ -40,25 +56,17 @@ SpartanmindView::SpartanmindView(wxWindow* parent, Game& game)
 }
 
 /**
- * Destructor. Stop the timer and clean up.
- */
-SpartanmindView::~SpartanmindView()
-{
-    if (mGameTimer)
-    {
-        mGameTimer->Stop();
-        delete mGameTimer;
-        mGameTimer = nullptr;
-    }
-}
-
-/**
  * Paint event, draws the window.
  * @param event Paint event object
  */
 void SpartanmindView::OnPaint(wxPaintEvent& event)
 {
+    auto newTime = mStopWatch.Time();
+    auto elapsed = (double)(newTime - mTime) * 0.001;
+    mTime = newTime;
+
     wxAutoBufferedPaintDC dc(this);
+
     wxBrush background(*wxBLACK);
     dc.SetBackground(background);
     dc.Clear();
@@ -68,21 +76,11 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
 
     wxRect rect = GetRect();
     // 1. Draw the game world (background, scoreboard, etc.)
-    mGame->OnDraw(gc, rect.GetWidth(), rect.GetHeight());
+    mGame.Update(elapsed);
+    mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
-    // 2. Draw Sparty (the player character) if valid
-    if (mGame && mGame->GetPlayer())
-    {
-        mGame->GetPlayer()->Draw(gc.get());
-    }
+    Refresh(false);
 
-    int x = 800;
-    int y = 144;
-    for (const auto& tray : mGame->GetTray())
-    {
-        tray->SetLocation(x, y);
-        tray->Draw(gc);
-    }
 }
 
 /**
@@ -91,7 +89,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
  */
 void SpartanmindView::OnTimer(wxTimerEvent& event)
 {
-    if (!mGame) return;
+//    if (!mGame) return;
 
     // Get elapsed time in milliseconds since the stopwatch was started.
     long deltaMs = mStopWatch.Time();
@@ -100,32 +98,44 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     double deltaSeconds = deltaMs / 1000.0;
 
     // Update game logic and scoreboard using the actual elapsed time.
-    mGame->Update(deltaSeconds);
-    mGame->UpdateScoreboard(deltaSeconds);
+    mGame.Update(deltaSeconds);
+    mGame.UpdateScoreboard(deltaSeconds);
+
+    // Move Sparty
+    std::shared_ptr<Player> player(mGame.GetPlayer());
+
+    if (player != nullptr)
+    {
+        player->Update(deltaSeconds);
+    }
 
     Refresh();
 }
 
 
-/**
- * Mouse left-click event - moves Sparty to the clicked position.
- * @param event Mouse event
- */
-void SpartanmindView::OnLeftDown(wxMouseEvent& event)
+
+void SpartanmindView::OnMouseClick(wxMouseEvent& event)
 {
-    if (!mGame) return;
 
-    int x = event.GetX();
-    int y = event.GetY();
-    // Invert y coordinate because window origin is top-left
-    int gameY = GetClientSize().GetHeight() - y;
+    // Get the clicked screen coordinates
+    wxPoint pos = event.GetPosition();
+    std::cout << "@DEBUG OnMouseClick Click at: " << pos.x << ", " << pos.y << std::endl;
 
-    // Update Sparty's target
-    if (mGame->GetPlayer())
+    // Get player
+    std::shared_ptr<Player> player(mGame.GetPlayer());
+    if(event.GetX() - 60 > mGame.GetXOffset() && event.GetX() < mGame.GetXOffset()
+        + mGame.GetPixelWidth() * mGame.GetScale())
     {
-        mGame->GetPlayer()->SetTarget(x, y);
+        if(event.GetY() - 10 > mGame.GetYOffset() && event.GetY() < mGame
+            .GetYOffset() + mGame.GetPixelHeight() * mGame.GetScale())
+        {
+            if(player != nullptr)
+            {
+                player->SetLocation(pos.x, pos.y);
+            }
+        }
+
     }
-    Refresh();
 }
 
 /**
@@ -134,9 +144,9 @@ void SpartanmindView::OnLeftDown(wxMouseEvent& event)
  */
 void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 {
-    if (!mGame) return;
+//    if (!mGame) return;
 
-    auto player = mGame->GetPlayer();
+    auto player = mGame.GetPlayer();
     if (!player) return;
 
     if (event.GetKeyCode() == WXK_SHIFT)
@@ -151,17 +161,86 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     event.Skip(); // Let other key events process
 }
 
-/**
- * Load level data from an XML file.
- * @param filename Path to the XML file.
- * @return True if loaded successfully, false otherwise.
- */
-bool SpartanmindView::LoadFromXML(const wxString& filename)
-{
-    if (!mGame) return false;
 
-    // Use the LoadLevel class to load the level
-    LoadLevel loadLevel(*mGame);
-    loadLevel.LoadFromXML(filename);
-    return true;
+/**
+ * Event handler for selecting Level One.
+ * Loads the first level of the game.
+ *
+ * @param event Command event object.
+ */
+void SpartanmindView::OnLevelOne(wxCommandEvent& event)
+{
+    const wxString filename = L"../levels/level1.xml";
+    NewLevel(filename, 1);
+}
+
+/**
+ * Event handler for selecting Level Two.
+ * Loads the second level of the game.
+ *
+ * @param event Command event object.
+ */
+void SpartanmindView::OnLevelTwo(wxCommandEvent& event)
+{
+    const wxString filename = L"../levels/level2.xml";
+    NewLevel(filename, 2);
+}
+
+/**
+ * Event handler for selecting Level Three.
+ * Loads the third level of the game.
+ *
+ * @param event Command event object.
+ */
+void SpartanmindView::OnLevelThree(wxCommandEvent& event)
+{
+    const wxString filename = L"../levels/level3.xml";
+    NewLevel(filename, 3);
+
+}
+
+void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
+{
+    // Reset the game state
+    mGame.Clear(); // Assuming this clears the current game state
+
+    mGameIsActive = false;
+    mNewLevel = true;
+
+    // Set the new level number in the game
+    mGame.SetLevel(levelNumber);
+
+    // Load the new level content
+    LoadLevel area(&mGame);
+    area.Load(filename);
+
+}
+
+void SpartanmindView::LoadNextLevel()
+{
+    // current level number
+    int currLevel = mGame.GetLevel();
+
+    // next level number
+    int nextLevel = currLevel + 1;
+
+    // Load the new level directly without using events
+    wxString filename;
+    switch (nextLevel)
+    {
+        case 1:
+            filename = L"../levels/level1.xml";
+            NewLevel(filename, 1);
+            break;
+        case 2:
+            filename = L"../levels/level2.xml";
+            NewLevel(filename, 2);
+            break;
+        case 3:
+            filename = L"../levels/level3.xml";
+            NewLevel(filename, 3);
+            break;
+        default:
+            break;
+    }
 }
