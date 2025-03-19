@@ -6,6 +6,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "LoadLevel.h"
 #include <algorithm>
 #include <wx/log.h>
 #include <wx/graphics.h>
@@ -48,6 +49,13 @@ void Game::SetBackground(const wxString& imagePath) {
     }
 }
 
+bool Game::LoadLvl(const wxString &filename)
+{
+    LoadLevel *mLevel = new LoadLevel;
+    mLevel->LoadFromXML(filename);
+
+}
+
 void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) {
     // Calculate scale factors based on the virtual dimensions.
     double scaleX = static_cast<double>(width) / mVirtualWidth;
@@ -75,7 +83,11 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     gc->PopState();
 
     mScoreboard.Draw(gc);
+    LoadLevel *mLevel = new LoadLevel;
+    mLevel->OnDraw(gc);
 }
+
+
 
 void Game::UpdateScoreboard(double deltaSeconds) {
     mScoreboard.Update(deltaSeconds);

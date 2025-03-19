@@ -14,7 +14,7 @@ private:
 
 public:
 	bool OnInit() override;
-	int OnExit();
+	int OnExit() override;
 
 };
 

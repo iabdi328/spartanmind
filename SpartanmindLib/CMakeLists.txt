@@ -34,6 +34,10 @@ set(SOURCE_FILES
         ItemVisitor.h
         Declaration.cpp
         Declaration.h
+        ItemPlayer.cpp
+        ItemPlayer.h
+        DeclarationPlayer.cpp
+        DeclarationPlayer.h
 )
 
 set(wxBUILD_PRECOMP OFF)

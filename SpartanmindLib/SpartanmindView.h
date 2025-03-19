@@ -5,8 +5,9 @@
 #ifndef PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H
 #define PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H
 
-#include <wx/wx.h>
 #include "Game.h"
+#include "LoadLevel.h"
+#include <wx/wx.h>
 #include <wx/stopwatch.h>
 
 /**
@@ -17,7 +18,6 @@ class SpartanmindView : public wxWindow
 private:
 	wxTimer* mGameTimer = nullptr; ///< Timer for periodic updates
 	Game* mGame;                    ///< Game object for virtual-pixel handling
-	//Spartanmind* mSpartanmind;     ///< Pointer to the Spartanmind game logic
 
 	// Event handlers
 	void OnPaint(wxPaintEvent& event);

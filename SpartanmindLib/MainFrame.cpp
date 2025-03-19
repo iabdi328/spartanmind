@@ -7,6 +7,7 @@
 #include "MainFrame.h"
 #include "SpartanmindView.h"
 #include "ids.h"
+#include "Game.h"
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 
@@ -103,7 +104,7 @@ void MainFrame::OnLoadLevel(wxCommandEvent& event)
     int levelIndex = event.GetId() - IDM_LOAD_LEVEL0;
     wxString levelFile = wxString::Format("resources/levels/level%d.xml", levelIndex);
 
-    if (!mSpartanmindView->LoadFromXML(levelFile)) {
+    if (!mGame->LoadLvl(levelFile)) {
         SetStatusText(wxString::Format("Failed to load Level %d", levelIndex));
     } else {
         // Parse the XML file again to extract the level dimensions.

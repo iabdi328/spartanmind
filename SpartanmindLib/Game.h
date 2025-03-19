@@ -15,6 +15,7 @@
 #include "Given.h"
 #include "Tray.h"
 #include "Container.h"
+#include "LoadLevel.h"
 
 class Letter;
 class Sparty;
@@ -44,6 +45,8 @@ private:
     std::vector<Tray*> mTray;          ///< Collection of letter trays
     std::vector<Container*> mContainer; ///< Collection of containers
 
+    //std::shared_ptr<LoadLevel> mLevel;
+
 public:
     /// Constructor and Destructor
     Game();
@@ -69,6 +72,8 @@ public:
      * @param height Height of the window.
      */
     void OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height);
+
+    bool LoadLvl(const wxString &filename);
 
     /**
      * Set Virtual Pixels

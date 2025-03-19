@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "Tray.h"
 
+/*
 Tray::Tray(Game* game, const std::wstring& filename,
                const wxString& id, wxString width, wxString height,
                const wxString& image, wxString value, wxString col, wxString row)
@@ -15,3 +16,4 @@ Tray::Tray(Game* game, const std::wstring& filename,
 {
     //std::cout << "Tray created: " << mValue << std::endl;
 }
+*/

@@ -7,7 +7,7 @@
 #include "Letter.h"
 
 
-
+/*
 Letter::Letter(Game* game, const std::wstring& filename,
                const wxString& id, wxString width, wxString height,
                const wxString& image, wxString value, wxString col, wxString row)
@@ -17,3 +17,4 @@ Letter::Letter(Game* game, const std::wstring& filename,
 {
     //std::cout << "Letter created: " << mValue << std::endl;
 }
+*/

@@ -81,7 +81,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     for (const auto& letter : mGame->GetLetters())
     {
         letter->SetLocation(x, y);
-        letter->Draw(&dc);
+        //letter->Draw(&dc);
         x += 50;
         if (x == 700)
         {
@@ -96,7 +96,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     for (const auto& given : mGame->GetGivens())
     {
         given->SetLocation(x, y);
-        given->Draw(&dc);
+        //given->Draw(&dc);
         x += 50;
         if (x == 700)
         {
@@ -109,7 +109,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     for (const auto& tray : mGame->GetTray())
     {
         tray->SetLocation(x, y);
-        tray->Draw(&dc);
+        //tray->Draw(&dc);
         x += 50;
         if (x == 700)
         {
@@ -254,10 +254,12 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
+                        /*
                         Letter* letter = new Letter(mGame, fullLetterPathw, letterId,
                                                     letterWidth, letterHeight, fullLetterPath,
                                                     letterValue, letterWidth, letterWidth);
                         mGame->AddLetter(letter);
+                         */
                     }
                 }
                 else if (child->GetName() == "given")
@@ -271,10 +273,12 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullLetterPath = "resources/images/" + letterImage;
                         std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
+                        /*
                         Given* given = new Given(mGame, fullLetterPathw, letterId,
                                                  letterWidth, letterHeight, fullLetterPath,
                                                  letterValue, letterWidth, letterWidth);
                         mGame->AddGiven(given);
+                         */
                     }
                 }
                 else if (child->GetName() == "tray")
@@ -288,9 +292,11 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullTrayPath = "resources/images/" + trayImage;
                         std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
+                        /*
                         Tray *tray = new Tray(mGame, fullTrayPathw, trayId, trayWidth,
                                               trayHeight, fullTrayPath, trayValue, trayWidth, trayWidth);
                         mGame->AddTray(tray);
+                        */
                     }
                 }
                 else if (child->GetName() == "container")
@@ -304,9 +310,11 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
                     {
                         wxString fullcontainerPath = "resources/images/" + containerImage;
                         std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
+                        /*
                         Container *container = new Container(mGame, fullcontainerPathw, containerId, containerWidth,
                                               containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
                         mGame->AddContainer(container);
+                         */
                     }
                 }
 
@@ -316,6 +324,8 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
         declarationsNode = declarationsNode->GetNext();
     }
 
+    //LoadLevel *mLevel = new LoadLevel;
+    //mLevel->LoadFromXML(filename);
     Refresh();
     return true;
 }

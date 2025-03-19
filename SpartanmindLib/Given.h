@@ -13,8 +13,8 @@
 class Given : public Letter {
 private:
 public:
-    Given(Game* game, const std::wstring& filename, const wxString& id, wxString width, wxString height,
-          const wxString& image, wxString value, wxString col, wxString row);
+    //Given(Game* game, const std::wstring& filename, const wxString& id, wxString width, wxString height,
+          //const wxString& image, wxString value, wxString col, wxString row);
 };
 
 
