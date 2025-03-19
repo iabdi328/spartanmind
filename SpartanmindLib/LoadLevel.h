@@ -17,7 +17,6 @@
 class LoadLevel
 {
 private:
-    Spartanmind& mSpartanmind;
     Game& mGame;
 
 public:
@@ -26,7 +25,7 @@ public:
      * @param spartanmind Reference to Spartanmind game object
      * @param game Reference to Game object
      */
-    LoadLevel(Spartanmind& spartanmind, Game& game);
+    LoadLevel(Game& game);
 
     /**
      * Load level data from an XML file

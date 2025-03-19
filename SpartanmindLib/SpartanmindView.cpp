@@ -1,8 +1,7 @@
 /**
-* @file SpartanmindView.cpp
+ * @file SpartanmindView.cpp
  * @author Raj Ambekar, Ismail Abdi, Emmanuel Koshy
  */
-
 
 #include "pch.h"
 #include "SpartanmindView.h"
@@ -15,7 +14,7 @@
 #include "Letter.h"
 #include "Sparty.h"
 #include "Tray.h"
-
+#include "LoadLevel.h"  // Include the LoadLevel class
 
 /**
  * Constructor. Creates the wxWindow and starts the game timer.
@@ -196,110 +195,7 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
 {
     if (!mGame) return false;
 
-    wxXmlDocument xmlDoc;
-    wxFileInputStream inputStream(filename);
-    if (!inputStream.IsOk() || !xmlDoc.Load(inputStream))
-    {
-        wxLogError("Failed to load level file: %s", filename);
-        return false;
-    }
-
-    wxXmlNode* root = xmlDoc.GetRoot();
-    if (!root || root->GetName() != "level")
-    {
-        wxLogError("Invalid level file format: %s", filename);
-        return false;
-    }
-
-    // Grab width/height from XML
-    double width, height, tileWidth, tileHeight;
-    root->GetAttribute("width", "0").ToDouble(&width);
-    root->GetAttribute("height", "0").ToDouble(&height);
-    root->GetAttribute("tilewidth", "48").ToDouble(&tileWidth);
-    root->GetAttribute("tileheight", "48").ToDouble(&tileHeight);
-
-    int totalWidth = static_cast<int>(width * tileWidth);
-    int totalHeight = static_cast<int>(height * tileHeight);
-
-    SetSize(totalWidth, totalHeight);
-    mGame->SetVirtualDimensions(totalWidth, totalHeight);
-
-    // Store a map of declared items for lookup
-    std::map<wxString, wxXmlNode*> declaredItems;
-
-    // Parse <declarations> to build a lookup table
-    wxXmlNode* declarationsNode = root->GetChildren();
-    while (declarationsNode)
-    {
-        if (declarationsNode->GetName() == "declarations")
-        {
-            wxXmlNode* child = declarationsNode->GetChildren();
-            while (child)
-            {
-                wxString id = child->GetAttribute("id", "");
-                if (!id.IsEmpty())
-                {
-                    declaredItems[id] = child;  // Store reference for lookup
-                }
-                child = child->GetNext();
-            }
-        }
-        declarationsNode = declarationsNode->GetNext();
-    }
-
-    // Parse <items> for letters and givens
-    wxXmlNode* itemsNode = root->GetChildren();
-    while (itemsNode)
-    {
-        if (itemsNode->GetName() == "items")
-        {
-            wxXmlNode* item = itemsNode->GetChildren();
-            while (item)
-            {
-                wxString itemId = item->GetAttribute("id", "");
-                if (!itemId.IsEmpty() && declaredItems.find(itemId) != declaredItems.end())
-                {
-                    wxXmlNode* declaration = declaredItems[itemId];
-
-                    wxString itemType = item->GetName();
-                    long width, height, col, row;
-                    declaration->GetAttribute("width", "48").ToLong(&width);
-                    declaration->GetAttribute("height", "48").ToLong(&height);
-                    item->GetAttribute("col", "0").ToLong(&col);
-                    item->GetAttribute("row", "0").ToLong(&row);
-
-                    wxString image = declaration->GetAttribute("image", "");
-                    wxString value = declaration->GetAttribute("value", "");
-                    wxString fullImagePath = "resources/images/" + image;
-                    std::wstring fullImagePathw = fullImagePath.ToStdWstring();
-
-                    int x = col * tileWidth;
-                    int y = row * tileHeight;
-
-                    if (itemType == "letter")
-                    {
-                        Letter* letter = new Letter(mGame, fullImagePathw, itemId, std::to_wstring(width),
-                                                    std::to_wstring(height), fullImagePath, value,
-                                                    std::to_wstring(width), std::to_wstring(height));
-                        letter->SetLocation(x, y);
-                        mGame->AddLetter(letter);
-                    }
-                    else if (itemType == "given")
-                    {
-                        Given* given = new Given(mGame, fullImagePathw, itemId, std::to_wstring(width),
-                                                 std::to_wstring(height), fullImagePath, value,
-                                                 std::to_wstring(width), std::to_wstring(height));
-                        given->SetLocation(x, y);
-                        mGame->AddGiven(given);
-                    }
-                }
-
-                item = item->GetNext();
-            }
-        }
-        itemsNode = itemsNode->GetNext();
-    }
-
-    Refresh();
-    return true;
+    // Use the LoadLevel class to load the level
+    LoadLevel loadLevel(*mGame);
+    return loadLevel.LoadFromXML(filename);
 }
