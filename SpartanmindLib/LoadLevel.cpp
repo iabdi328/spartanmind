@@ -48,13 +48,10 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
     int totalWidth = static_cast<int>(width * tileWidth);
     int totalHeight = static_cast<int>(height * tileHeight);
 
-    // Update the virtual dimensions for the game.
     mGame.SetVirtualDimensions(totalWidth, totalHeight);
 
-    // Store a map of declared items for lookup
     std::map<wxString, wxXmlNode*> declaredItems;
 
-    // Parse <declarations> to build a lookup table
     wxXmlNode* declarationsNode = root->GetChildren();
     while (declarationsNode) {
         if (declarationsNode->GetName() == "declarations") {
@@ -62,7 +59,14 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
             while (child) {
                 wxString id = child->GetAttribute("id", "");
                 if (!id.IsEmpty()) {
-                    declaredItems[id] = child;  // Store reference for lookup
+                    declaredItems[id] = child;
+                    if (child->GetName() == "background") {
+                        wxString image = child->GetAttribute("image", "");
+                        if (!image.IsEmpty()) {
+                            wxString fullImagePath = "resources/images/" + image;
+                            mGame.SetBackground(fullImagePath);
+                        }
+                    }
                 }
                 child = child->GetNext();
             }
@@ -101,7 +105,14 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                         } else if (itemType == "given") {
                             Given* given = new Given(&mGame, fullImagePathw, itemId, width, height,
                                                      fullImagePath, value, width, width);
-                            given->SetLocation(col * tileWidth, row * tileHeight);
+                            // Compute the correct position inside the tray
+                            int trayStartX = 0;
+                            int trayStartY = 0;
+                            double trayX = trayStartX + col * tileWidth + ((tileWidth - 48) / 2);
+                            double trayY = trayStartY + row * tileHeight + (tileHeight - 48) / 2;
+
+                            given->SetLocation(trayX, trayY);
+
                             mGame.AddGiven(given);
                         }
                     }

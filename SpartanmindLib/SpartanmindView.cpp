@@ -77,46 +77,22 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     }
 
     // 3. Draw all letters stored in Spartanmind
-    int x = 200;
-    int y = 300;
     for (const auto& letter : mGame->GetLetters())
     {
-        letter->SetLocation(x, y);
         letter->Draw(&dc);
-        x += 50;
-        if (x == 700)
-        {
-            y += 50;
-            x = 300;
-        }
     }
 
     // 4. Draw all givens
-    x = 200;
-    y = 100;
     for (const auto& given : mGame->GetGivens())
     {
-        given->SetLocation(x, y);
         given->Draw(&dc);
-        x += 50;
-        if (x == 700)
-        {
-            y += 50;
-            x = 300;
-        }
     }
-    x = 800;
-    y = 144;
+    int x = 800;
+    int y = 144;
     for (const auto& tray : mGame->GetTray())
     {
         tray->SetLocation(x, y);
         tray->Draw(&dc);
-        x += 50;
-        if (x == 700)
-        {
-            y += 50;
-            x = 300;
-        }
     }
 }
 
@@ -197,5 +173,6 @@ bool SpartanmindView::LoadFromXML(const wxString& filename)
 
     // Use the LoadLevel class to load the level
     LoadLevel loadLevel(*mGame);
-    return loadLevel.LoadFromXML(filename);
+    loadLevel.LoadFromXML(filename);
+    return true;
 }

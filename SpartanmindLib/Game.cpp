@@ -72,7 +72,7 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
         gc->SetBrush(brush);
         gc->DrawRectangle(0, 0, mVirtualWidth, mVirtualHeight);
     }
-    gc->PopState();
+    gc->PopState();  // This removes all the scaling!
 
     mScoreboard.Draw(gc);
 }
