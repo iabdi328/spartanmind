@@ -264,6 +264,8 @@ void LoadLevel::LetterNode(wxXmlNode *node)
 }
 void LoadLevel::SpartyNode(wxXmlNode * node)
 {
+    const wstring loc = L"../images/";
+    auto tagName = node->GetName();
     // id of the element
     auto id = node->GetAttribute(L"id");
     // image
@@ -301,20 +303,23 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
 
-                    // creating player, setting and adding into game
-                    std::shared_ptr<Player> player;
-                    player = std::make_shared<Player>(mGame, image1, image2);
-                    player->SetStartingLocation((col*mGame->GetTileHeight()), ((row)
-                        *mGame->GetTileWidth()));
-                    player->SetHeadPivotAngle(std::stod(headPivotAngle.ToStdString()));
-                    player->SetHeadPivotX(std::stod(headPivotX.ToStdString()));
-                    player->SetHeadPivotY(std::stod(headPivotY.ToStdString()));
-                    player->SetMouthPivotAngle(std::stod(mouthPivotAngle.ToStdString()));
-                    player->SetMouthPivotX(std::stod(mouthPivotX.ToStdString()));
-                    player->SetMouthPivotY(std::stod(mouthPivotY.ToStdString()));
-                    player->SetTargetX(std::stod(targetX.ToStdString()));
-                    player->SetTargetY(std::stod(targetY.ToStdString()));
-                    mGame->SetPlayer(player);
+                    if(tagName == L"player")
+                    {
+                        // creating player, setting and adding into game
+                        std::shared_ptr<Player> player;
+                        player = std::make_shared<Player>(mGame, loc+image1, loc+image2);
+                        player->SetStartingLocation((col * mGame->GetTileHeight()), ((row)
+                            * mGame->GetTileWidth()));
+                        player->SetHeadPivotAngle(std::stod(headPivotAngle.ToStdString()));
+                        player->SetHeadPivotX(std::stod(headPivotX.ToStdString()));
+                        player->SetHeadPivotY(std::stod(headPivotY.ToStdString()));
+                        player->SetMouthPivotAngle(std::stod(mouthPivotAngle.ToStdString()));
+                        player->SetMouthPivotX(std::stod(mouthPivotX.ToStdString()));
+                        player->SetMouthPivotY(std::stod(mouthPivotY.ToStdString()));
+                        player->SetTargetX(std::stod(targetX.ToStdString()));
+                        player->SetTargetY(std::stod(targetY.ToStdString()));
+                        mGame->SetPlayer(player);
+                    }
 
                 }
             }

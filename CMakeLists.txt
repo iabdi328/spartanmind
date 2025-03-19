@@ -28,10 +28,9 @@ target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${APPLICATION_LIBRA
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
 
-file(COPY images/
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources/images/)
-
-file(COPY levels/
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources/levels/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/images/
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/images/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/levels/
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/levels/)
 
 add_subdirectory(Tests)
