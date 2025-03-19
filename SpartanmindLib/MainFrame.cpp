@@ -8,7 +8,6 @@
 #include "SpartanmindView.h"
 #include "ids.h"
 #include <wx/xml/xml.h>
-#include <wx/wfstream.h>
 
 
 
@@ -29,10 +28,6 @@ void MainFrame::Initialize() {
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
 
-    // Create Spartanmind instance as a member of MainFrame
-    //mGame = new Spartanmind();  // Create the Spartanmind object and store it as a member
-
-
     // Create SpartanmindView and pass the Spartanmind object (not pointer) to it
     auto spartanMindView = new SpartanmindView();  // Pass spartanmind by reference
     spartanMindView->Initialize(this);
@@ -52,11 +47,6 @@ void MainFrame::Initialize() {
 
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the program");
 
-    // Adding levels 0 to 3 based on XML files and setting help strings for hover status text.
-    for (int i = 0; i <= 3; i++) {
-        wxString levelLabel = wxString::Format("Level %d", i);
-        levelsMenu->Append(IDM_LEVEL1 + i, levelLabel, wxString::Format("Load %s", levelLabel));
-    }
 
     helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
@@ -64,14 +54,15 @@ void MainFrame::Initialize() {
     menuBar->Append(levelsMenu, "&Levels");
     menuBar->Append(helpMenu, "&Help");
 
+    levelsMenu->Append(IDM_LEVEL1, L"&Level 1", L"&Move to Level 1");
+    levelsMenu->Append(IDM_LEVEL2, L"&Level 2", L"&Move to Level 2");
+    levelsMenu->Append(IDM_LEVEL3, L"&Level 3", L"&Move to Level 3");
+
+    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
+    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
+
     SetMenuBar(menuBar);
 
-    // Optionally load level0 immediately
-//    if (!mSpartanmindView->LoadFromXML(level0File)) {
-//        SetStatusText("Failed to load Level 0");
-//    } else {
-//        SetStatusText(wxString::Format("Loaded Level 0 (%d x %d)", totalWidth, totalHeight));
-//    }
 }
 
 
@@ -90,13 +81,3 @@ void MainFrame::OnAbout(wxCommandEvent& event) {
                  "About Spartanmind", wxOK | wxICON_INFORMATION);
 }
 
-/**
- * Handles the window close event.
- */
-void MainFrame::OnClose(wxCloseEvent& event) {
-    if (mSpartanmindView) {
-        mSpartanmindView->Destroy();
-        mSpartanmindView = nullptr;
-    }
-    Destroy();
-}

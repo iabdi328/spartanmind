@@ -1,12 +1,10 @@
 /**
- * @file GameArea.cpp
+ * @file LoadLevel.cpp
  * @author Terrance Zackery
  */
 
 #include "pch.h"
-#include "SpartanmindView.h"
 #include "Given.h"
-#include "Sparty.h"
 #include "Player.h"
 #include "LLetter.h"
 #include "Tray.h"
@@ -14,13 +12,9 @@
 #include "LoadLevel.h"
 #include "Item.h"
 #include <sstream>
-#include <vector>
 #include <string>
 #include <memory>
-#include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
-#include <wx/wfstream.h>
-#include <wx/graphics.h>
 
 using namespace std;
 
@@ -53,7 +47,10 @@ void LoadLevel::Load(const wxString &filename)
     auto rootName = root->GetName();
 
     // variables
-    int width, height, tileWidth, tileHeight;
+    int width;
+    int height;
+    int tileWidth;
+    int tileHeight;
 
 
 
@@ -69,8 +66,7 @@ void LoadLevel::Load(const wxString &filename)
     mGame->SetTileHeight(tileHeight);
 
 
-//     Iterate through Level's Child XML nodes:
-//     declarations, game, items
+//     Iterate through Levels data
     auto child = root->GetChildren();
     for (; child; child=child->GetNext())
     {
@@ -100,12 +96,11 @@ void LoadLevel::Load(const wxString &filename)
                 {
                     SpartyNode(decChild);
                 }
-//
-//                if (decName == "container")
-//                {
-//                    ContainerNode(decChild);
-//                }
 
+                if (decName == "container")
+                {
+                    ContainerNode(decChild);
+                }
 
             }
         }
@@ -134,19 +129,20 @@ void LoadLevel::Clear()
 void LoadLevel::TrayNode(wxXmlNode *node)
 {
     // A pointer for the item we are loading
-    // name of the tag
     auto tagName = node->GetName();
-    // id of the element
+
     auto id = node->GetAttribute(L"id");
-    //Value of the number
+
     int capacity;
     node->GetAttribute(L"capacity").ToInt(&capacity);
-    // image
+
 
     auto image = node->GetAttribute(L"image").ToStdWstring();
-    // Go up to Level node to iterating into items
+
+    // Level node to iterating into items
     auto root = node->GetParent()->GetParent();
-    // iterate into item
+
+    // iterate  items
     auto child = root->GetChildren();
     for (; child; child=child->GetNext())
     {
@@ -157,7 +153,7 @@ void LoadLevel::TrayNode(wxXmlNode *node)
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild=itemsChild->GetNext())
             {
-                // find the node with the same id. there can be multiple
+
                 if (itemsChild->GetAttribute(L"id") == id)
                 {
                     // set coordinates
@@ -165,7 +161,6 @@ void LoadLevel::TrayNode(wxXmlNode *node)
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
                     itemsChild->GetAttribute(L"height").ToDouble(&height);
 
-                    // working so far.
                     if(tagName == L"tray")
                     {
                         shared_ptr<Item> tray;
@@ -183,11 +178,11 @@ void LoadLevel::TrayNode(wxXmlNode *node)
 
 void LoadLevel::BackgroundNode(wxXmlNode * node)
 {
-    // id of the element
+
     auto id = node->GetAttribute(L"id");
-    // image
+
     auto image = node->GetAttribute(L"image").ToStdWstring();
-    // Go up to Level node to iterating into items
+
     auto root = node->GetParent()->GetParent();
     // iterate into item
     auto child = root->GetChildren();
@@ -196,35 +191,34 @@ void LoadLevel::BackgroundNode(wxXmlNode * node)
         auto name = child->GetName();
         if(name == L"items")
         {
-            double col, row, height;
+            double col;
+            double row;
+            double height;
+
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild = itemsChild->GetNext())
             {
-                // find the node with the same id. there can be multiple
+                // node with the same id
                 if(itemsChild->GetAttribute(L"id") == id)
                 {
                     mGame->SetBackground(image);
                 }
-
             }
-
         }
     }
 }
 
 void LoadLevel::LetterNode(wxXmlNode *node)
 {
-    // A pointer for the item we are loading
-    // name of the tag
+    // item we are loading
     auto tagName = node->GetName();
-    // id of the element
+
     auto id = node->GetAttribute(L"id");
-    //Value of the number
+
     int value = 0;
     node->GetAttribute(L"value").ToInt(&value);
-    // image
+
     auto image = node->GetAttribute(L"image").ToStdWstring();
-    // Go up to Level node to iterating into items
     auto root = node->GetParent()->GetParent();
     // iterate into item
     auto child = root->GetChildren();
@@ -237,14 +231,13 @@ void LoadLevel::LetterNode(wxXmlNode *node)
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild=itemsChild->GetNext())
             {
-                // find the node with the same id. there can me multiple
                 if (itemsChild->GetAttribute(L"id") == id)
                 {
                     // set coordinates
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
 
-                    // working so far.
+                    // setting and adding given items
                     if(tagName == L"given")
                     {
                         shared_ptr<Item> given;
@@ -252,9 +245,8 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                         given->SetLocation((col*mGame->GetTileHeight()), ((row)
                             *mGame->GetTileWidth()));
                         mGame->Add(given);
-//                        wxLogMessage("Given Letter set: %s", col);
                     }
-
+                    // setting and adding letter items
                     if(tagName == L"letter")
                     {
                         shared_ptr<Item> letter;
@@ -262,7 +254,6 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                         letter->SetLocation((col*mGame->GetTileHeight()), ((row)
                             *mGame->GetTileWidth()));
                         mGame->Add(letter);
-//                        wxLogMessage("Given Letter set: %s", row);
                     }
 
                 }
@@ -279,7 +270,7 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
     auto image1 = node->GetAttribute(L"image1").ToStdWstring();
     auto image2 = node->GetAttribute(L"image2").ToStdWstring();
 
-    ////<sparty id="i250" width="96" height="96" front="1" head-pivot-angle="1.5" head-pivot-x="40" head-pivot-y="86" image1="sparty-3.png" image2="sparty-4.png" mouth-pivot-angle="0.5" mouth-pivot-x="30" mouth-pivot-y="65" target-x="72" target-y="24" />
+    // player data
     auto headPivotAngle = node->GetAttribute(L"head-pivot-angle");
     auto headPivotX = node->GetAttribute(L"head-pivot-x");
     auto headPivotY = node->GetAttribute(L"head-pivot-y");
@@ -289,7 +280,7 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
     auto targetX = node->GetAttribute(L"target-x");
     auto targetY = node->GetAttribute(L"target-y");
 
-    // Go up to Level node to iterating into items
+    // Level node
     auto root = node->GetParent()->GetParent();
 
     // iterate into item
@@ -303,13 +294,14 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild = itemsChild->GetNext())
             {
-                // find the node with the same id. there can be multiple
+
                 if(itemsChild->GetAttribute(L"id") == id)
                 {
                     // set coordinates
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
 
+                    // creating player, setting and adding into game
                     std::shared_ptr<Player> player;
                     player = std::make_shared<Player>(mGame, image1, image2);
                     player->SetStartingLocation((col*mGame->GetTileHeight()), ((row)
@@ -329,55 +321,54 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
         }
     }
 }
-//void LoadLevel::ContainerNode(wxXmlNode *node)
-//{
-//    const wstring loc = L"../images/";
-//    // A pointer for the item we are loading
-//    // name of the tag
-//    auto tagName = node->GetName();
-//    // id of the element
-//    auto id = node->GetAttribute(L"id");
-//    // 2 images
-//    auto image = node->GetAttribute(L"image").ToStdWstring();
-//    auto frontImage = node->GetAttribute(L"front").ToStdWstring();
-//    // Go up to Level node to iterating into items
-//    auto root = node->GetParent()->GetParent();
-//    // iterate into item
-//    auto child = root->GetChildren();
-//    for (; child; child=child->GetNext())
-//    {
-//        auto name = child->GetName();
-//        if (name == L"items")
-//        {
-//            double col, row;
-//            auto itemsChild = child->GetChildren();
-//            for(; itemsChild; itemsChild=itemsChild->GetNext())
-//            {
-//                // find the node with the same id. there can me multiple
-//                if (itemsChild->GetAttribute(L"id") == id)
-//                {
-//                    // set coordinates
-//                    itemsChild->GetAttribute(L"col").ToDouble(&col);
-//                    itemsChild->GetAttribute(L"row").ToDouble(&row);
-//
-//                    // construct Container. It only makes a vector of items
-//                    // and draws them separately.
-//                    shared_ptr<Container> container;
-//                    container = make_shared<Container>(mGame);
-//
-//                    // make the background image as the first element in the
-//                    // list of container items
-//                    shared_ptr<Item> backImage;
-//                    backImage = make_shared<Item>(mGame,
-//                                                  loc+image);
-//                    backImage->SetLocation((col*mGame->GetTileHeight()), (
-//                        (row-4)*mGame->GetTileWidth()));
-//                    container->Add(backImage);
-//
-//
-//                }
-//
-//            }
-//        }
-//    }
-//}
+void LoadLevel::ContainerNode(wxXmlNode *node)
+{
+    const wstring loc = L"../images/";
+
+    // A pointer for the item we are loading
+    auto tagName = node->GetName();
+
+    auto id = node->GetAttribute(L"id");
+
+    // 2 images in container
+    auto image = node->GetAttribute(L"image").ToStdWstring();
+    auto frontImage = node->GetAttribute(L"front").ToStdWstring();
+
+    // Level node
+    auto root = node->GetParent()->GetParent();
+    // iterate into item
+    auto child = root->GetChildren();
+    for (; child; child=child->GetNext())
+    {
+        auto name = child->GetName();
+        if (name == L"items")
+        {
+            double col, row;
+            auto itemsChild = child->GetChildren();
+            for(; itemsChild; itemsChild=itemsChild->GetNext())
+            {
+
+                if (itemsChild->GetAttribute(L"id") == id)
+                {
+                    // set coordinates
+                    itemsChild->GetAttribute(L"col").ToDouble(&col);
+                    itemsChild->GetAttribute(L"row").ToDouble(&row);
+
+                    // shared ptr for container items
+                    shared_ptr<Container> container;
+                    container = make_shared<Container>(mGame);
+
+                    // setting background to first item in container vectorr
+                    shared_ptr<Item> backImage;
+                    backImage = make_shared<Item>(mGame,
+                                                  loc+image);
+                    backImage->SetLocation((col*mGame->GetTileHeight()), (
+                        (row-4)*mGame->GetTileWidth()));
+                    container->Add(backImage);
+
+                }
+
+            }
+        }
+    }
+}

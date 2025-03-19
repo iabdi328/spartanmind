@@ -8,7 +8,7 @@
 #ifndef LETTER_H
 #define LETTER_H
 
-#include "Game.h"
+
 #include "Item.h"
 
 class Letter : public Item

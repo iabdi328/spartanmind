@@ -1,17 +1,25 @@
 /**
 * @file Player.cpp
- * @author  Emmanuel Koshy
+ * @author  Emmanuel Koshy, Terrance Zackery
  *
  *
  */
 #include "pch.h"
 #include "Player.h"
+#include "Game.h"
 #include <wx/graphics.h>
 #include <wx/geometry.h>
 #include <cstdio>
 
 
+/// Character speed in pixels per second
+const double mMaxSpeed = 400.00;
 
+/// The time for an eating cycles in seconds
+const double EatingTime = 0.5;
+
+/// The time for a headbutt cycle in seconds
+const double HeadbuttTime = 0.5;
 
 Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : Item(game, headImage, mouthImage)
 {
@@ -24,40 +32,55 @@ Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : I
     mSpeed = 0;
     mX = 0;
     mY = 0;
-    const wstring loc = L"../images/";
+    const std::wstring loc = L"../images/";
     mSpartyImage = std::make_unique<wxBitmap>(loc+headImage, wxBITMAP_TYPE_ANY);
     mMouthImage = std::make_unique<wxBitmap>(loc+mouthImage, wxBITMAP_TYPE_ANY);
 
-//    if (!mSpartyImage->IsOk()) {
-//        std::cerr << "You Failed to load head image: " << loc + headImage << std::endl;
-//    }
-//
-//    if (!mMouthImage->IsOk()) {
-//        std::cerr << "You Failed to load mouth image: " << loc + mouthImage << std::endl;
-//    }
 }
 
 // Update method
 void Player::Update(double elapsedTime) {
-    // Calculate the vector from the current position to the target
-    wxPoint2DDouble direction = mTarget - mLocation;
 
-    // Calculate the distance to the target manually using std::sqrt
-    double distanceToTarget = std::sqrt(direction.m_x * direction.m_x + direction.m_y * direction.m_y);
+    if (mMoving)
+    {
+        // Update the direction of Sparty
+        mDirectionX = mDestX - mX;
+        mDirectionY = mDestY - mY;
+        mDirection = atan2(mDirectionY, mDirectionX);
 
-    // If there's distance left to the target
-    if (distanceToTarget > 0) {
-        // Calculate how far Sparty should move this frame (based on max speed and elapsed time)
-        double moveLength = MaxSpeed * elapsedTime;
+        // Update the speed of Sparty
+        mSpeed = mMaxSpeed;
 
-        // If the move length is greater than or equal to the distance to the target, just move to the target
-        if (moveLength >= distanceToTarget) {
-            mLocation = mTarget;  // Set the player at the target position directly
-        } else {
-            // Otherwise, move towards the target by the calculated move length
-            direction.Normalize();  // Normalize direction to get a unit vector
-            mLocation += direction * moveLength;  // Move Sparty in the direction towards the target
+        // Update the location of Sparty
+        mX += mSpeed * cos(mDirection) * elapsedTime;
+        mY += mSpeed * sin(mDirection) * elapsedTime;
+
+        double distanceToDestination = sqrt(mDirectionX * mDirectionX + mDirectionY * mDirectionY);
+        if (distanceToDestination < mTargetY) { // You can adjust the threshold as needed
+            mMoving = false;
+            mX = mDestX;
+            mY = mDestY;
         }
+    } else if(mEating) //mouth animation
+    {
+        mEatingTimer += elapsedTime/EatingTime;
+        if (mEatingTimer > EatingTime)
+        {
+            mEating = false;
+            mEatingTimer = 0;
+        }
+    } else if(mHeadbutt) //headbutt animation
+    {
+        mHeadbuttTimer += elapsedTime/HeadbuttTime;
+        if (mHeadbuttTimer > HeadbuttTime)
+        {
+            mHeadbutt = false;
+            mHeadbuttTimer = 0;
+        }
+    }
+
+    else {
+        mSpeed = 0;
     }
 }
 
@@ -67,46 +90,58 @@ void Player::SetStartingLocation(double x, double y){
 }
 
 void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics) {
-    // First, apply rotation for the headbutt (using the base pivot)
-    graphics->PushState();
-    
-    // Apply rotation around the base pivot
-    graphics->Translate(mBasePivot.m_x, mBasePivot.m_y);
-    graphics->Rotate(mBaseAngle);  // mBaseAngle is the current headbutt angle
-    graphics->Translate(-mBasePivot.m_x, -mBasePivot.m_y);
-    
-    // Translate to the current position of the player
-    graphics->Translate(mLocation.m_x, mLocation.m_y);
-    
-    // Draw image1 (the main body/head) at (0, 0)
-//    wxBitmap bmp1(mImage1, wxBITMAP_TYPE_PNG);
-//    if (bmp1.IsOk()) {
-//        graphics->DrawBitmap(bmp1, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
-//    }
+    auto position = ComputePosition();
+    // Draw player
     if (mSpartyImage != nullptr && !mHeadbutt)
     {
-        graphics->DrawBitmap(*mSpartyImage, mX, mY, wid,hit);
+        graphics->DrawBitmap(*mSpartyImage, mX, mY, wid, hit);
     }
-    if (mMouthImage != nullptr && !mEating)
+    // Draw player mouth
+    if (mMouthImage != nullptr && !mEating && !mHeadbutt)
     {
-        graphics->DrawBitmap(*mMouthImage, 0, 0, wid,hit);
+        graphics->DrawBitmap(*mMouthImage, mX, 50, wid, hit);
     }
+    if (mMouthImage != nullptr && mEating)
+    {
+        graphics->Translate(position.x + mMouthPivotX , position.y +  mMouthPivotY);
+        graphics->Rotate(1);
+        graphics->DrawBitmap(*mMouthImage, 0, 0, wid, hit);
+        graphics->PopState();
 
-    // Now, apply the mouth (or lid) animation (with auxiliary pivot)
+    }
+    if(mSpartyImage != nullptr && mHeadbutt && !mEating)
+    {
+        //Make player headbutt
+        graphics->Translate(position.x + mTargetX , position.y );
+        graphics->Rotate(1);
+        //Draw playeer
+        graphics->DrawBitmap(*mSpartyImage, 0, 0,wid, hit);
+        //Draw mouth
+        graphics->DrawBitmap(*mMouthImage, 0, 0, wid, hit);
+        graphics->PopState();
+    }
     graphics->PushState();
-    graphics->Translate(mAuxPivot.m_x, mAuxPivot.m_y);
-    graphics->Rotate(mAuxAngle);  // Rotate around the mouth/lid pivot
-    graphics->Translate(-mAuxPivot.m_x, -mAuxPivot.m_y);
+}
 
-    // Draw image2 (the mouth or lid)
-//    wxBitmap bmp2(mImage2, wxBITMAP_TYPE_PNG);
-//    if (bmp2.IsOk()) {
-//        graphics->DrawBitmap(bmp2, 0, 0, 96, 96);  // Drawing width and height of 96px (as specified)
-//    }
-    graphics->PopState();
-
-    // Restore graphics state
-    graphics->PopState();
+/**
+* Set Location of Player
+ * @param x X location in pixels
+ * @param y Y location in pixels
+*/
+void Player::SetLocation(double x, double y)
+{
+    mDestX = ((x - mGameWorld->GetXOffset() )/
+        mGameWorld->GetScale()) - mSpartyImage->GetWidth();
+    mDestY = ((y - mGameWorld->GetYOffset()) / mGameWorld->GetScale()) - mSpartyImage
+        ->GetHeight();
+    if (mX == mDestX && mY == mDestY)
+    {
+        mMoving = false;
+    }
+    else
+    {
+        mMoving = true;
+    }
 }
 
 void Player::SetTarget(double x, double y) {
@@ -137,3 +172,40 @@ void Player::Eat() {
         printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
     }
 }
+
+/**
+* Compute position
+ * @return position of playeer
+**/
+wxRealPoint Player::ComputePosition()
+{
+    wxRealPoint pos(mX,mY);
+    return pos;
+}
+
+//bool Sparty::HitTest(int x, int y) const {
+//    // To test for a hit, we reverse the transformations applied in Draw().
+//    // Forward transformation:
+//    //    p_world = mLocation + R(mHeadAngle) * (p_local + mBasePivot) - mBasePivot
+//    // We invert this process.
+//
+//    // lol Compute the vector from Sparty's position (world space) to the hit point.
+//    double qx = x - mLocation.m_x;
+//    double qy = y - mLocation.m_y;
+//
+//    // Apply the inverse rotation: R(-mHeadAngle)
+//    // Note: cos(-a) = cos(a) and sin(-a) = -sin(a)
+//    double cosAngle = cos(mHeadAngle);
+//    double sinAngle = sin(mHeadAngle);
+//
+//    // Shift the point by mBasePivot before rotating, then undo the pivot shift
+//    double localX = cosAngle * (qx + mBasePivot.m_x) + sinAngle * (qy + mBasePivot.m_y) - mBasePivot.m_x;
+//    double localY = -sinAngle * (qx + mBasePivot.m_x) + cosAngle * (qy + mBasePivot.m_y) - mBasePivot.m_y;
+//
+//    // Now check if the resulting local coordinates lie within the head image's rectangle
+//    // (assumed to be at (0,0) with width and height 96)
+//    if (localX >= 0 && localX <= 96 && localY >= 0 && localY <= 96) {
+//        return true;
+//    }
+//    return false;
+//}

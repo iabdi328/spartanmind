@@ -14,14 +14,11 @@ set(SOURCE_FILES
         Item.h
         Player.cpp
         Player.h
-        Sparty.cpp
         Scoreboard.h
         Scoreboard.cpp
         Scoreboard.cpp
         Letter.cpp
         Letter.h
-        Chest.cpp
-        Chest.h
         Given.cpp
         Given.h
         LoadLevel.cpp
@@ -32,8 +29,6 @@ set(SOURCE_FILES
         Container.h
         ItemVisitor.cpp
         ItemVisitor.h
-        Declaration.cpp
-        Declaration.h
         LLetter.cpp
         LLetter.h
 )

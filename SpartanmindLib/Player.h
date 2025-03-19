@@ -11,7 +11,8 @@
 #include <wx/geometry.h>
 #include <string>
 #include <wx/graphics.h>
-#include "Game.h"
+
+class Game;
 
 class Player : public Item {
 private:
@@ -64,6 +65,18 @@ private:
     /// Y location of player
     double mY = 0;
 
+    /// X destination of sparty given
+    double mDestX = 0;
+
+    /// Y destination of party given
+    double mDestY = 0;
+
+    /// X direction of sparty
+    double mDirectionX = 0;
+
+    /// Y direction of sparty
+    double mDirectionY = 0;
+
     /// width of sparty
     double wid = 96;
 
@@ -101,6 +114,9 @@ private:
     /// Pivot point of mouth (Y)
     double mMouthPivotY= 7;
 
+    double mHeadAngle = 0;     // Head rotation angle for headbutt
+    double mMouthAngle = 0.5;    // Angle for mouth rotation (eating)
+
     const double HeadbuttDuration = 0.5; // Headbutt duration (seconds)
     const double HeadbuttAngle = 0.5; // Max angle for headbutt
 
@@ -111,10 +127,12 @@ public:
     Player(Game *game, std::wstring headImage, std::wstring mouthImage);
     virtual ~Player() {}
 
+    void SetLocation(double x, double y);
     void Update(double elapsedTime);  // Updates position based on movement
     void Draw(std::shared_ptr<wxGraphicsContext> graphics);  // Pure virtual for drawing player
     void Eat();  // Virtual Eat method to be overridden by derived class
     void Headbutt();  // Method to perform headbutt animation
+    wxRealPoint ComputePosition();
 
     // Movement methods
     void SetTarget(double x, double y);  // Set the target position

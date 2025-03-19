@@ -14,15 +14,7 @@ Item::~Item()
 
 }
 
-/**
- * Constructor
- * @param spartanmind The spartanmind this item is a member of
- */
-//Item::Item(Game *spartanmind, const std::wstring &filename) : mGame(spartanmind)
-//{
-//    mItemImage = make_unique<wxImage>(filename, wxBITMAP_TYPE_ANY);
-//    mItemBitmap = make_unique<wxBitmap>(*mItemImage);
-//}
+
 
 
 /**
@@ -81,7 +73,27 @@ bool Item::HitTest(int x, int y)
 void Item::Draw(const std::shared_ptr<wxGraphicsContext>& gc)
 {
     // cout << "Drawing letters" << endl;
-    double mImageWidth = mItemBitmap->GetWidth();
-    double mImageHeight = mItemBitmap->GetHeight();
-    gc->DrawBitmap(*mItemBitmap, GetX(), GetY(), mImageWidth, mImageHeight);
+//    double mImageWidth = mItemBitmap->GetWidth();
+//    double mImageHeight = mItemBitmap->GetHeight();
+//    gc->DrawBitmap(*mItemBitmap, GetX(), GetY(), mImageWidth, mImageHeight);
+
+    if(mFirstImage)
+    {
+        double mImageWidth = mItemBitmap->GetWidth();
+        double mImageHeight = mItemBitmap->GetHeight();
+        gc->DrawBitmap(*mItemBitmap, GetX(), GetY(), mImageWidth, mImageHeight);
+
+    }
+
+    if(mSecondImage){
+        double wid2 = mItemBitmap2->GetWidth();
+        double hit2 = mItemBitmap2->GetHeight();
+        gc->DrawBitmap(*mItemBitmap2, int(GetX()), int(GetY()), wid2,
+                             hit2);
+    }
+}
+
+void Item::SetLocation(double x, double y) {
+    mX = x;
+    mY = y;
 }

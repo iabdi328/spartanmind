@@ -18,7 +18,7 @@
 class LoadLevel
 {
 private:
-    Game *mGame;
+    Game * mGame;
 
 public:
     /// Default constructor (disabled)
@@ -39,9 +39,6 @@ public:
      */
     void Load(const wxString &filename);
 
-    /**
-     * Node for the Background
-     */
     void BackgroundNode(wxXmlNode * node);
     void LetterNode(wxXmlNode * node);
     void TrayNode(wxXmlNode *node);

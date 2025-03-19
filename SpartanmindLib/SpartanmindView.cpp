@@ -12,10 +12,10 @@
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 #include <memory>
+#include "Player.h"
 #include "LoadLevel.h"
 #include "Given.h"
 #include "Letter.h"
-#include "Sparty.h"
 #include "Tray.h"
 
 using namespace std;
@@ -32,16 +32,16 @@ void SpartanmindView::Initialize(wxFrame *parent)
 
     // Bind our event handlers
     Bind(wxEVT_PAINT, &SpartanmindView::OnPaint, this);
-    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnLeftDown, this);
     Bind(wxEVT_KEY_DOWN, &SpartanmindView::OnKeyDown, this);
+    Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnMouseClick, this);
 
-//    // Bind functions from MainFrame
-//    parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelOne, this,
-//                 IDM_LEVEL1);
-//    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelTwo, this,
-//                 IDM_LEVEL2);
-//    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelThree, this,
-//                 IDM_LEVEL3);
+    // Bind functions from MainFrame
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelOne, this,
+                 IDM_LEVEL1);
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelTwo, this,
+                 IDM_LEVEL2);
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelThree, this,
+                 IDM_LEVEL3);
 
     const wxString filename = L"../levels/level1.xml";
 
@@ -55,26 +55,18 @@ void SpartanmindView::Initialize(wxFrame *parent)
     mGameTimer->Start(16);
 }
 
-///**
-// * Destructor. Stop the timer and clean up.
-// */
-//SpartanmindView::~SpartanmindView()
-//{
-//    if (mGameTimer)
-//    {
-//        mGameTimer->Stop();
-//        delete mGameTimer;
-//        mGameTimer = nullptr;
-//    }
-//}
-
 /**
  * Paint event, draws the window.
  * @param event Paint event object
  */
 void SpartanmindView::OnPaint(wxPaintEvent& event)
 {
+    auto newTime = mStopWatch.Time();
+    auto elapsed = (double)(newTime - mTime) * 0.001;
+    mTime = newTime;
+
     wxAutoBufferedPaintDC dc(this);
+
     wxBrush background(*wxBLACK);
     dc.SetBackground(background);
     dc.Clear();
@@ -84,96 +76,11 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
 
     wxRect rect = GetRect();
     // 1. Draw the game world (background, scoreboard, etc.)
+    mGame.Update(elapsed);
     mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
-//    // 2. Draw Sparty (the player character) if valid
-//    if (mGame.GetPlayer() && mGame)
-//    {
-//        mGame.GetPlayer()->Draw(gc.get());
-//    }
+    Refresh(false);
 
-    // 3. Draw all letters stored in Spartanmind
-//    int x = 200;
-//    int y = 300;
-//    for (const auto& letter : mGame.GetLetters())
-//    {
-//        letter->SetLocation(x, y);int x = 200;
-////    int y = 300;
-////    for (const auto& letter : mGame.GetLetters())
-////    {
-////        letter->SetLocation(x, y);
-////        letter->Draw(&dc);
-////        x += 50;
-////        if (x == 700)
-////        {
-////            y += 50;
-////            x = 300;
-////        }
-////    }
-////
-////    // 4. Draw all givens
-////    x = 200;
-////    y = 100;
-////    for (const auto& given : mGame.GetGivens())
-////    {
-////        given->SetLocation(x, y);
-////        given->Draw(&dc);
-////        x += 50;
-////        if (x == 700)
-////        {
-////            y += 50;
-////            x = 300;
-////        }
-////    }
-////    x = 800;
-////    y = 144;
-////    for (const auto& tray : mGame.GetTray())
-////    {
-////        tray->SetLocation(x, y);
-////        tray->Draw(&dc);
-////        x += 50;
-////        if (x == 700)
-////        {
-////            y += 50;
-////            x = 300;
-////        }
-////    }
-//        letter->Draw(&dc);
-//        x += 50;
-//        if (x == 700)
-//        {
-//            y += 50;
-//            x = 300;
-//        }
-//    }
-//
-//    // 4. Draw all givens
-//    x = 200;
-//    y = 100;
-//    for (const auto& given : mGame.GetGivens())
-//    {
-//        given->SetLocation(x, y);
-//        given->Draw(&dc);
-//        x += 50;
-//        if (x == 700)
-//        {
-//            y += 50;
-//            x = 300;
-//        }
-//    }
-//    x = 800;
-//    y = 144;
-//    for (const auto& tray : mGame.GetTray())
-//    {
-//        tray->SetLocation(x, y);
-//        tray->Draw(&dc);
-//        x += 50;
-//        if (x == 700)
-//        {
-//            y += 50;
-//            x = 300;
-//        }
-//    }
 }
 
 /**
@@ -194,30 +101,41 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     mGame.Update(deltaSeconds);
     mGame.UpdateScoreboard(deltaSeconds);
 
+    // Move Sparty
+    std::shared_ptr<Player> player(mGame.GetPlayer());
+
+    if (player != nullptr)
+    {
+        player->Update(deltaSeconds);
+    }
+
     Refresh();
 }
 
 
-/**
- * Mouse left-click event - moves Sparty to the clicked position.
- * @param event Mouse event
- */
-void SpartanmindView::OnLeftDown(wxMouseEvent& event)
+
+void SpartanmindView::OnMouseClick(wxMouseEvent& event)
 {
-//    if (!mGame) return;
 
-    int x = event.GetX();
-    int y = event.GetY();
-    // Invert y coordinate because window origin is top-left
-    int gameY = GetClientSize().GetHeight() - y;
+    // Get the clicked screen coordinates
+    wxPoint pos = event.GetPosition();
+    std::cout << "@DEBUG OnMouseClick Click at: " << pos.x << ", " << pos.y << std::endl;
 
-    // Update Sparty's target
-    if (mGame.GetPlayer())
+    // Get player
+    std::shared_ptr<Player> player(mGame.GetPlayer());
+    if(event.GetX() - 60 > mGame.GetXOffset() && event.GetX() < mGame.GetXOffset()
+        + mGame.GetPixelWidth() * mGame.GetScale())
     {
+        if(event.GetY() - 10 > mGame.GetYOffset() && event.GetY() < mGame
+            .GetYOffset() + mGame.GetPixelHeight() * mGame.GetScale())
+        {
+            if(player != nullptr)
+            {
+                player->SetLocation(pos.x, pos.y);
+            }
+        }
 
-        mGame.GetPlayer()->SetTarget(x, y);
     }
-    Refresh();
 }
 
 /**
@@ -243,142 +161,6 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     event.Skip(); // Let other key events process
 }
 
-///**
-// * Load level data from an XML file.
-// * @param filename Path to the XML file.
-// * @return True if loaded successfully, false otherwise.
-// */
-//bool SpartanmindView::LoadFromXML(const wxString& filename)
-//{
-//    if (!mGame) return false;
-//
-//    wxXmlDocument xmlDoc;
-//    wxFileInputStream inputStream(filename);
-//    if (!inputStream.IsOk() || !xmlDoc.Load(inputStream))
-//    {
-//        wxLogError("Failed to load level file: %s", filename);
-//        return false;
-//    }
-//
-//    wxXmlNode* root = xmlDoc.GetRoot();
-//    if (!root || root->GetName() != "level")
-//    {
-//        wxLogError("Invalid level file format: %s", filename);
-//        return false;
-//    }
-//
-//    // Grab width/height from XML
-//    double width, height, tileWidth, tileHeight;
-//    root->GetAttribute("width", "0").ToDouble(&width);
-//    root->GetAttribute("height", "0").ToDouble(&height);
-//    root->GetAttribute("tilewidth", "48").ToDouble(&tileWidth);
-//    root->GetAttribute("tileheight", "48").ToDouble(&tileHeight);
-//
-//    int totalWidth = static_cast<int>(width * tileWidth);
-//    int totalHeight = static_cast<int>(height * tileHeight);
-//
-//    SetSize(totalWidth, totalHeight);
-//
-//    // Update the virtual dimensions in our Game object
-//    mGame->SetVirtualDimensions(totalWidth, totalHeight);
-//
-//    // Parse <declarations> to set background, letters, givens, etc.
-//    wxXmlNode* declarationsNode = root->GetChildren();
-//    while (declarationsNode)
-//    {
-//        if (declarationsNode->GetName() == "declarations")
-//        {
-//            wxXmlNode* child = declarationsNode->GetChildren();
-//            while (child)
-//            {
-//                if (child->GetName() == "background")
-//                {
-//                    wxString bgImage = child->GetAttribute("image", "");
-//                    if (!bgImage.IsEmpty())
-//                    {
-//                        wxString fullBgPath = "resources/images/" + bgImage;
-//                        //mSpartanmind->SetBackground(fullBgPath);
-//                        mGame.SetBackground(fullBgPath);
-//                    }
-//                }
-//                else if (child->GetName() == "letter")
-//                {
-//                    wxString letterId = child->GetAttribute("id", "");
-//                    wxString letterWidth = child->GetAttribute("width", "");
-//                    wxString letterHeight = child->GetAttribute("height", "");
-//                    wxString letterImage = child->GetAttribute("image", "");
-//                    wxString letterValue = child->GetAttribute("value", "");
-//                    if (!letterImage.IsEmpty())
-//                    {
-//                        wxString fullLetterPath = "resources/images/" + letterImage;
-//                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-//                        Letter* letter = new Letter(mGame, fullLetterPathw, letterId,
-//                                                    letterWidth, letterHeight, fullLetterPath,
-//                                                    letterValue, letterWidth, letterWidth);
-//                        mGame->AddLetter(letter);
-//                    }
-//                }
-//                else if (child->GetName() == "given")
-//                {
-//                    wxString letterId = child->GetAttribute("id", "");
-//                    wxString letterWidth = child->GetAttribute("width", "");
-//                    wxString letterHeight = child->GetAttribute("height", "");
-//                    wxString letterImage = child->GetAttribute("image", "");
-//                    wxString letterValue = child->GetAttribute("value", "");
-//                    if (!letterImage.IsEmpty())
-//                    {
-//                        wxString fullLetterPath = "resources/images/" + letterImage;
-//                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-//                        Given* given = new Given(mGame, fullLetterPathw, letterId,
-//                                                 letterWidth, letterHeight, fullLetterPath,
-//                                                 letterValue, letterWidth, letterWidth);
-//                        mGame->AddGiven(given);
-//                    }
-//                }
-//                else if (child->GetName() == "tray")
-//                {
-//                    wxString trayId = child->GetAttribute("id", "");
-//                    wxString trayWidth = child->GetAttribute("width", "");
-//                    wxString trayHeight = child->GetAttribute("height", "");
-//                    wxString trayImage = child->GetAttribute("image", "");
-//                    wxString trayValue = child->GetAttribute("capacity", "");
-//                    if(!trayImage.IsEmpty())
-//                    {
-//                        wxString fullTrayPath = "resources/images/" + trayImage;
-//                        std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
-//                        Tray *tray = new Tray(mGame, fullTrayPathw, trayId, trayWidth,
-//                                              trayHeight, fullTrayPath, trayValue, trayWidth, trayWidth);
-//                        mGame->AddTray(tray);
-//                    }
-//                }
-//                else if (child->GetName() == "container")
-//                {
-//                    wxString containerId = child->GetAttribute("id", "");
-//                    wxString containerWidth = child->GetAttribute("width", "");
-//                    wxString containerHeight = child->GetAttribute("height", "");
-//                    wxString containerImage = child->GetAttribute("image", "");
-//                    wxString containerValue = child->GetAttribute("capacity", "");
-//                    if(!containerImage.IsEmpty())
-//                    {
-//                        wxString fullcontainerPath = "resources/images/" + containerImage;
-//                        std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
-//                        Container *container = new Container(mGame, fullcontainerPathw, containerId, containerWidth,
-//                                              containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
-//                        mGame->AddContainer(container);
-//                    }
-//                }
-//
-//                child = child->GetNext();
-//            }
-//        }
-//        declarationsNode = declarationsNode->GetNext();
-//    }
-//
-//    Refresh();
-//    return true;
-//}
-
-
 
 /**
  * Event handler for selecting Level One.
@@ -389,7 +171,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 void SpartanmindView::OnLevelOne(wxCommandEvent& event)
 {
     const wxString filename = L"../levels/level1.xml";
-//    LoadNewLevel(filename, 1);
+    NewLevel(filename, 1);
 }
 
 /**
@@ -401,7 +183,7 @@ void SpartanmindView::OnLevelOne(wxCommandEvent& event)
 void SpartanmindView::OnLevelTwo(wxCommandEvent& event)
 {
     const wxString filename = L"../levels/level2.xml";
-//    LoadNewLevel(filename, 2);
+    NewLevel(filename, 2);
 }
 
 /**
@@ -413,6 +195,52 @@ void SpartanmindView::OnLevelTwo(wxCommandEvent& event)
 void SpartanmindView::OnLevelThree(wxCommandEvent& event)
 {
     const wxString filename = L"../levels/level3.xml";
-//    LoadNewLevel(filename, 3);
+    NewLevel(filename, 3);
 
+}
+
+void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
+{
+    // Reset the game state
+    mGame.Clear(); // Assuming this clears the current game state
+
+    mGameIsActive = false;
+    mNewLevel = true;
+
+    // Set the new level number in the game
+    mGame.SetLevel(levelNumber);
+
+    // Load the new level content
+    LoadLevel area(&mGame);
+    area.Load(filename);
+
+}
+
+void SpartanmindView::LoadNextLevel()
+{
+    // current level number
+    int currLevel = mGame.GetLevel();
+
+    // next level number
+    int nextLevel = currLevel + 1;
+
+    // Load the new level directly without using events
+    wxString filename;
+    switch (nextLevel)
+    {
+        case 1:
+            filename = L"../levels/level1.xml";
+            NewLevel(filename, 1);
+            break;
+        case 2:
+            filename = L"../levels/level2.xml";
+            NewLevel(filename, 2);
+            break;
+        case 3:
+            filename = L"../levels/level3.xml";
+            NewLevel(filename, 3);
+            break;
+        default:
+            break;
+    }
 }
