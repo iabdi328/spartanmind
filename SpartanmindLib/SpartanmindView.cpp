@@ -76,23 +76,12 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
         mGame->GetPlayer()->Draw(gc.get());
     }
 
-    // 3. Draw all letters stored in Spartanmind
-    for (const auto& letter : mGame->GetLetters())
-    {
-        letter->Draw(&dc);
-    }
-
-    // 4. Draw all givens
-    for (const auto& given : mGame->GetGivens())
-    {
-        given->Draw(&dc);
-    }
     int x = 800;
     int y = 144;
     for (const auto& tray : mGame->GetTray())
     {
         tray->SetLocation(x, y);
-        tray->Draw(&dc);
+        tray->Draw(gc);
     }
 }
 

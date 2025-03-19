@@ -106,8 +106,13 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
                             Given* given = new Given(&mGame, fullImagePathw, itemId, width, height,
                                                      fullImagePath, value, width, width);
                             // Compute the correct position inside the tray
-                            int trayStartX = 0;
-                            int trayStartY = 0;
+                            int trayStartX, trayStartY;
+                            std::cout << "filename" << filename << std::endl;
+                            std::string prefix = "filenameresources/levels/";
+                            std::cout << prefix + "level1.xml" << std::endl;
+                            trayStartX = 72;
+                            trayStartY = 24;
+
                             double trayX = trayStartX + col * tileWidth + ((tileWidth - 48) / 2);
                             double trayY = trayStartY + row * tileHeight + (tileHeight - 48) / 2;
 

@@ -56,14 +56,15 @@ bool Item::HitTest(int x, int y)
 
 /**
  * Draw this item
- * @param dc Device context to draw on
+ * @param gc Graphics context to draw on
  */
-void Item::Draw(wxDC *dc)
+void Item::Draw(std::shared_ptr<wxGraphicsContext> gc)
 {
-    // cout << "Drawing letters" << endl;
+    if (!mItemBitmap || !mItemBitmap->IsOk()) return;  // Safety check
+
     double wid = mItemBitmap->GetWidth();
     double hit = mItemBitmap->GetHeight();
-    dc->DrawBitmap(*mItemBitmap,
-     int(GetX() - wid / 2),
-     int(GetY() - hit / 2));
+
+    // Apply scaling directly in Game::OnDraw(), so use original coordinates here.
+    gc->DrawBitmap(*mItemBitmap, GetX() - wid / 2, GetY() - hit / 2, wid, hit);
 }

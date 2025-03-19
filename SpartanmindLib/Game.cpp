@@ -58,6 +58,8 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     mXOffset = (width - mVirtualWidth * mScale) / 2.0;
     mYOffset = (height - mVirtualHeight * mScale) / 2.0;
 
+
+
     gc->PushState();
     gc->Translate(mXOffset, mYOffset);
     gc->Scale(mScale, mScale);
@@ -72,6 +74,17 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
         gc->SetBrush(brush);
         gc->DrawRectangle(0, 0, mVirtualWidth, mVirtualHeight);
     }
+
+    for (auto letter : mLetters) {
+        letter->Draw(gc);
+    }
+
+    for (auto given : mGivens)
+    {
+        given->Draw(gc);
+    }
+
+
     gc->PopState();  // This removes all the scaling!
 
     mScoreboard.Draw(gc);

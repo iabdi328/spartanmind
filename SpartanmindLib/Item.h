@@ -74,7 +74,7 @@ public:
   * Draw this item
   * @param dc Device context to draw on
   */
- void Draw(wxDC *dc);
+ void Draw(std::shared_ptr<wxGraphicsContext> gc);
 };
 
 #endif //ITEM_H
