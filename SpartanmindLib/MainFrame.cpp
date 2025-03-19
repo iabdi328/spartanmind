@@ -10,6 +10,8 @@
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 
+#include "LoadLevel.h"
+
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MainFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
@@ -102,7 +104,6 @@ void MainFrame::OnLoadLevel(wxCommandEvent& event)
     mGame->ClearContainers();
     int levelIndex = event.GetId() - IDM_LOAD_LEVEL0;
     wxString levelFile = wxString::Format("resources/levels/level%d.xml", levelIndex);
-
     if (!mSpartanmindView->LoadFromXML(levelFile)) {
         SetStatusText(wxString::Format("Failed to load Level %d", levelIndex));
     } else {

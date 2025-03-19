@@ -29,6 +29,7 @@ LoadLevel::LoadLevel(Spartanmind& spartanmind, Game& game)
  */
 bool LoadLevel::LoadFromXML(const wxString& filename)
 {
+    std::cout << "Loading from XML" << std::endl;
     wxXmlDocument xmlDoc;
     wxFileInputStream inputStream(filename);
 
@@ -56,80 +57,53 @@ bool LoadLevel::LoadFromXML(const wxString& filename)
     mGame.SetVirtualDimensions(totalWidth, totalHeight);
 
     // Look for the background element in the <declarations> node.
-    wxXmlNode* declarationsNode = root->GetChildren();
-    while (declarationsNode) {
-        if (declarationsNode->GetName() == "declarations") {
-            wxXmlNode* child = declarationsNode->GetChildren();
-            while (child) {
-                if (child->GetName() == "background") {
-                    wxString bgImage = child->GetAttribute("image", "");
-                    if (!bgImage.IsEmpty()) {
-                        wxString fullBgPath = "resources/images/" + bgImage;
-                        //mSpartanmind.SetBackground(fullBgPath);  // Update Spartanmind's background.
-                        mGame.SetBackground(fullBgPath);         // Also update the Game's background.
+   wxXmlNode* itemsNode = root->GetChildren();
+while (itemsNode) {
+    if (itemsNode->GetName() == "items") {
+        wxXmlNode* item = itemsNode->GetChildren();
+        while (item) {
+            if (item->GetName() == "letter" || item->GetName() == "given") {
+                wxString id = item->GetAttribute("id", "");
+                wxString col = item->GetAttribute("col", "");
+                wxString row = item->GetAttribute("row", "");
+
+                // Find matching letter/given attributes from declarations
+                wxXmlNode* declarationsNode = root->GetChildren();
+                while (declarationsNode) {
+                    if (declarationsNode->GetName() == "items") {
+                        wxXmlNode* declChild = declarationsNode->GetChildren();
+                        while (declChild) {
+                            if (declChild->GetName() == item->GetName() && declChild->GetAttribute("id", "") == id) {
+                                wxString width = declChild->GetAttribute("width", "");
+                                wxString height = declChild->GetAttribute("height", "");
+                                wxString image = declChild->GetAttribute("image", "");
+                                wxString value = declChild->GetAttribute("value", "");
+
+                                if (!image.IsEmpty()) {
+                                    wxString fullPath = "resources/images/" + image;
+                                    std::wstring fullPathw = fullPath.ToStdWstring();
+
+                                    if (item->GetName() == "letter") {
+                                        Letter* letter = new Letter(&mGame, fullPathw, id, width, height, fullPath, value, col, row);
+                                        // mGame.AddLetter(letter);
+                                    } else if (item->GetName() == "given") {
+                                        Given* given = new Given(&mGame, fullPathw, id, width, height, fullPath, value, col, row);
+                                        // mGame.AddGiven(given);
+                                    }
+                                }
+                            }
+                            declChild = declChild->GetNext();
+                        }
                     }
-                } else if (child->GetName() == "letter") {
-                    wxString letterId = child->GetAttribute("id", "");
-                    wxString letterWidth = child->GetAttribute("width", "");
-                    wxString letterHeight = child->GetAttribute("height", "");
-                    wxString letterImage = child->GetAttribute("image", "");
-                    wxString letterValue = child->GetAttribute("value", "");
-                    if (!letterImage.IsEmpty()) {
-                        wxString fullLetterPath = "resources/images/" + letterImage;
-                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Letter* letter = new Letter(&mGame, fullLetterPathw, letterId, letterWidth,
-                                                    letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
-                        mGame.AddLetter(letter);
-                    }
-                } else if (child->GetName() == "given") {
-                    wxString letterId = child->GetAttribute("id", "");
-                    wxString letterWidth = child->GetAttribute("width", "");
-                    wxString letterHeight = child->GetAttribute("height", "");
-                    wxString letterImage = child->GetAttribute("image", "");
-                    wxString letterValue = child->GetAttribute("value", "");
-                    if (!letterImage.IsEmpty()) {
-                        wxString fullLetterPath = "resources/images/" + letterImage;
-                        std::wstring fullLetterPathw = fullLetterPath.ToStdWstring();
-                        Given* given = new Given(&mGame, fullLetterPathw, letterId, letterWidth,
-                                                 letterHeight, fullLetterPath, letterValue, letterWidth, letterWidth);
-                        mGame.AddGiven(given);
-                    }
+                    declarationsNode = declarationsNode->GetNext();
                 }
-                else if (child->GetName() == "tray") {
-                    wxString trayId = child->GetAttribute("id", "");
-                    wxString trayWidth = child->GetAttribute("width", "");
-                    wxString trayHeight = child->GetAttribute("height", "");
-                    wxString trayImage = child->GetAttribute("image", "");
-                    wxString trayCapacity = child->GetAttribute("capacity", "");
-                    if (!trayImage.IsEmpty()) {
-                        wxString fullTrayPath = "resources/images/" + trayImage;
-                        std::wstring fullTrayPathw = fullTrayPath.ToStdWstring();
-                        Tray* tray = new Tray(&mGame, fullTrayPathw, trayId, trayWidth,
-                                                 trayHeight, fullTrayPath, trayCapacity, trayWidth, trayWidth);
-                        mGame.AddTray(tray);
-                    }
-                }
-                else if (child->GetName() == "container")
-                {
-                    wxString containerId = child->GetAttribute("id", "");
-                    wxString containerWidth = child->GetAttribute("width", "");
-                    wxString containerHeight = child->GetAttribute("height", "");
-                    wxString containerImage = child->GetAttribute("image", "");
-                    wxString containerValue = child->GetAttribute("capacity", "");
-                    if(!containerImage.IsEmpty())
-                    {
-                        wxString fullcontainerPath = "resources/images/" + containerImage;
-                        std::wstring fullcontainerPathw = fullcontainerPath.ToStdWstring();
-                        Container *container = new Container(&mGame, fullcontainerPathw, containerId, containerWidth,
-                                                             containerHeight, fullcontainerPath, containerValue, containerWidth, containerWidth);
-                        mGame.AddContainer(container);
-                    }
-                }
-                child = child->GetNext();
             }
+            item = item->GetNext();
         }
-        declarationsNode = declarationsNode->GetNext();
     }
+    itemsNode = itemsNode->GetNext();
+}
+
 
     return true;
 }
