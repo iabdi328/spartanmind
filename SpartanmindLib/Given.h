@@ -2,19 +2,21 @@
  * @file Given.h
  * @author Terrance Zackery, Raj Ambekar
  *
- *
+ * Given Class
  */
  
 #ifndef GIVEN_H
 #define GIVEN_H
 
-#include "Letter.h"
 #include "Game.h"
 #include "Item.h"
 
 
 class Game;
 
+/**
+ * Given Class
+ */
 class Given : public Item
 {
 

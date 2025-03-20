@@ -1,9 +1,10 @@
 /**
-* @file Player.cpp
- * @author  Emmanuel Koshy, Terrance Zackery
+ * @file Player.cpp
+ * @author  Emmanuel Koshy, Terrance Zackery, Raj Ambekar
  *
  *
  */
+
 #include "pch.h"
 #include "Player.h"
 #include "Game.h"
@@ -11,17 +12,16 @@
 #include <wx/geometry.h>
 #include <cstdio>
 
-
 /// Character speed in pixels per second
 const double mMaxSpeed = 400.00;
-
 /// The time for an eating cycles in seconds
 const double EatingTime = 0.5;
-
 /// The time for a headbutt cycle in seconds
 const double HeadbuttTime = 0.5;
 
-Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : Item(game, headImage, mouthImage)
+// Update the constructor to properly handle both images
+Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage)
+    : Item(game, headImage)
 {
     mGameWorld = game;
     mEating = false;
@@ -32,13 +32,30 @@ Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage ) : I
     mSpeed = 0;
     mX = 0;
     mY = 0;
-    const std::wstring loc = L"../images/";
-    mSpartyImage = std::make_unique<wxBitmap>(loc+headImage, wxBITMAP_TYPE_ANY);
-    mMouthImage = std::make_unique<wxBitmap>(loc+mouthImage, wxBITMAP_TYPE_ANY);
 
+    // Load both images
+    mPlayerImage = std::make_unique<wxBitmap>(headImage, wxBITMAP_TYPE_ANY);
+    mMouthImage = std::make_unique<wxBitmap>(mouthImage, wxBITMAP_TYPE_ANY);
+
+    // Set dimensions based on the body image
+    wid = mPlayerImage->GetWidth();
+    hit = mPlayerImage->GetHeight();
+
+    // Initialize animation parameters
+    mHeadPivotAngle = 0;
+    mHeadPivotX = 0;
+    mHeadPivotY = 0;
+    mMouthPivotAngle = 0;
+    mMouthPivotX = 0;
+    mMouthPivotY = 0;
+    mTargetX = 0;
+    mTargetY = 0;
 }
 
-// Update method
+/**
+ * Update player action
+ * @param elapsedTime time
+ */
 void Player::Update(double elapsedTime) {
 
     if (mMoving)
@@ -84,55 +101,85 @@ void Player::Update(double elapsedTime) {
     }
 }
 
+/**
+ * Set the initial location
+ * @param x location
+ * @param y location
+ */
 void Player::SetStartingLocation(double x, double y){
     mX = x;
     mY = y;
 }
 
-void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics) {
-    auto position = ComputePosition();
-    // Draw player
-    if (mSpartyImage != nullptr && !mHeadbutt)
+/**
+ * Draw the player in the game
+ * @param graphics context
+ */
+void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics)
+{
+
+    int headWid = mPlayerImage->GetWidth();
+    int headHit = mPlayerImage->GetHeight();
+    int mouthWid = mMouthImage->GetWidth();
+    int mouthHit = mMouthImage->GetHeight();
+
+    // Save the current graphics state
+    graphics->PushState();
+
+    // Draw the player's body
+    if (mPlayerImage != nullptr && !mHeadbutt)
     {
-        graphics->DrawBitmap(*mSpartyImage, mX, mY, wid, hit);
+        // Normal state - draw the body at the current position
+        graphics->DrawBitmap(*mPlayerImage, mX, mY, headWid, headHit);
     }
-    // Draw player mouth
+
+    // Draw the player's mouth
     if (mMouthImage != nullptr && !mEating && !mHeadbutt)
     {
-        graphics->DrawBitmap(*mMouthImage, mX, mY, wid, hit);
+        // Normal state - draw the mouth at the same position as the body
+        graphics->DrawBitmap(*mMouthImage, mX, mY, mouthWid, mouthHit);
     }
-    if (mMouthImage != nullptr && mEating)
+    else if (mMouthImage != nullptr && mEating)
     {
-        graphics->Translate(position.x + mMouthPivotX , position.y +  mMouthPivotY);
-        graphics->Rotate(1);
-        graphics->DrawBitmap(*mMouthImage, 0, 0, wid, hit);
+        // Eating animation - apply mouth pivot transformation
+        graphics->PushState();
+        graphics->Translate(mX + mMouthPivotX, mY + mMouthPivotY);
+        graphics->Rotate(mMouthPivotAngle);
+        graphics->DrawBitmap(*mMouthImage, -mMouthPivotX, -mMouthPivotY, wid, hit);
         graphics->PopState();
+    }
 
-    }
-    if(mSpartyImage != nullptr && mHeadbutt && !mEating)
+    // Handle headbutt animation
+    if (mPlayerImage != nullptr && mHeadbutt)
     {
-        //Make player headbutt
-        graphics->Translate(position.x + mTargetX , position.y );
-        graphics->Rotate(1);
-        //Draw playeer
-        graphics->DrawBitmap(*mSpartyImage, 0, 0,wid, hit);
-        //Draw mouth
-        graphics->DrawBitmap(*mMouthImage, 0, 0, wid, hit);
+        // Headbutt animation - apply head pivot transformation
+        graphics->PushState();
+        graphics->Translate(mX + mHeadPivotX, mY + mHeadPivotY);
+        graphics->Rotate(mHeadPivotAngle);
+        graphics->DrawBitmap(*mPlayerImage, -mHeadPivotX, -mHeadPivotY, wid, hit);
+
+        // Draw mouth in headbutt position too
+        if (mMouthImage != nullptr)
+        {
+            graphics->DrawBitmap(*mMouthImage, -mHeadPivotX, -mHeadPivotY, wid, hit);
+        }
         graphics->PopState();
     }
-    graphics->PushState();
+
+    // Restore the graphics state
+    graphics->PopState();
 }
 
 /**
-* Set Location of Player
+ * Set Location of Player
  * @param x X location in pixels
  * @param y Y location in pixels
 */
 void Player::SetLocation(double x, double y)
 {
     mDestX = ((x - mGameWorld->GetXOffset() )/
-        mGameWorld->GetScale()) - mSpartyImage->GetWidth();
-    mDestY = ((y - mGameWorld->GetYOffset()) / mGameWorld->GetScale()) - mSpartyImage
+        mGameWorld->GetScale()) - mPlayerImage->GetWidth();
+    mDestY = ((y - mGameWorld->GetYOffset()) / mGameWorld->GetScale()) - mPlayerImage
         ->GetHeight();
     if (mX == mDestX && mY == mDestY)
     {
@@ -149,11 +196,18 @@ void Player::SetTarget(double x, double y) {
     mTarget = wxPoint2DDouble(x - mTargetXOffset, y - mTargetYOffset);
 }
 
+/**
+ * Set Position of the Player
+ * @param x location
+ * @param y location
+ */
 void Player::SetPosition(double x, double y) {
     mLocation = wxPoint2DDouble(x, y);  // Set the current position of the player
 }
 
-
+/**
+ * Headbutt Function
+ */
 void Player::Headbutt() {
     if (!mHeadbutt) {
         mHeadbutt = true;
@@ -163,7 +217,9 @@ void Player::Headbutt() {
     }
 }
 
-
+/**
+ * Eat Function
+ */
 void Player::Eat() {
     if (!mEating) {
         mEating = true;

@@ -1,9 +1,10 @@
 /**
-* @file Player.h
- * @author  Emmanuel Koshy
+ * @file Player.h
+ * @author  Emmanuel Koshy, Raj Ambekar
  *
- *
+ * Player class defines Sparty and Chest
  */
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -14,14 +15,20 @@
 
 class Game;
 
+/**
+ * Player class defines Sparty and Chest
+ */
 class Player : public Item {
 private:
     /// Game
     Game* mGameWorld;
+    /// Current position of the player
+    wxPoint2DDouble mLocation;
+    /// Target position of the player
+    wxPoint2DDouble mTarget;
 
-    wxPoint2DDouble mLocation;  // Current position of the player
-    wxPoint2DDouble mTarget;    // Target position of the player
-    const double MaxSpeed = 400.0;  // Movement speed in pixels per second
+    /// Movement speed in pixels per second
+    const double MaxSpeed = 400.0;
 
     /// Is player eating?
     bool mEating = false;
@@ -42,17 +49,17 @@ private:
     double mDirection = 0;
 
     /// Speed of player
-
     double mSpeed;
 
-    // Image files for the player
-    std::wstring mImage1; // e.g., "sparty.png"
-    std::wstring mImage2; // e.g., "sparty-mouth.png"
+    /// Image files for the player body
+    std::wstring mImage1;
+    /// Image files for the player mouth/lid
+    std::wstring mImage2;
 
-    /// The bitmap we can display for sparty
-    std::unique_ptr<wxBitmap> mSpartyImage;
+    /// The bitmap we can display for player
+    std::unique_ptr<wxBitmap> mPlayerImage;
 
-    /// The bitmap we can display for sparty mouth
+    /// The bitmap we can display for player mouth/lid
     std::unique_ptr<wxBitmap> mMouthImage;
 
     // Target offsets (from XML attributes)

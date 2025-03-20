@@ -96,7 +96,7 @@ void LoadLevel::Load(const wxString &filename)
 
                 if (decName == "player")
                 {
-                    SpartyNode(decChild);
+                    PlayerNode(decChild);
                 }
 
                 if (decName == "container")
@@ -264,30 +264,33 @@ void LoadLevel::LetterNode(wxXmlNode *node)
         }
     }
 }
-void LoadLevel::SpartyNode(wxXmlNode * node)
+
+void LoadLevel::PlayerNode(wxXmlNode * node)
 {
+    // Define the path to images
     const wstring loc = L"../images/";
-    auto tagName = node->GetName();
-    // id of the element
+
+    // Get the player ID
     auto id = node->GetAttribute(L"id");
-    // image
-    auto image1 = node->GetAttribute(L"image1").ToStdWstring();
-    auto image2 = node->GetAttribute(L"image2").ToStdWstring();
 
-    // player data
-    auto headPivotAngle = node->GetAttribute(L"head-pivot-angle");
-    auto headPivotX = node->GetAttribute(L"head-pivot-x");
-    auto headPivotY = node->GetAttribute(L"head-pivot-y");
-    auto mouthPivotAngle = node->GetAttribute(L"mouth-pivot-angle");
-    auto mouthPivotX = node->GetAttribute(L"mouth-pivot-x");
-    auto mouthPivotY = node->GetAttribute(L"mouth-pivot-y");
-    auto targetX = node->GetAttribute(L"target-x");
-    auto targetY = node->GetAttribute(L"target-y");
+    // Get the image paths - properly combining with the base path
+    auto image1 = loc + node->GetAttribute(L"image1").ToStdWstring();
+    auto image2 = loc + node->GetAttribute(L"image2").ToStdWstring();
 
-    // Level node
+    // Get all animation parameters
+    double headPivotAngle = std::stod(node->GetAttribute(L"head-pivot-angle").ToStdString());
+    double headPivotX = std::stod(node->GetAttribute(L"head-pivot-x").ToStdString());
+    double headPivotY = std::stod(node->GetAttribute(L"head-pivot-y").ToStdString());
+    double mouthPivotAngle = std::stod(node->GetAttribute(L"mouth-pivot-angle").ToStdString());
+    double mouthPivotX = std::stod(node->GetAttribute(L"mouth-pivot-x").ToStdString());
+    double mouthPivotY = std::stod(node->GetAttribute(L"mouth-pivot-y").ToStdString());
+    double targetX = std::stod(node->GetAttribute(L"target-x").ToStdString());
+    double targetY = std::stod(node->GetAttribute(L"target-y").ToStdString());
+
+    // Get the root node
     auto root = node->GetParent()->GetParent();
 
-    // iterate into item
+    // Find the player item in the items section
     auto child = root->GetChildren();
     for (; child; child=child->GetNext())
     {
@@ -298,36 +301,38 @@ void LoadLevel::SpartyNode(wxXmlNode * node)
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild = itemsChild->GetNext())
             {
-
                 if(itemsChild->GetAttribute(L"id") == id)
                 {
-                    // set coordinates
+                    // Get the player's position
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
 
-                    if(tagName == L"player")
-                    {
-                        // creating player, setting and adding into game
-                        std::shared_ptr<Player> player;
-                        player = std::make_shared<Player>(mGame, loc+image1, loc+image2);
-                        player->SetStartingLocation((col * mGame->GetTileHeight()), ((row)
-                            * mGame->GetTileWidth()));
-                        player->SetHeadPivotAngle(std::stod(headPivotAngle.ToStdString()));
-                        player->SetHeadPivotX(std::stod(headPivotX.ToStdString()));
-                        player->SetHeadPivotY(std::stod(headPivotY.ToStdString()));
-                        player->SetMouthPivotAngle(std::stod(mouthPivotAngle.ToStdString()));
-                        player->SetMouthPivotX(std::stod(mouthPivotX.ToStdString()));
-                        player->SetMouthPivotY(std::stod(mouthPivotY.ToStdString()));
-                        player->SetTargetX(std::stod(targetX.ToStdString()));
-                        player->SetTargetY(std::stod(targetY.ToStdString()));
-                        mGame->SetPlayer(player);
-                    }
+                    // Create the player with both images
+                    std::shared_ptr<Player> player = std::make_shared<Player>(mGame, image1, image2);
 
+                    // Set initial position
+                    player->SetStartingLocation(col * mGame->GetTileHeight(),
+                                                row * mGame->GetTileWidth());
+
+                    // Set all animation parameters
+                    player->SetHeadPivotAngle(headPivotAngle);
+                    player->SetHeadPivotX(headPivotX);
+                    player->SetHeadPivotY(headPivotY);
+                    player->SetMouthPivotAngle(mouthPivotAngle);
+                    player->SetMouthPivotX(mouthPivotX);
+                    player->SetMouthPivotY(mouthPivotY);
+                    player->SetTargetX(targetX);
+                    player->SetTargetY(targetY);
+
+                    // Add the player to the game
+                    mGame->SetPlayer(player);
+                    return;  // Exit once we've found and set up the player
                 }
             }
         }
     }
 }
+
 void LoadLevel::ContainerNode(wxXmlNode *node)
 {
     const wstring loc = L"../images/";

@@ -43,7 +43,7 @@ public:
     void BackgroundNode(wxXmlNode * node);
     void LetterNode(wxXmlNode * node);
     void TrayNode(wxXmlNode *node);
-    void SpartyNode(wxXmlNode * node);
+    void PlayerNode(wxXmlNode * node);
     void ContainerNode(wxXmlNode * node);
 
     /**
