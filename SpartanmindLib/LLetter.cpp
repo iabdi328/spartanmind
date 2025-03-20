@@ -3,6 +3,7 @@
  * @author Terrance Zackery
  */
 
+/*
 #include "pch.h"
 #include "LLetter.h"
 
@@ -16,3 +17,4 @@ LLetter::LLetter(Game *game, int value, std::wstring &filename)
     : Letter(game, value, loc + filename)
 {
 }
+ */
