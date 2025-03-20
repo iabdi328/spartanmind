@@ -19,7 +19,6 @@
 Game::Game()
 {
     mBackground = std::make_unique<wxBitmap>(L"images/background.png", wxBITMAP_TYPE_ANY);
-//    mScoreboard = std::make_shared<Scoreboard>();
 }
 
 /**
@@ -117,6 +116,15 @@ void Game::UpdateScoreboard(double deltaSeconds) {
 void Game::Add(std::shared_ptr<Item> item)
 {
     mItems.push_back(item);
+}
+
+/**
+ * Appends to the word solution list
+ * @param number the letter
+ */
+void Game::AddAnswer(int number)
+{
+    mWord.push_back(number);
 }
 
 /**

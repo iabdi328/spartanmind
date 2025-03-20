@@ -7,16 +7,14 @@
 #include "pch.h"
 #include "ids.h"
 #include "SpartanmindView.h"
+#include "Player.h"
+#include "LoadLevel.h"
 #include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 #include <memory>
-#include "Player.h"
-#include "LoadLevel.h"
-#include "Given.h"
-#include "Letter.h"
-#include "Tray.h"
+
 
 using namespace std;
 
@@ -36,6 +34,8 @@ void SpartanmindView::Initialize(wxFrame *parent)
     Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnMouseClick, this);
 
     // Bind functions from MainFrame
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelZero, this,
+                 IDM_LEVEL0);
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelOne, this,
                  IDM_LEVEL1);
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelTwo, this,
@@ -47,6 +47,7 @@ void SpartanmindView::Initialize(wxFrame *parent)
 
     LoadLevel load(&mGame);
     load.Load(filename);
+    mGame.ShowLevelBeginPopup(mGame.GetLevel());
 
 
     // Create & start the timer for ~60 FPS
@@ -95,7 +96,7 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     long deltaMs = mStopWatch.Time();
     // Restart the stopwatch for the next interval.
     mStopWatch.Start();
-    double deltaSeconds = deltaMs / 1000.0;
+    double deltaSeconds = deltaMs / 2000.0;
 
     // Update game logic and scoreboard using the actual elapsed time.
     mGame.Update(deltaSeconds);
@@ -121,7 +122,6 @@ void SpartanmindView::OnMouseClick(wxMouseEvent& event)
 
     // Get the clicked screen coordinates
     wxPoint pos = event.GetPosition();
-    std::cout << "@DEBUG OnMouseClick Click at: " << pos.x << ", " << pos.y << std::endl;
 
     // Get player
     std::shared_ptr<Player> player(mGame.GetPlayer());
@@ -161,6 +161,19 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     }
 
     event.Skip(); // Let other key events process
+}
+
+/**
+ * Event handler for selecting Level Zero.
+ * Loads the first level of the game.
+ *
+ * @param event Command event object.
+ */
+void SpartanmindView::OnLevelZero(wxCommandEvent& event)
+{
+    const wxString filename = L"../levels/level0.xml";
+    NewLevel(filename, 0);
+
 }
 
 

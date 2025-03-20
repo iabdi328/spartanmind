@@ -21,6 +21,9 @@ private:
     /// Game pointer
     Game* mGame;
 
+    /// List for the word solution
+    std::vector<int> mWord;
+
 public:
     LoadLevel(Game * game);
     /// Default constructor (disabled)

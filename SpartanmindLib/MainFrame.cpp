@@ -45,8 +45,10 @@ void MainFrame::Initialize()
     menuBar->Append(helpMenu, "&Help");
 
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the program");
+    fileMenu->Append(IDM_SOLVE, "Solve", "Solve the game");
     helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
+    levelsMenu->Append(IDM_LEVEL0, L"&Level 0", L"&Move to Level 0");
     levelsMenu->Append(IDM_LEVEL1, L"&Level 1", L"&Move to Level 1");
     levelsMenu->Append(IDM_LEVEL2, L"&Level 2", L"&Move to Level 2");
     levelsMenu->Append(IDM_LEVEL3, L"&Level 3", L"&Move to Level 3");
