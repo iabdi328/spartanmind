@@ -31,6 +31,12 @@ public:
     Container(Game * game);
 
     void Add(std::shared_ptr<Item> item);
+
+    /**
+     * Accept a visitor
+     * @param visitor The visitor we accept
+     */
+    void Accept(ItemVisitor* visitor) override { visitor->VisitContainer(this); }
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_CONTAINER_H

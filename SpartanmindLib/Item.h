@@ -7,12 +7,12 @@
 
 #ifndef ITEM_H
 #define ITEM_H
+
+#include "ItemVisitor.h"
 #include <string>
 #include <wx/image.h>
 #include <memory>
 
-
-class Spartanmind;
 class Game;
 
 class Item {
@@ -48,8 +48,7 @@ public:
      /// Assignment operator
      void operator=(const Item &) = delete;
      /// Constructor
-     Item(Game *game, const std::wstring &filename1 = L"None", const std::wstring
-     &filename2 = L"None");
+     Item(Game *game, const std::wstring &filename1 = L"None", const std::wstring &filename2 = L"None");
 
      virtual ~Item();
 
@@ -65,39 +64,55 @@ public:
       */
      double GetY() const { return mY; }
 
+     /**
+      * Get the Height of the item
+      * @return double Image Height
+      */
      double GetImageHeight() { return mImageHeight;};
 
      /**
-     * Get the Width of the item
-     * @return double Image Width
-     */
-
-    double GetImageWidth() { return mImageWidth;};
-    /**
-    * Set the location of the item
-    */
-    void SetLocation(double x, double y);
-
+      * Get the Width of the item
+      * @return double Image Width
+      */
+     double GetImageWidth() { return mImageWidth;};
 
      /**
-      * Test this item to see if it has been clicked on
-      * @param x X location on the spartanmind to test in pixels
-      * @param y Y location on the spartanmind to test in pixels
-      * @return true if clicked on
+      * Set the location of the item
       */
-     bool HitTest(int x, int y);
+     void SetLocation(double x, double y);
 
-     /**
-      * Draw this item
-      * @param dc Device context to draw on
-      */
-     virtual void Draw(const std::shared_ptr<wxGraphicsContext>& );
-        virtual void Update(double elapsed) {}
-        /**
-         * Get the game
-         * @return The game
-         */
-        Game * GetGame() {return mGame;}
+      /**
+       * Test this item to see if it has been clicked on
+       * @param x X location on the spartanmind to test in pixels
+       * @param y Y location on the spartanmind to test in pixels
+       * @return true if clicked on
+       */
+      bool HitTest(int x, int y);
+
+      /**
+       * Draw this item
+       * @param dc Device context to draw on
+       */
+      virtual void Draw(const std::shared_ptr<wxGraphicsContext>& );
+
+      /**
+       * Base update class
+       * @param elapsed time
+       */
+      virtual void Update(double elapsed) {}
+
+      /**
+       * Get the game
+       * @return The game
+       */
+      Game* GetGame() { return mGame; }
+
+      /**
+       * Accept a visitor for all items
+       * @param visitor The accepted visitor
+       */
+      virtual void Accept(ItemVisitor* visitor) = 0;
+
 };
 
 #endif //ITEM_H

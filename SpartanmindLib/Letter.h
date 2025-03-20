@@ -31,10 +31,10 @@ public:
     void operator=(const Letter &) = delete;
 
     /**
-     * Get the value of this letter
-     * @return The value
+     * Accept a visitor
+     * @param visitor The visitor we accept
      */
-    int GetValue() const { return mValue; }
+    void Accept(ItemVisitor* visitor) override { visitor->VisitLetter(this); }
 
 };
 

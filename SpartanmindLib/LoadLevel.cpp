@@ -52,8 +52,6 @@ void LoadLevel::Load(const wxString &filename)
     int tileWidth;
     int tileHeight;
 
-
-
     // Extract window sizing from level xml node
     root->GetAttribute(L"width").ToInt(&width);
     root->GetAttribute(L"height").ToInt(&height);
@@ -167,8 +165,7 @@ void LoadLevel::TrayNode(wxXmlNode *node)
                     {
                         shared_ptr<Item> tray;
                         tray = std::make_shared<Tray>(mGame, capacity, image);
-                        tray->SetLocation((col*mGame->GetTileHeight()),
-                                          (row)*mGame->GetTileWidth());
+                        tray->SetLocation((col*mGame->GetTileHeight()),(row)*mGame->GetTileWidth());
                         mGame->Add(tray);
                     }
                 }
@@ -311,8 +308,7 @@ void LoadLevel::PlayerNode(wxXmlNode * node)
                     std::shared_ptr<Player> player = std::make_shared<Player>(mGame, image1, image2);
 
                     // Set initial position
-                    player->SetStartingLocation(col * mGame->GetTileHeight(),
-                                                row * mGame->GetTileWidth());
+                    player->SetStartingLocation(col * mGame->GetTileHeight(),row * mGame->GetTileWidth());
 
                     // Set all animation parameters
                     player->SetHeadPivotAngle(headPivotAngle);
@@ -359,7 +355,6 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
             auto itemsChild = child->GetChildren();
             for(; itemsChild; itemsChild=itemsChild->GetNext())
             {
-
                 if (itemsChild->GetAttribute(L"id") == id)
                 {
                     // set coordinates
@@ -372,14 +367,11 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
 
                     // setting background to first item in container vectorr
                     shared_ptr<Item> backImage;
-                    backImage = make_shared<Item>(mGame,
-                                                  loc+image);
-                    backImage->SetLocation((col*mGame->GetTileHeight()), (
-                        (row-4)*mGame->GetTileWidth()));
+                    //backImage = make_shared<Item>(mGame, loc+image);
+                    container->SetLocation((col*mGame->GetTileHeight()), ((row-4)*mGame->GetTileWidth()));
                     container->Add(backImage);
 
                 }
-
             }
         }
     }

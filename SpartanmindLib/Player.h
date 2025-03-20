@@ -135,7 +135,7 @@ public:
     virtual ~Player() {}
 
     void SetLocation(double x, double y);
-    void Update(double elapsedTime);  // Updates position based on movement
+    void Update(double elapsedTime) override;  // Updates position based on movement
     void Draw(std::shared_ptr<wxGraphicsContext> graphics);  // Pure virtual for drawing player
     void Eat();  // Virtual Eat method to be overridden by derived class
     void Headbutt();  // Method to perform headbutt animation
@@ -192,6 +192,12 @@ public:
      * @param y
      */
     void SetTargetY(double y) { mTargetY = y; }
+
+    /**
+     * Accept a visitor
+     * @param visitor The visitor we accept
+     */
+    void Accept(ItemVisitor* visitor) override { visitor->VisitPlayer(this); }
 };
 
 #endif // PLAYER_H

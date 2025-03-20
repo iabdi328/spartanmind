@@ -33,12 +33,11 @@ public:
     /// Assignment operator
     void operator=(const Given &) = delete;
 
-
     /**
-     * Get the value of this given item
-     * @return The value
+     * Accept a visitor
+     * @param visitor The visitor we accept
      */
-    int GetValue() const { return mValue; }
+    void Accept(ItemVisitor* visitor) override { visitor->VisitGiven(this); }
 };
 
 

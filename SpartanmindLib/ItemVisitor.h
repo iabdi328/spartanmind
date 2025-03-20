@@ -7,10 +7,9 @@
 
 class Letter;
 class Given;
-class Chest;
+class Player;
 class Container;
 class Tray;
-class Sparty;
 
 
 #ifndef PROJECT1_SPARTANMINDLIB_ITEMVISITOR_H
@@ -27,18 +26,6 @@ public:
     virtual ~ItemVisitor() {}
 
     /**
-     * Visit Sparty
-     * @param sparty Sparty we are visiting
-     */
-    virtual void VisitSparty(Sparty* sparty) {}
-
-    /**
-     * Visit DigitNumber
-     * @param digitNumber DigitNumber we are visiting
-     */
-    virtual void VisitChest(Chest* chest) {}
-
-    /**
      * Visit Letter
      * @param letter Letter we are visiting
      */
@@ -49,6 +36,12 @@ public:
      * @param given Givens we are visiting
      */
     virtual void VisitGiven(Given* given) {}
+
+    /**
+     * Visit Player
+     * @param player Player we are visiting
+     */
+    virtual void VisitPlayer(Player* player) {}
 
     /**
      * Visit Tray

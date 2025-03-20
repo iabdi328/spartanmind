@@ -20,6 +20,14 @@ private:
     int mCapacity = 0;
 
 public:
+    /**
+     * Constructor
+     * @param game The game this character is a member of
+     * @param capacity The capacity of the xray
+     * @param filename The image for the xray
+     */
+    Tray(Game * game, int capacity, std::wstring &filename);
+
     /// Default constructor (disabled)
     Tray() = delete;
 
@@ -30,12 +38,12 @@ public:
     void operator=(const Tray &) = delete;
 
     /**
-     * Constructor
-     * @param game The game this character is a member of
-     * @param capacity The capacity of the xray
-     * @param filename The image for the xray
+     * Accept a visitor
+     * @param visitor The visitor we accept
      */
-    Tray(Game * game, int capacity, std::wstring &filename);
+    void Accept(ItemVisitor* visitor) override { visitor->VisitTray(this); }
+
+
 
 };
 
