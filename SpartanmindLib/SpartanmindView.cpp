@@ -36,6 +36,8 @@ void SpartanmindView::Initialize(wxFrame *parent)
     Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnMouseClick, this);
 
     // Bind functions from MainFrame
+    parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelZero, this,
+                 IDM_LEVEL0);
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelOne, this,
                  IDM_LEVEL1);
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelTwo, this,
@@ -121,7 +123,6 @@ void SpartanmindView::OnMouseClick(wxMouseEvent& event)
 
     // Get the clicked screen coordinates
     wxPoint pos = event.GetPosition();
-    std::cout << "@DEBUG OnMouseClick Click at: " << pos.x << ", " << pos.y << std::endl;
 
     // Get player
     std::shared_ptr<Player> player(mGame.GetPlayer());
@@ -161,6 +162,19 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     }
 
     event.Skip(); // Let other key events process
+}
+
+/**
+ * Event handler for selecting Level Zero.
+ * Loads the first level of the game.
+ *
+ * @param event Command event object.
+ */
+void SpartanmindView::OnLevelZero(wxCommandEvent& event)
+{
+    const wxString filename = L"../levels/level0.xml";
+    NewLevel(filename, 0);
+
 }
 
 

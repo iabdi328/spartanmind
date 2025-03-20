@@ -12,13 +12,13 @@
  * ID class to load levels on menu buttons
  */
 enum IDs {
-    IDM_LEVEL1 = wxID_HIGHEST + 1,
-    IDM_LEVEL2 = wxID_HIGHEST + 2,
-    IDM_LEVEL3 = wxID_HIGHEST + 3,
+    IDM_LEVEL0 = wxID_HIGHEST + 1,
+    IDM_LEVEL1 = wxID_HIGHEST + 2,
+    IDM_LEVEL2 = wxID_HIGHEST + 3,
+    IDM_LEVEL3 = wxID_HIGHEST + 4,
 
- // Standard Menu Item IDs
- IDM_EXIT,          // ID for the "Exit" menu item
- IDM_ABOUT          // ID for the "About" menu item
+    IDM_SOLVE,
+
 };
 
 #endif //IDS_H

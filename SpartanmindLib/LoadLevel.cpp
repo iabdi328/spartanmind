@@ -101,10 +101,16 @@ void LoadLevel::Load(const wxString &filename)
         if (name == L"game")
         {
             auto solution = child->GetNodeContent().ToStdString();
-            int solutionCol,solutionRow;
+            int solutionCol,solutionRow,solutionLength;
             child->GetAttribute(L"col").ToInt(&solutionCol);
             child->GetAttribute(L"row").ToInt(&solutionRow);
-            std::stringstream iss( solution );
+            child->GetAttribute(L"length").ToInt(&solutionLength);
+            wxString input = child->GetNodeContent();
+            std::stringstream ss(input.ToStdString());
+            int number;
+            while (ss >> number) {
+                mGame->AddAnswer(number);
+            }
         }
     }
 }

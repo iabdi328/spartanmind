@@ -25,8 +25,7 @@ class Player;
  * This class is responsible for drawing the game world using a virtual coordinate system,
  * scaling the view appropriately, handling mouse input, and managing game state.
  */
-class Game
-{
+class Game {
 private:
     double mScale;         ///< Scale factor from virtual to screen coordinates.
     double mXOffset;       ///< X offset (screen pixels) to center the playing area.
@@ -38,21 +37,22 @@ private:
     int mWidth = 0;        ///< Width
     int mHeight = 0;       ///< Height
 
-    /// Pop Up message
-    PopUps mPopUps;
-
     /// Represents the current level of the game.
     int mLevel = 1;
 
-    std::unique_ptr<wxBitmap> mBackground; ///< Background image for the level.
-
-    Scoreboard mScoreboard;  ///< The scoreboard instance.
-
-    std::shared_ptr<Player> mPlayer;     ///<player object
+    /// Background image for the level.
+    std::unique_ptr<wxBitmap> mBackground;
+    /// The scoreboard instance.
+    Scoreboard mScoreboard;
+    /// player object
+    std::shared_ptr<Player> mPlayer;
+    /// Pop Up message
+    PopUps mPopUps;
 
     /// All the items to populate our game
     std::vector<std::shared_ptr<Item>> mItems;
-
+    /// List for the word solution
+    std::vector<int> mWord;
 
 public:
     /// Constructor and Destructor
@@ -63,6 +63,7 @@ public:
     void UpdateScoreboard(double deltaSeconds);
     void SetVirtualDimensions(int virtualWidth, int virtualHeight);
     void Add(std::shared_ptr<Item> item);
+    void AddAnswer(int number);
     void Clear();
     void ShowLevelBeginPopup(int levelNumber);
 
@@ -129,8 +130,6 @@ public:
         wxString loc = L"../images/";
         mBackground = std::make_unique<wxBitmap>(loc+file, wxBITMAP_TYPE_ANY);
     }
-
-
 
     /**
      * Set level
