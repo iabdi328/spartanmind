@@ -214,6 +214,7 @@ void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
     LoadLevel area(&mGame);
     area.Load(filename);
 
+    mGame.ShowLevelBeginPopup(levelNumber);
 }
 
 void SpartanmindView::LoadNextLevel()
@@ -243,4 +244,5 @@ void SpartanmindView::LoadNextLevel()
         default:
             break;
     }
+
 }

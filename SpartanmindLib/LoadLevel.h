@@ -18,7 +18,8 @@
 class LoadLevel
 {
 private:
-    Game * mGame;
+    Game* mGame;
+
 
 public:
     /// Default constructor (disabled)

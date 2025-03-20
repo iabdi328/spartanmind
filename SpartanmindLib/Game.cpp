@@ -11,6 +11,7 @@
 #include <wx/log.h>
 #include <wx/graphics.h>
 #include "Item.h"
+#include "PopUps.h"
 
 Game::Game()
 {
@@ -18,11 +19,9 @@ Game::Game()
 //    mScoreboard = std::make_shared<Scoreboard>();
 }
 
-
-
-
 void Game::Update(double deltaSeconds) {
     UpdateScoreboard(deltaSeconds);
+    mPopUps.Update(deltaSeconds);
     if (mPlayer != nullptr) {
         mPlayer->Update(deltaSeconds);
     }
@@ -30,7 +29,6 @@ void Game::Update(double deltaSeconds) {
     {
         item->Update(deltaSeconds);
     }
-
 }
 
 void Game::SetVirtualDimensions(int virtualWidth, int virtualHeight) {
@@ -60,7 +58,6 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     gc->Translate(mXOffset, mYOffset);
     gc->Scale(mScale, mScale);
 
-
     //
     // Draw in virtual pixels on the graphics context
     //
@@ -82,8 +79,9 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
 
     mPlayer->Draw(gc);
 
-    gc->PopState();
+    mPopUps.Draw(gc, width, height);
 
+    gc->PopState();
 }
 
 void Game::UpdateScoreboard(double deltaSeconds) {
@@ -98,4 +96,13 @@ void Game::Add(std::shared_ptr<Item> item)
 void Game::Clear()
 {
     mItems.clear();
+}
+
+void Game::ShowLevelBeginPopup(int levelNumber)
+{
+
+    std::wcout << L"@DEBUG ShowLevelBeginPopup Called: Level " << levelNumber << std::endl;
+    // Only pass "Level n Begins!" to the PopUps class
+    std::wstring message = L"Level " + std::to_wstring(levelNumber) + L" Begins!";
+    mPopUps.ShowPopup(message, 10.0);
 }

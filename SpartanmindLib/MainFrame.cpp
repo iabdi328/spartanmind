@@ -7,6 +7,8 @@
 #include "MainFrame.h"
 #include "SpartanmindView.h"
 #include "ids.h"
+#include "Game.h"
+
 #include <wx/xml/xml.h>
 
 
@@ -15,7 +17,7 @@
  * Initializes MainFrame with custom settings.
  */
 void MainFrame::Initialize() {
-
+    mGame = std::make_shared<Game>();
     wxString level0File = "resources/levels/level1.xml";
     long width = 20, height = 15, tileWidth = 48, tileHeight = 48; // Default values
 
@@ -80,3 +82,26 @@ void MainFrame::OnAbout(wxCommandEvent& event) {
                  "About Spartanmind", wxOK | wxICON_INFORMATION);
 }
 
+void MainFrame::OnSelectLevel1(wxCommandEvent& event)
+{
+    if (mSpartanmindView)
+    {
+        mSpartanmindView->NewLevel(L"../levels/level1.xml", 1);
+    }
+}
+
+void MainFrame::OnSelectLevel2(wxCommandEvent& event)
+{
+    if (mSpartanmindView)
+    {
+        mSpartanmindView->NewLevel(L"../levels/level2.xml", 2);
+    }
+}
+
+void MainFrame::OnSelectLevel3(wxCommandEvent& event)
+{
+    if (mSpartanmindView)
+    {
+        mSpartanmindView->NewLevel(L"../levels/level3.xml", 3);
+    }
+}

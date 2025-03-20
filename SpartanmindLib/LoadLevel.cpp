@@ -65,6 +65,8 @@ void LoadLevel::Load(const wxString &filename)
     mGame->SetTileWidth(tileWidth);
     mGame->SetTileHeight(tileHeight);
 
+    
+
 
 //     Iterate through Levels data
     auto child = root->GetChildren();

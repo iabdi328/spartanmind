@@ -17,8 +17,7 @@
 #include "Item.h"
 #include "Letter.h"
 #include "Container.h"
-
-
+#include "PopUps.h"
 
 class Player;
 
@@ -39,6 +38,7 @@ private:
     int mTileHeight = 0;   /// Tile height
     int mWidth = 0;        /// Width
     int mHeight = 0;       /// Height
+    PopUps mPopUps;
 
 
     int mLevel = 1;        /// Represents the current level of the game.
@@ -166,6 +166,7 @@ public:
     * cleer the game items
     */
     void Clear();
+    void ShowLevelBeginPopup(int levelNumber);
 };
 
 #endif // GAME_H
