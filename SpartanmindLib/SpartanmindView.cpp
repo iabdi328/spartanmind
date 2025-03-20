@@ -112,8 +112,10 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     Refresh();
 }
 
-
-
+/**
+ * Handles the mouse single click event
+ * @param event mouse click
+ */
 void SpartanmindView::OnMouseClick(wxMouseEvent& event)
 {
 
@@ -199,6 +201,11 @@ void SpartanmindView::OnLevelThree(wxCommandEvent& event)
 
 }
 
+/**
+ * Loads in new level
+ * @param filename level xml file
+ * @param levelNumber number of level
+ */
 void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
 {
     // Reset the game state
@@ -217,6 +224,9 @@ void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
     mGame.ShowLevelBeginPopup(levelNumber);
 }
 
+/**
+ * Loads in the next level on game completion
+ */
 void SpartanmindView::LoadNextLevel()
 {
     // current level number

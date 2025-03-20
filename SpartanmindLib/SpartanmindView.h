@@ -17,35 +17,34 @@
 class SpartanmindView : public wxWindow
 {
 private:
-	wxTimer* mGameTimer = nullptr; ///< Timer for periodic updates
-	Game mGame;                    ///< Game object for virtual-pixel handling
+    /// Game object for virtual-pixel handling
+    Game mGame;
+    /// Timer for periodic updates
+	wxTimer* mGameTimer = nullptr;
 
+    /// Game Active
     bool mGameIsActive;
-
-    /// The last stopwatch time
-    long mTime = 0;
-
-	// Event handlers
-	void OnPaint(wxPaintEvent& event);
-	void OnKeyDown(wxKeyEvent& event);
-	void OnTimer(wxTimerEvent& event);
-	wxStopWatch mStopWatch;
     ///New level
     bool mNewLevel = false;
 
+    /// The last stopwatch time
+    long mTime = 0;
+    /// StopWatch instance
+    wxStopWatch mStopWatch;
+
+	void OnPaint(wxPaintEvent& event);
+	void OnKeyDown(wxKeyEvent& event);
+	void OnTimer(wxTimerEvent& event);
 
 public:
-    /**
-	 * Initialize the view
-	 * @param parent Parent window
-	 */
+
     void Initialize(wxFrame* parent);
-    void OnMouseClick(wxMouseEvent& event); /// Event handler for mouse clicks
+    void OnMouseClick(wxMouseEvent& event);
     void OnLevelOne(wxCommandEvent &event);
     void OnLevelTwo(wxCommandEvent &event);
     void OnLevelThree(wxCommandEvent &event);
     void LoadNextLevel();
-    void NewLevel(const wxString &filename, int levelNumber); /// Load a new level
+    void NewLevel(const wxString &filename, int levelNumber);
 };
 
 #endif // PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H

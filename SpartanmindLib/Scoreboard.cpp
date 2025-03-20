@@ -1,5 +1,5 @@
 /**
-* @file Scoreboard.cpp
+ * @file Scoreboard.cpp
  * @author Ismail Abdi
  */
 
@@ -8,29 +8,41 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 
+/// Scoreboard Text Size
+const int ScoreboardTextSize = 50;
+
+/**
+ * Location of scoreboard on g
+ * @return (doxygen thinks this is a function)
+ */
+const wxPoint ScoreboardTopLeft(10, 10);
+
+/**
+ * Scoreboard Constructor
+ */
 Scoreboard::Scoreboard()
 {
 }
 
+/**
+ * Update scoreboard
+ * @param deltaSeconds time
+ */
 void Scoreboard::Update(double deltaSeconds) {
- mElapsedTime += deltaSeconds;
+    mElapsedTime += deltaSeconds;
 }
 
+/**
+ * Draw the scoreboard in the game
+ * @param gc game graphics context
+ */
 void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
- // Set up a bold font for the scoreboard.
- wxFont font(ScoreboardTextSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
- gc->SetFont(font, *wxWHITE);
+    wxFont font(ScoreboardTextSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    gc->SetFont(font, *wxWHITE);
 
- // Convert elapsed time into minutes and seconds.
- int minutes = static_cast<int>(mElapsedTime) / 60;
- int seconds = static_cast<int>(mElapsedTime) % 60;
- wxString timeStr = wxString::Format("%d:%02d", minutes, seconds);
+    int minutes = (int)(mElapsedTime) / 60;
+    int seconds = (int)(mElapsedTime) % 60;
+    wxString timeStr = wxString::Format("%d:%02d", minutes, seconds);
 
- // Draw the time at the fixed virtual position (ScoreboardTopLeft).
- gc->DrawText(timeStr, ScoreboardTopLeft.x, ScoreboardTopLeft.y);
+    gc->DrawText(timeStr, ScoreboardTopLeft.x, ScoreboardTopLeft.y);
 }
-
-double Scoreboard::GetElapsedTime() const {
- return mElapsedTime;
-}
-

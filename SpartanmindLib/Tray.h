@@ -2,7 +2,7 @@
  * @file Tray.h
  * @author Terrance Zackery
  *
- *
+ * Tray Class
  */
 
 #ifndef PROJECT1_SPARTANMINDLIB_TRAY_H
@@ -10,6 +10,9 @@
 
 #include "Item.h"
 
+/**
+ * Tray Class
+ */
 class Tray : public Item
 {
 private:

@@ -9,7 +9,7 @@
 
 /**
  * Initialize the application.
- * @return
+ * @return init
  */
 bool SpartanmindApp::OnInit()
 {
@@ -26,6 +26,10 @@ bool SpartanmindApp::OnInit()
 	return true;
 }
 
+/**
+ * Exit the application
+ * @return exit
+ */
 int SpartanmindApp::OnExit()
 {
 	return wxApp::OnExit();

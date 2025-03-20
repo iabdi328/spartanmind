@@ -19,8 +19,8 @@
 using namespace std;
 
 /**
- * Constructor
- * @param game
+ * Constructor for loading in levels
+ * @param game instance
  */
 LoadLevel::LoadLevel(Game *game): mGame(game)
 {
@@ -34,6 +34,7 @@ LoadLevel::LoadLevel(Game *game): mGame(game)
 void LoadLevel::Load(const wxString &filename)
 {
     wxXmlDocument xmlDoc;
+
     if(!xmlDoc.Load(filename))
     {
         wxMessageBox(L"Unable to load Game file");
@@ -42,17 +43,14 @@ void LoadLevel::Load(const wxString &filename)
 
     Clear();
 
-    // Get the root node (Level)
     auto root = xmlDoc.GetRoot();
     auto rootName = root->GetName();
 
-    // variables
     int width;
     int height;
     int tileWidth;
     int tileHeight;
 
-    // Extract window sizing from level xml node
     root->GetAttribute(L"width").ToInt(&width);
     root->GetAttribute(L"height").ToInt(&height);
     root->GetAttribute(L"tilewidth").ToInt(&tileWidth);
@@ -63,10 +61,6 @@ void LoadLevel::Load(const wxString &filename)
     mGame->SetTileWidth(tileWidth);
     mGame->SetTileHeight(tileHeight);
 
-    
-
-
-//     Iterate through Levels data
     auto child = root->GetChildren();
     for (; child; child=child->GetNext())
     {
@@ -104,7 +98,8 @@ void LoadLevel::Load(const wxString &filename)
 
             }
         }
-        if(name == L"game"){
+        if (name == L"game")
+        {
             auto solution = child->GetNodeContent().ToStdString();
             int solutionCol,solutionRow;
             child->GetAttribute(L"col").ToInt(&solutionCol);
@@ -123,12 +118,11 @@ void LoadLevel::Clear()
 }
 
 /**
- * Container XML node constructor
- * @param node Container node form XML file
+ * Loads in the Tray
+ * @param node xml tray node
  */
 void LoadLevel::TrayNode(wxXmlNode *node)
 {
-    // A pointer for the item we are loading
     auto tagName = node->GetName();
 
     auto id = node->GetAttribute(L"id");
@@ -136,13 +130,10 @@ void LoadLevel::TrayNode(wxXmlNode *node)
     int capacity;
     node->GetAttribute(L"capacity").ToInt(&capacity);
 
-
     auto image = node->GetAttribute(L"image").ToStdWstring();
 
-    // Level node to iterating into items
     auto root = node->GetParent()->GetParent();
 
-    // iterate  items
     auto child = root->GetChildren();
     for (; child; child=child->GetNext())
     {
@@ -156,7 +147,6 @@ void LoadLevel::TrayNode(wxXmlNode *node)
 
                 if (itemsChild->GetAttribute(L"id") == id)
                 {
-                    // set coordinates
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
                     itemsChild->GetAttribute(L"height").ToDouble(&height);
@@ -175,6 +165,10 @@ void LoadLevel::TrayNode(wxXmlNode *node)
     }
 }
 
+/**
+ * Loads in the background
+ * @param node xml background node
+ */
 void LoadLevel::BackgroundNode(wxXmlNode * node)
 {
 
@@ -207,6 +201,10 @@ void LoadLevel::BackgroundNode(wxXmlNode * node)
     }
 }
 
+/**
+ * Loads in the letter and givens declarations and items
+ * @param node xml letter node
+ */
 void LoadLevel::LetterNode(wxXmlNode *node)
 {
     // item we are loading
@@ -262,6 +260,10 @@ void LoadLevel::LetterNode(wxXmlNode *node)
     }
 }
 
+/**
+ * Loads in the player declarations and items
+ * @param node xml player node
+ */
 void LoadLevel::PlayerNode(wxXmlNode * node)
 {
     // Define the path to images
@@ -329,6 +331,10 @@ void LoadLevel::PlayerNode(wxXmlNode * node)
     }
 }
 
+/**
+ * Loads in the Container declarations and items
+ * @param node xml Node to container
+ */
 void LoadLevel::ContainerNode(wxXmlNode *node)
 {
     const wstring loc = L"../images/";

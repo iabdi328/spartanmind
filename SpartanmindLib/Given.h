@@ -21,6 +21,7 @@ class Given : public Item
 {
 
 private:
+    /// Letter value
     int mValue;
 
 public:

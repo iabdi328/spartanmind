@@ -1,8 +1,9 @@
 /**
-* @file Item.h
+ * @file Item.h
  * @author Daniel Conti
  * @author Raj Ambekar
  *
+ * Base Item Class
  */
 
 #ifndef ITEM_H
@@ -15,21 +16,27 @@
 
 class Game;
 
+/**
+ * Base Item Class
+ */
 class Item {
 
 private:
-    /// The game this item is contained in
-    Game* mGame;
-    /// The first image
-    bool mFirstImage = true;
-    bool mSecondImage = false;
+     /// The game this item is contained in
+     Game* mGame;
+     /// The first image
+     bool mFirstImage = true;
+     /// Second image
+     bool mSecondImage = false;
 
-     /// The underlying item image
+     /// The underlying item image for image 1
      std::unique_ptr<wxImage> mItemImage;
+     /// The underlying item image for image 2
      std::unique_ptr<wxImage> mItemImage2;
 
-     /// The bitmap we can display for this item
+     /// The bitmap we can display for the image 1
      std::unique_ptr<wxBitmap> mItemBitmap;
+     /// The bitmap we can display for the image 1
      std::unique_ptr<wxBitmap> mItemBitmap2;
 
      /// Item location in the spartanmind
@@ -51,6 +58,10 @@ public:
      Item(Game *game, const std::wstring &filename1 = L"None", const std::wstring &filename2 = L"None");
 
      virtual ~Item();
+
+     bool HitTest(int x, int y);
+
+     virtual void Draw(const std::shared_ptr<wxGraphicsContext>& gc);
 
      /**
        * The X location of the item
@@ -77,23 +88,11 @@ public:
      double GetImageWidth() { return mImageWidth;};
 
      /**
-      * Set the location of the item
+      * Set location of item
+      * @param x position
+      * @param y position
       */
-     void SetLocation(double x, double y);
-
-      /**
-       * Test this item to see if it has been clicked on
-       * @param x X location on the spartanmind to test in pixels
-       * @param y Y location on the spartanmind to test in pixels
-       * @return true if clicked on
-       */
-      bool HitTest(int x, int y);
-
-      /**
-       * Draw this item
-       * @param dc Device context to draw on
-       */
-      virtual void Draw(const std::shared_ptr<wxGraphicsContext>& );
+     void SetLocation(double x, double y) { mX = x; mY = y; };
 
       /**
        * Base update class

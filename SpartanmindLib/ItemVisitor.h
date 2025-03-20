@@ -2,7 +2,7 @@
  * @file ItemVisitor.h
  * @author Terrance Zackery
  *
- *
+ * ItemVisitor class for all Items
  */
 
 class Letter;
@@ -15,6 +15,9 @@ class Tray;
 #ifndef PROJECT1_SPARTANMINDLIB_ITEMVISITOR_H
 #define PROJECT1_SPARTANMINDLIB_ITEMVISITOR_H
 
+/**
+ * ItemVisitor class for all Items
+ */
 class ItemVisitor
 {
 private:

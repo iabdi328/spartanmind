@@ -14,12 +14,11 @@ Item::~Item()
 
 }
 
-
-
-
 /**
- * Constructor
- * @param game The game this item is a member of
+ * Base constructor for an item
+ * @param game pointer of which item is in
+ * @param filename image1
+ * @param filename2 image2 (conditionally required)
  */
 Item::Item(Game *game, const std::wstring &filename, const std::wstring &filename2) : mGame (game)
 {
@@ -68,7 +67,7 @@ bool Item::HitTest(int x, int y)
 
 /**
  * Draw this item
- * @param dc Device context to draw on
+ * @param gc graphic context to draw on
  */
 void Item::Draw(const std::shared_ptr<wxGraphicsContext>& gc)
 {
@@ -87,9 +86,4 @@ void Item::Draw(const std::shared_ptr<wxGraphicsContext>& gc)
         gc->DrawBitmap(*mItemBitmap2, int(GetX()), int(GetY()), wid2,
                              hit2);
     }
-}
-
-void Item::SetLocation(double x, double y) {
-    mX = x;
-    mY = y;
 }

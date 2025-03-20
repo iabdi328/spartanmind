@@ -2,7 +2,7 @@
  * @file Scoreboard.h
  * @author Ismail Abdi
  *
- *
+ * Scoreboard class to display time
  */
 
 #ifndef SCOREBOARD_H
@@ -11,25 +11,24 @@
 #include <wx/graphics.h>
 #include "memory"
 
-// Define the scoreboard constants.
-const int ScoreboardTextSize = 50;
-const wxPoint ScoreboardTopLeft(10, 10);
-
+/**
+ * Scoreboard class to display time
+ */
 class Scoreboard {
-public:
- Scoreboard();
-
- // Update the elapsed time (deltaSeconds is the time elapsed since the last update).
- void Update(double deltaSeconds);
-
- // Draw the scoreboard (elapsed time in MM:SS format) using the provided graphics context.
- void Draw(std::shared_ptr<wxGraphicsContext> gc) const;
-
- // Optionally, get the elapsed time (in seconds).
- double GetElapsedTime() const;
-
 private:
- double mElapsedTime; // Total elapsed time in seconds.
+    /// Total elapsed time in seconds.
+    double mElapsedTime;
+
+public:
+    Scoreboard();
+    void Update(double deltaSeconds);
+    void Draw(std::shared_ptr<wxGraphicsContext> gc) const;
+
+    /**
+     * Get the elapsed amount of time
+     * @return elapsed time
+     */
+    double GetElapsedTime() const { return mElapsedTime; };
 
 };
 

@@ -8,30 +8,26 @@
 #include "SpartanmindView.h"
 #include "ids.h"
 #include "Game.h"
-
 #include <wx/xml/xml.h>
-
-
 
 /**
  * Initializes MainFrame with custom settings.
  */
-void MainFrame::Initialize() {
+void MainFrame::Initialize()
+{
     mGame = std::make_shared<Game>();
     wxString level0File = "resources/levels/level1.xml";
-    long width = 20, height = 15, tileWidth = 48, tileHeight = 48; // Default values
+    long width = 20, height = 15, tileWidth = 48, tileHeight = 48;
 
     int totalWidth = static_cast<int>(width * tileWidth);
     int totalHeight = static_cast<int>(height * tileHeight);
 
 
-    // Create the main frame with the calculated level dimensions.
     Create(nullptr, wxID_ANY, "Spartanmind", wxDefaultPosition, wxSize(totalWidth, totalHeight));
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
 
-    // Create SpartanmindView and pass the Spartanmind object (not pointer) to it
-    auto spartanMindView = new SpartanmindView();  // Pass spartanmind by reference
+    auto spartanMindView = new SpartanmindView();
     spartanMindView->Initialize(this);
 
     sizer->Add(spartanMindView, 1, wxEXPAND | wxALL);
@@ -66,42 +62,21 @@ void MainFrame::Initialize() {
 
 }
 
-
 /**
- * Handles the exit event.
+ * Handles on exit menu button
+ * @param event click event
  */
-void MainFrame::OnExit(wxCommandEvent& event) {
+void MainFrame::OnExit(wxCommandEvent& event)
+{
     Close(true);
 }
 
 /**
- * Handles the about dialog event.
+ * Handles the about menu button
+ * @param event click event
  */
-void MainFrame::OnAbout(wxCommandEvent& event) {
+void MainFrame::OnAbout(wxCommandEvent& event)
+{
     wxMessageBox("Welcome to Spartanmind!",
                  "About Spartanmind", wxOK | wxICON_INFORMATION);
-}
-
-void MainFrame::OnSelectLevel1(wxCommandEvent& event)
-{
-    if (mSpartanmindView)
-    {
-        mSpartanmindView->NewLevel(L"../levels/level1.xml", 1);
-    }
-}
-
-void MainFrame::OnSelectLevel2(wxCommandEvent& event)
-{
-    if (mSpartanmindView)
-    {
-        mSpartanmindView->NewLevel(L"../levels/level2.xml", 2);
-    }
-}
-
-void MainFrame::OnSelectLevel3(wxCommandEvent& event)
-{
-    if (mSpartanmindView)
-    {
-        mSpartanmindView->NewLevel(L"../levels/level3.xml", 3);
-    }
 }

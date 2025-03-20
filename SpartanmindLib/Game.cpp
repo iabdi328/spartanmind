@@ -13,12 +13,19 @@
 #include "Item.h"
 #include "PopUps.h"
 
+/**
+ * Game Constructor
+ */
 Game::Game()
 {
     mBackground = std::make_unique<wxBitmap>(L"images/background.png", wxBITMAP_TYPE_ANY);
 //    mScoreboard = std::make_shared<Scoreboard>();
 }
 
+/**
+ * Update game view
+ * @param deltaSeconds time
+ */
 void Game::Update(double deltaSeconds) {
     UpdateScoreboard(deltaSeconds);
     mPopUps.Update(deltaSeconds);
@@ -31,11 +38,22 @@ void Game::Update(double deltaSeconds) {
     }
 }
 
+/**
+ * Sets the virtual dimensions for items
+ * @param virtualWidth
+ * @param virtualHeight
+ */
 void Game::SetVirtualDimensions(int virtualWidth, int virtualHeight) {
     mVirtualWidth = virtualWidth;
     mVirtualHeight = virtualHeight;
 }
 
+/**
+ * Draw the game context
+ * @param gc context
+ * @param width of game
+ * @param height of game
+ */
 void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) {
 
     int pixelWidth =  mWidth * mTileWidth;
@@ -84,25 +102,37 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
     gc->PopState();
 }
 
+/**
+ * Update the scoreboard
+ * @param deltaSeconds
+ */
 void Game::UpdateScoreboard(double deltaSeconds) {
     mScoreboard.Update(deltaSeconds);
 }
 
+/**
+ * Add items to item list
+ * @param item
+ */
 void Game::Add(std::shared_ptr<Item> item)
 {
     mItems.push_back(item);
 }
 
+/**
+ * Remove all items when loading new level
+ */
 void Game::Clear()
 {
     mItems.clear();
 }
 
+/**
+ * Class to display pop up on new level
+ * @param levelNumber int level
+ */
 void Game::ShowLevelBeginPopup(int levelNumber)
 {
-
-    std::wcout << L"@DEBUG ShowLevelBeginPopup Called: Level " << levelNumber << std::endl;
-    // Only pass "Level n Begins!" to the PopUps class
     std::wstring message = L"Level " + std::to_wstring(levelNumber) + L" Begins!";
-    mPopUps.ShowPopup(message, 10.0);
+    mPopUps.ShowPopup(message, 3.0);
 }

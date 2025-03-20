@@ -2,7 +2,7 @@
  * @file Container.h
  * @author Terrance Zackery
  *
- *
+ * Container Class
  */
 
 #ifndef PROJECT1_SPARTANMINDLIB_CONTAINER_H
@@ -10,6 +10,9 @@
 
 #include "Item.h"
 
+/**
+ * Container Class, displays present box
+ */
 class Container : public Item
 {
 private:

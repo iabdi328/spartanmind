@@ -18,37 +18,24 @@
 class LoadLevel
 {
 private:
+    /// Game pointer
     Game* mGame;
 
-
 public:
+    LoadLevel(Game * game);
     /// Default constructor (disabled)
     LoadLevel() = delete;
-
     /// Copy constructor (disabled)
     LoadLevel(const LoadLevel &) = delete;
     /// Assignment operator
     void operator=(const LoadLevel &) = delete;
 
-    /**
-     * Constructor
-     * @param game
-     */
-     LoadLevel(Game * game);
-    /**
-     * Load
-     */
     void Load(const wxString &filename);
-
     void BackgroundNode(wxXmlNode * node);
     void LetterNode(wxXmlNode * node);
     void TrayNode(wxXmlNode *node);
     void PlayerNode(wxXmlNode * node);
     void ContainerNode(wxXmlNode * node);
-
-    /**
-     * Clearing the playing area
-     */
     void Clear();
 
 };

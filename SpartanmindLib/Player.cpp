@@ -19,7 +19,12 @@ const double EatingTime = 0.5;
 /// The time for a headbutt cycle in seconds
 const double HeadbuttTime = 0.5;
 
-// Update the constructor to properly handle both images
+/**
+ * Player Constructor
+ * @param game Player in the game
+ * @param headImage head image file path
+ * @param mouthImage mouth image file path
+ */
 Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage)
     : Item(game, headImage)
 {
@@ -33,15 +38,12 @@ Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage)
     mX = 0;
     mY = 0;
 
-    // Load both images
     mPlayerImage = std::make_unique<wxBitmap>(headImage, wxBITMAP_TYPE_ANY);
     mMouthImage = std::make_unique<wxBitmap>(mouthImage, wxBITMAP_TYPE_ANY);
 
-    // Set dimensions based on the body image
     wid = mPlayerImage->GetWidth();
     hit = mPlayerImage->GetHeight();
 
-    // Initialize animation parameters
     mHeadPivotAngle = 0;
     mHeadPivotX = 0;
     mHeadPivotY = 0;
@@ -189,11 +191,6 @@ void Player::SetLocation(double x, double y)
     {
         mMoving = true;
     }
-}
-
-void Player::SetTarget(double x, double y) {
-    // Adjust the target based on target-x and target-y offsets
-    mTarget = wxPoint2DDouble(x - mTargetXOffset, y - mTargetYOffset);
 }
 
 /**

@@ -17,7 +17,7 @@
 class Letter : public Item
 {
 private:
-
+    /// Value of letter
     int mValue;
 
 public:
