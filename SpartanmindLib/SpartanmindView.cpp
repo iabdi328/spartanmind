@@ -7,16 +7,14 @@
 #include "pch.h"
 #include "ids.h"
 #include "SpartanmindView.h"
+#include "Player.h"
+#include "LoadLevel.h"
 #include <wx/dcbuffer.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 #include <memory>
-#include "Player.h"
-#include "LoadLevel.h"
-#include "Given.h"
-#include "Letter.h"
-#include "Tray.h"
+
 
 using namespace std;
 
@@ -49,6 +47,7 @@ void SpartanmindView::Initialize(wxFrame *parent)
 
     LoadLevel load(&mGame);
     load.Load(filename);
+    mGame.ShowLevelBeginPopup(mGame.GetLevel());
 
 
     // Create & start the timer for ~60 FPS
@@ -97,7 +96,7 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
     long deltaMs = mStopWatch.Time();
     // Restart the stopwatch for the next interval.
     mStopWatch.Start();
-    double deltaSeconds = deltaMs / 1000.0;
+    double deltaSeconds = deltaMs / 2000.0;
 
     // Update game logic and scoreboard using the actual elapsed time.
     mGame.Update(deltaSeconds);
