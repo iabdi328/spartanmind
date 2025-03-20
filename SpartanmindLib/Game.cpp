@@ -12,6 +12,7 @@
 #include <wx/graphics.h>
 #include "Item.h"
 #include "PopUps.h"
+using namespace std;
 
 /**
  * Game Constructor
@@ -143,4 +144,28 @@ void Game::ShowLevelBeginPopup(int levelNumber)
 {
     std::wstring message = L"Level " + std::to_wstring(levelNumber) + L" Begins!";
     mPopUps.ShowPopup(message, 3.0);
+}
+
+std::shared_ptr<Item> Game::GetItems(double mX, double mY)
+{
+    cout << "x: " << mX << endl;
+    cout << "y: " << mY << endl;
+    mX += 96;
+    mY += 96;
+    for (auto item : mItems)
+    {
+        double itemX = item->GetX();
+        double itemY = item->GetY();
+        double itemWidth = 48;
+        double itemHeight = 48;
+
+        // std::cout << "itemX: " << itemX << endl;
+        // std::cout << "itemY: " << itemY << endl;
+        if ((mX >= itemX) && (mX <= itemX + itemWidth) && (mY >= itemY) && (mY <= itemY + itemHeight))
+        {
+            cout << "Item Location: (" << itemX << ", " << itemY << ")" << endl;
+            return item;
+        }
+    }
+    return nullptr;
 }

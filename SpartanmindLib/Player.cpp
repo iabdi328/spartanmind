@@ -206,11 +206,17 @@ void Player::SetPosition(double x, double y) {
  * Headbutt Function
  */
 void Player::Headbutt() {
-    if (!mHeadbutt) {
+    if (!mHeadbutt)
+    {
         mHeadbutt = true;
         mHeadbuttTimer = 0;  // Start at 0, not HeadbuttDuration
         mBaseAngle = HeadbuttAngle;
         printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
+        std::shared_ptr<Item> container = mGameWorld->GetItems(mX, mY);
+        if (container != nullptr)
+        {
+            // letter->SetLocation(0, 0);
+        }
     }
 }
 
@@ -223,6 +229,11 @@ void Player::Eat() {
         mEatingTimer = 0;  // Start at 0, not EatingDuration
         mAuxAngle = EatingAngle;
         printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
+        std::shared_ptr<Item> letter = mGameWorld->GetItems(mX, mY);
+        if (letter != nullptr)
+        {
+            letter->SetLocation(0, 0);
+        }
     }
 }
 

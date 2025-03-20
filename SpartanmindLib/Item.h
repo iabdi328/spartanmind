@@ -42,10 +42,11 @@ private:
      /// Item location in the spartanmind
      double  mX;     ///< X location for the center of the item
      double  mY;     ///< Y location for the center of the item
-     double mImageHeight; ///< The height of the image
-     double mImageWidth; ///< The width of the image
 
 
+protected:
+    double mImageHeight; ///< The height of the image
+    double mImageWidth; ///< The width of the image
 public:
 
      /// Default constructor (disabled)

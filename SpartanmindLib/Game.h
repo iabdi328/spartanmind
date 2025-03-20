@@ -66,6 +66,8 @@ public:
     void AddAnswer(int number);
     void Clear();
     void ShowLevelBeginPopup(int levelNumber);
+    std::shared_ptr<Item> GetItems(double mX, double mY);
+
 
     /**
      * Return the pointer of the player
