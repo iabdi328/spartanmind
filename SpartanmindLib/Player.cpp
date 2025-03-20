@@ -147,7 +147,7 @@ void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics)
         graphics->PushState();
         graphics->Translate(mX + mMouthPivotX, mY + mMouthPivotY);
         graphics->Rotate(mMouthPivotAngle);
-        graphics->DrawBitmap(*mMouthImage, -mMouthPivotX, -mMouthPivotY, wid, hit);
+        graphics->DrawBitmap(*mMouthImage, -mMouthPivotX, -mMouthPivotY, mouthWid, mouthHit);
         graphics->PopState();
     }
 
@@ -158,12 +158,12 @@ void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics)
         graphics->PushState();
         graphics->Translate(mX + mHeadPivotX, mY + mHeadPivotY);
         graphics->Rotate(mHeadPivotAngle);
-        graphics->DrawBitmap(*mPlayerImage, -mHeadPivotX, -mHeadPivotY, wid, hit);
+        graphics->DrawBitmap(*mPlayerImage, -mHeadPivotX, -mHeadPivotY, headWid, headHit);
 
         // Draw mouth in headbutt position too
         if (mMouthImage != nullptr)
         {
-            graphics->DrawBitmap(*mMouthImage, -mHeadPivotX, -mHeadPivotY, wid, hit);
+            graphics->DrawBitmap(*mMouthImage, -mHeadPivotX, -mHeadPivotY, mouthWid, mouthHit);
         }
         graphics->PopState();
     }
