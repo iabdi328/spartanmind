@@ -59,47 +59,47 @@ Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage)
  * @param elapsedTime time
  */
 void Player::Update(double elapsedTime) {
-
     if (mMoving)
     {
-        // Update the direction of Sparty
+        // Existing movement logic remains unchanged
         mDirectionX = mDestX - mX;
         mDirectionY = mDestY - mY;
         mDirection = atan2(mDirectionY, mDirectionX);
-
-        // Update the speed of Sparty
         mSpeed = mMaxSpeed;
-
-        // Update the location of Sparty
         mX += mSpeed * cos(mDirection) * elapsedTime;
         mY += mSpeed * sin(mDirection) * elapsedTime;
-
         double distanceToDestination = sqrt(mDirectionX * mDirectionX + mDirectionY * mDirectionY);
-        if (distanceToDestination < mTargetY) { // You can adjust the threshold as needed
+        if (distanceToDestination < mTargetY) {
             mMoving = false;
             mX = mDestX;
             mY = mDestY;
         }
-    } else if(mEating) //mouth animation
+    }
+    else
     {
-        mEatingTimer += elapsedTime/EatingTime;
-        if (mEatingTimer > EatingTime)
+        mSpeed = 0;
+    }
+
+    // Handle eating animation regardless of movement
+    if (mEating)
+    {
+        mEatingTimer += elapsedTime;
+        if (mEatingTimer >= EatingDuration)  // EatingDuration = 0.5
         {
             mEating = false;
             mEatingTimer = 0;
         }
-    } else if(mHeadbutt) //headbutt animation
+    }
+
+    // Handle headbutt animation regardless of movement
+    if (mHeadbutt)
     {
-        mHeadbuttTimer += elapsedTime/HeadbuttTime;
-        if (mHeadbuttTimer > HeadbuttTime)
+        mHeadbuttTimer += elapsedTime;
+        if (mHeadbuttTimer >= HeadbuttDuration)  // HeadbuttDuration = 0.5
         {
             mHeadbutt = false;
             mHeadbuttTimer = 0;
         }
-    }
-
-    else {
-        mSpeed = 0;
     }
 }
 
@@ -208,7 +208,7 @@ void Player::SetPosition(double x, double y) {
 void Player::Headbutt() {
     if (!mHeadbutt) {
         mHeadbutt = true;
-        mHeadbuttTimer = HeadbuttDuration;
+        mHeadbuttTimer = 0;  // Start at 0, not HeadbuttDuration
         mBaseAngle = HeadbuttAngle;
         printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
     }
@@ -220,8 +220,8 @@ void Player::Headbutt() {
 void Player::Eat() {
     if (!mEating) {
         mEating = true;
-        mEatingTimer = EatingDuration;
-        mAuxAngle = EatingAngle;  // Rotate the mouth to the max open position
+        mEatingTimer = 0;  // Start at 0, not EatingDuration
+        mAuxAngle = EatingAngle;
         printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
     }
 }
