@@ -213,58 +213,77 @@ void LoadLevel::BackgroundNode(wxXmlNode * node)
  */
 void LoadLevel::LetterNode(wxXmlNode *node)
 {
-    // item we are loading
     auto tagName = node->GetName();
-
     auto id = node->GetAttribute(L"id");
 
     int value = 0;
     node->GetAttribute(L"value").ToInt(&value);
 
     auto image = node->GetAttribute(L"image").ToStdWstring();
-    auto root = node->GetParent()->GetParent();
-    // iterate into item
-    auto child = root->GetChildren();
-    for (; child; child=child->GetNext())
+    if (image.empty())
     {
-        auto name = child->GetName();
-        if (name == L"items")
+        image = id.substr(2) + L".png";
+    }
+
+    auto parent = node->GetParent();
+
+    std::cout << "Processing letter: " << id << " inside parent: " << parent->GetName() << std::endl;
+
+    double col = 0, row = 0;
+    if (node->GetAttribute(L"col").ToDouble(&col) && node->GetAttribute(L"row").ToDouble(&row))
+    {
+        std::cout << "Letter position: col=" << col << ", row=" << row << std::endl;
+    }
+    else
+    {
+        std::cout << "Warning: Letter " << id << " has no col/row attributes!" << std::endl;
+    }
+
+    if (parent->GetName() == "container")
+    {
+        std::cout << "Letter " << id << " is inside a container." << std::endl;
+
+        if(tagName == L"letter")
         {
-            double col, row;
-            auto itemsChild = child->GetChildren();
-            for(; itemsChild; itemsChild=itemsChild->GetNext())
+            shared_ptr<Item> letter = make_shared<Letter>(mGame, value, image);
+            letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
+            mGame->Add(letter);
+        }
+    }
+    else
+    {
+        auto root = parent->GetParent();
+        if (root)
+        {
+            auto child = root->GetChildren();
+            for (; child; child = child->GetNext())
             {
-                if (itemsChild->GetAttribute(L"id") == id)
+                if (child->GetName() == L"items")
                 {
-                    // set coordinates
-                    itemsChild->GetAttribute(L"col").ToDouble(&col);
-                    itemsChild->GetAttribute(L"row").ToDouble(&row);
-
-                    // setting and adding given items
-                    if(tagName == L"given")
+                    auto itemsChild = child->GetChildren();
+                    for (; itemsChild; itemsChild = itemsChild->GetNext())
                     {
-                        shared_ptr<Item> given;
-                        given = std::make_shared<Given>(mGame, value, image);
-                        given->SetLocation((col*mGame->GetTileHeight()), ((row)
-                            *mGame->GetTileWidth()));
-                        mGame->Add(given);
-                    }
-                    // setting and adding letter items
-                    if(tagName == L"letter")
-                    {
-                        shared_ptr<Item> letter;
-                        letter = make_shared<Letter>(mGame, value, image);
-                        letter->SetLocation((col*mGame->GetTileHeight()), ((row)
-                            *mGame->GetTileWidth()));
-                        mGame->Add(letter);
-                    }
+                        if (itemsChild->GetAttribute(L"id") == id)
+                        {
+                            itemsChild->GetAttribute(L"col").ToDouble(&col);
+                            itemsChild->GetAttribute(L"row").ToDouble(&row);
 
+                            std::cout << "Found letter " << id << " at col: " << col << ", row: " << row << std::endl;
+
+                            if(tagName == L"letter")
+                            {
+                                shared_ptr<Item> letter = make_shared<Letter>(mGame, value, image);
+                                letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
+                                mGame->Add(letter);
+                            }
+                        }
+                    }
                 }
             }
-
         }
     }
 }
+
 
 /**
  * Loads in the player declarations and items
@@ -372,6 +391,16 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
                     // set coordinates
                     itemsChild->GetAttribute(L"col").ToDouble(&col);
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
+
+                    wxXmlNode* letters = itemsChild->GetChildren();
+                    std::cout << "Loading container letters" << std::endl;
+
+                    for(; letters; letters=letters->GetNext())
+                    {
+                        auto name = letters->GetAttribute("id").ToStdWstring();
+                        std::cout << "Letter id: " << name << std::endl;
+                        LetterNode(letters);
+                    }
 
                     // shared ptr for container items
                     shared_ptr<Container> container;
