@@ -37,26 +37,25 @@ void MainFrame::Initialize() {
     SetSizer(sizer);
     Layout();
 
-    CreateStatusBar();
-    SetStatusText("Welcome to Spartanmind!");
-
     auto menuBar = new wxMenuBar();
     auto fileMenu = new wxMenu();
     auto levelsMenu = new wxMenu();
     auto helpMenu = new wxMenu();
 
-    fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the program");
-
-
-    helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
-
     menuBar->Append(fileMenu, "&File");
     menuBar->Append(levelsMenu, "&Levels");
     menuBar->Append(helpMenu, "&Help");
 
+    fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the program");
+    helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
+
     levelsMenu->Append(IDM_LEVEL1, L"&Level 1", L"&Move to Level 1");
     levelsMenu->Append(IDM_LEVEL2, L"&Level 2", L"&Move to Level 2");
     levelsMenu->Append(IDM_LEVEL3, L"&Level 3", L"&Move to Level 3");
+
+    CreateStatusBar(1, wxSTB_SIZEGRIP, wxID_ANY);
+
+    SetStatusText("Welcome to Spartanmind!");
 
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);

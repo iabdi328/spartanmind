@@ -99,7 +99,7 @@ void Player::Draw(std::shared_ptr<wxGraphicsContext> graphics) {
     // Draw player mouth
     if (mMouthImage != nullptr && !mEating && !mHeadbutt)
     {
-        graphics->DrawBitmap(*mMouthImage, mX, 50, wid, hit);
+        graphics->DrawBitmap(*mMouthImage, mX, mY, wid, hit);
     }
     if (mMouthImage != nullptr && mEating)
     {
