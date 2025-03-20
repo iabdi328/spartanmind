@@ -276,7 +276,13 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                                 shared_ptr<Item> letter = make_shared<Letter>(mGame, value, image);
                                 letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
                                 mGame->Add(letter);
+                            } else if (tagName == L"given")
+                            {
+                                shared_ptr<Given> given = make_shared<Given>(mGame, value, image);
+                                given->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
+                                mGame->Add(given);
                             }
+
                         }
                     }
                 }
