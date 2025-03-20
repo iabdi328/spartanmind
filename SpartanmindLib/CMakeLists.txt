@@ -29,8 +29,6 @@ set(SOURCE_FILES
         Container.h
         ItemVisitor.cpp
         ItemVisitor.h
-        LLetter.cpp
-        LLetter.h
         PopUps.cpp
         PopUps.h
 )
