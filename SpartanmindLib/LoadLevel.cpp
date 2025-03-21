@@ -408,17 +408,9 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
                         std::cout << "Letter id: " << name << std::endl;
                         LetterNode(letters);
                     }
-
-                    // shared ptr for container items
-                    shared_ptr<Container> container;
-                    container = make_shared<Container>(mGame);
-
-                    // setting background to first item in container vectorr
-                    shared_ptr<Item> backImage;
-                    //backImage = make_shared<Item>(mGame, loc+image);
-                    container->SetLocation((col*mGame->GetTileHeight()), ((row-4)*mGame->GetTileWidth()));
-                    container->Add(backImage);
-
+                    shared_ptr<Item> presentFront = make_shared<Item>(mGame, loc + L"present-front.png", loc + L"present-front.png");
+                    presentFront->SetLocation(col * mGame->GetTileWidth(), row * mGame->GetTileHeight() - 30);
+                    mGame->Add(presentFront);
                 }
             }
         }

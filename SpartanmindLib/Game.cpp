@@ -289,5 +289,4 @@ bool Game::CellOccupied(double x, double y){
 void Game::SubtractTimeFromScoreboard(double seconds)
 {
     mScoreboard.SubtractTime(seconds);
-
 }
