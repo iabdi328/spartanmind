@@ -53,6 +53,8 @@ private:
     /// Pop Up message
     PopUps mPopUps;
 
+    std::vector<std::shared_ptr<Given>> mGivens;
+
     /// All the items to populate our game
     std::vector<std::shared_ptr<Item>> mItems;
 
@@ -222,6 +224,18 @@ public:
     {
         mUserGuess.clear();
     }
+
+    std::vector<std::shared_ptr<Given>> GetGivens()
+    {
+        return mGivens;
+    }
+
+    void ClearGivens()
+    {
+        mGivens.clear();
+    }
+
+    void AddGiven(std::shared_ptr<Given> given) { mGivens.push_back(given); }
 };
 
 #endif // GAME_H

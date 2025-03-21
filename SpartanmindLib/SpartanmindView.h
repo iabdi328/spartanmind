@@ -42,7 +42,41 @@ private:
 	void OnTimer(wxTimerEvent& event);
 
 public:
-	~SpartanmindView();
+	std::vector<std::pair<int, int>> mLevelZeroSlots = {
+		{7, 4},
+		{8, 4},
+		{9, 4},
+		{10, 4},
+		{11, 4},
+		{12, 4},
+	};
+    std::vector<std::pair<int, int>> mLevelOneSlots = {
+	    {7, 4},
+	    {8, 4},
+	    {9, 4},
+	    {10, 4},
+	    {11, 4},
+	    {12, 4},
+    };
+	std::vector<std::pair<int, int>> mLevelTwoSlots = {
+		{11, 6},
+		{12, 6},
+	    {13, 6},
+		{14, 6},
+		{15, 6},
+		{16, 6},
+		{17, 6},
+		{18, 6}
+	};
+	std::vector<std::pair<int, int>> mLevelThreeSlots = {
+		{7, 4},
+		{8, 4},
+		{9, 4},
+		{10, 4},
+		{11, 4},
+		{12, 4},
+	};
+    ~SpartanmindView();
     void Initialize(wxFrame* parent);
     void OnMouseClick(wxMouseEvent& event);
     void OnLevelZero(wxCommandEvent& event);
