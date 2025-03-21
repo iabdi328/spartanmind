@@ -229,7 +229,6 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        double gridPosX = floor((player->GetX() + 96) / 48);
        double gridPosY = floor((player->GetY() + 96) / 48);
 
-
        /// Print sparty location for testing
         std::cout << "Sparty Location: " << gridPosX << ", " << gridPosY << std::endl;
 
@@ -245,31 +244,30 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        int level = mGame.GetLevel();
        cout << endl << "level: " << level << endl;
 
-       // Assuming mLevelZeroSlots, mLevelOneSlots, mLevelTwoSlots, mLevelThreeSlots, and mGame are defined
 
            switch (level) {
            case 0:
-                   if (std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelZeroSlots.end()) {
-                       return;
-                   }
+                   // if (std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelZeroSlots.end()) {
+                   //     return;
+                   // }
                mGame.ResizeUserGuess(6);
                break;
            case 1:
-                   if (std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelOneSlots.end()) {
-                       return;
-                   }
+                   // if (std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelOneSlots.end()) {
+                   //     return;
+                   // }
                mGame.ResizeUserGuess(6);
                break;
            case 2:
-                   if (std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelTwoSlots.end()) {
-                       return;
-                   }
+                   // if (std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelTwoSlots.end()) {
+                   //     return;
+                   // }
                mGame.ResizeUserGuess(8);
                break;
            case 3:
-                   if (std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelThreeSlots.end()) {
-                       return;
-                   }
+                   // if (std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelThreeSlots.end()) {
+                   //     return;
+                   // }
                mGame.ResizeUserGuess(6);
                break;
            default:
