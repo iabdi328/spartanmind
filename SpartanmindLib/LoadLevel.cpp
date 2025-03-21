@@ -97,8 +97,7 @@ void LoadLevel::Load(const wxString &filename)
                 }
 
             }
-        }
-        if (name == L"game")
+        } else if (name == L"game")
         {
             auto solution = child->GetNodeContent().ToStdString();
             int solutionCol,solutionRow,solutionLength;
@@ -111,6 +110,9 @@ void LoadLevel::Load(const wxString &filename)
             while (ss >> number) {
                 mGame->AddAnswer(number);
             }
+        } else if (name == L"items")
+        {
+
         }
     }
 }
@@ -130,44 +132,17 @@ void LoadLevel::Clear()
 void LoadLevel::TrayNode(wxXmlNode *node)
 {
     auto tagName = node->GetName();
-
-    auto id = node->GetAttribute(L"id");
-
     int capacity;
-    node->GetAttribute(L"capacity").ToInt(&capacity);
-
+    capacity = node->GetAttribute(L"capacity").ToInt(&capacity);
     auto image = node->GetAttribute(L"image").ToStdWstring();
 
-    auto root = node->GetParent()->GetParent();
-
-    auto child = root->GetChildren();
-    for (; child; child=child->GetNext())
+    double col, row, height;
+    if(tagName == L"tray")
     {
-        auto name = child->GetName();
-        if (name == L"items")
-        {
-            double col, row, height;
-            auto itemsChild = child->GetChildren();
-            for(; itemsChild; itemsChild=itemsChild->GetNext())
-            {
-
-                if (itemsChild->GetAttribute(L"id") == id)
-                {
-                    itemsChild->GetAttribute(L"col").ToDouble(&col);
-                    itemsChild->GetAttribute(L"row").ToDouble(&row);
-                    itemsChild->GetAttribute(L"height").ToDouble(&height);
-
-                    if(tagName == L"tray")
-                    {
-                        shared_ptr<Item> tray;
-                        tray = std::make_shared<Tray>(mGame, capacity, image);
-                        tray->SetLocation((col*mGame->GetTileHeight()),(row)*mGame->GetTileWidth());
-                        mGame->Add(tray);
-                    }
-                }
-
-            }
-        }
+        shared_ptr<Item> tray;
+        tray = std::make_shared<Tray>(mGame, capacity, image);
+        tray->SetLocation((col*mGame->GetTileHeight()),(row)*mGame->GetTileWidth());
+        mGame->Add(tray);
     }
 }
 
@@ -245,7 +220,6 @@ void LoadLevel::LetterNode(wxXmlNode *node)
 
         if(tagName == L"letter")
         {
-
             shared_ptr<Item> letter = make_shared<Letter>(mGame, value, image);
             letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
             mGame->Add(letter);
@@ -282,7 +256,6 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                                 given->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
                                 mGame->Add(given);
                             }
-
                         }
                     }
                 }
@@ -418,7 +391,6 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
                     //backImage = make_shared<Item>(mGame, loc+image);
                     container->SetLocation((col*mGame->GetTileHeight()), ((row-4)*mGame->GetTileWidth()));
                     container->Add(backImage);
-
                 }
             }
         }
