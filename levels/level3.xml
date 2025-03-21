@@ -57,9 +57,9 @@
 		<letter id="i1-l" width="48" height="48" image="-l.png" value="-20" />
 		<player id="i182" width="96" height="96" front="2" head-pivot-angle="0.8" head-pivot-x="30" head-pivot-y="86" image1="chest.png" image2="chest-lid.png" mouth-pivot-angle="1" mouth-pivot-x="96" mouth-pivot-y="35" target-x="72" target-y="24" />
 		<tray id="i184" width="144" height="144" image="tray.png" capacity="4" />
-		<background id="i189" width="960" height="720" image="background0.png" />
+		<background id="i189" width="960" height="720" image="backrground03.png" />
 	</declarations>
-	<game col="7" row="4" length="6">18 15 0 17 19 24</game>
+	<game col="7" row="4" length="5">22 7 8 19 4</game>
 	<items>
 		<background id="i189" col="0.0" row="14.0" />
 		<tray id="i184" col="16.5" row="2.5" />
@@ -90,11 +90,8 @@
 		<letter id="i1nl" col="11" row="12" />
 		<letter id="i1ml" col="12" row="12" />
 		<letter id="i1-l" col="13" row="12" />
-		<given id="i1sd" col="7" row="4" />
-		<given id="i1pd" col="8" row="4" />
-		<given id="i1rd" col="10" row="4" />
-		<given id="i1td" col="11" row="4" />
-		<given id="i1yd" col="12" row="4" />
+		<given id="i1wd" col="7" row="4" />
+		<given id="i1id" col="9" row="4" />
 		<player id="i182" col="9" row="8" />
 	</items>
 </level>
