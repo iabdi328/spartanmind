@@ -111,7 +111,7 @@ public:
        * Accept a visitor for all items
        * @param visitor The accepted visitor
        */
-      virtual void Accept(ItemVisitor* visitor) = 0;
+      virtual void Accept(ItemVisitor* visitor){};
 
 };
 

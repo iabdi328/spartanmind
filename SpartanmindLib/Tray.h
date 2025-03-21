@@ -40,14 +40,21 @@ public:
     /// Assignment operator
     void operator=(const Tray &) = delete;
 
+    void Add(std::shared_ptr<Item> item);
     /**
      * Accept a visitor
      * @param visitor The visitor we accept
      */
     void Accept(ItemVisitor* visitor) override { visitor->VisitTray(this); }
 
+    std::vector<std::shared_ptr<Item>> GetrayItems() { return mTrayItems; }
+    bool IsFull()
+    {
+        if(mTrayItems.size() < mCapacity) return false;
+        return true;
+    }
 
-
+    void Draw(const std::shared_ptr<wxGraphicsContext> &graphics) override;
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_TRAY_H

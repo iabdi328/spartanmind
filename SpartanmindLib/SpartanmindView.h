@@ -22,6 +22,9 @@ private:
     /// Timer for periodic updates
 	wxTimer* mGameTimer = nullptr;
 
+    ///Grabbed Item
+    std::shared_ptr<Item> mGrabbedItem = nullptr;
+
     /// Game Active
     bool mGameIsActive;
     ///New level

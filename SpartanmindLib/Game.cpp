@@ -12,6 +12,7 @@
 #include <wx/graphics.h>
 #include "Item.h"
 #include "PopUps.h"
+#include "TrayVisitor.h"
 using namespace std;
 
 /**
@@ -103,6 +104,27 @@ void Game::OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height) 
 }
 
 /**
+ * Test an x,y click location to see if it clicked
+ * on some item in the aquarium.
+ * @param x X location in pixels
+ * @param y Y location in pixels
+ * @returns Pointer to item we clicked on or nullptr if none.
+*/
+std::shared_ptr<Item> Game::HitTest(int x, int y)
+{
+    for (auto i = mItems.rbegin(); i != mItems.rend();  i++)
+    {
+        if ((*i)->HitTest(x, y))
+        {
+            return *i;
+        }
+    }
+
+    return  nullptr;
+}
+
+
+/**
  * Update the scoreboard
  * @param deltaSeconds
  */
@@ -170,7 +192,31 @@ std::shared_ptr<Item> Game::GetItems(double mX, double mY)
     return nullptr;
 }
 
+/**
+ * visitor for item collection
+ * @param *visitor The visitor for the collection
+ */
+void Game::Accept(ItemVisitor *visitor)
+{
+    for (auto item : mItems)
+    {
+        item->Accept(visitor);
+    }
+}
 
+void Game::ItemToTray(std::shared_ptr<Item> item)
+{
+    auto loc = find(std::begin(mItems), std::end(mItems), item);
+    if (loc != std::end(mItems))
+    {
+        mItems.erase(loc);
+    }
+    TrayVisitor visitor;
+    this->Accept(&visitor);
+    if(visitor.GetTray() != nullptr ){
+        visitor.GetTray()->Add(item);
+    }
+}
 
 void Game::ResetScoreboard() {
     mScoreboard.Reset();

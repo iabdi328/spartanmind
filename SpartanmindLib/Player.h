@@ -120,6 +120,25 @@ public:
     void SetPosition(double x, double y);
     void SetStartingLocation(double x, double y);
 
+    double GetX() const { return mX; }
+
+    /**
+     * Get Y
+     * @return mY
+     */
+    double GetY() const { return mY; }
+    /**
+     * Get Width
+     * @return Mouth image width
+     */
+    int GetWidth(){return mMouthImage->GetWidth();}
+
+    /**
+     * Get Height
+     * @return Mouth image height
+     */
+    int GetHeight(){return mMouthImage->GetHeight();}
+
     /**
      * Set Head Pivot Angle
      * @param angle

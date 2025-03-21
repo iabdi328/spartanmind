@@ -14,6 +14,7 @@
 #include <wx/wfstream.h>
 #include <wx/graphics.h>
 #include <memory>
+#include "TrayVisitor.h"
 
 
 using namespace std;
@@ -158,6 +159,21 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     else if (event.GetKeyCode() == WXK_SPACE)
     {
         player->Eat();
+        mGrabbedItem = mGame.HitTest((player->GetX()+player->GetWidth()),
+                                     (player->GetY()+player->GetHeight()));
+        if(mGrabbedItem != nullptr)
+        {
+            TrayVisitor visitor2;
+            TrayVisitor visitor;
+            mGame.Accept(&visitor2);
+            mGrabbedItem->Accept(&visitor);
+            bool isLetter = visitor.IsFound();
+            if(mGrabbedItem != nullptr && isLetter && !visitor2.GetTray()
+                ->IsFull())
+            {
+                mGame.ItemToTray(mGrabbedItem);
+            }
+        }
     }
 
     event.Skip(); // Let other key events process

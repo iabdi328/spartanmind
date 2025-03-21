@@ -8,6 +8,7 @@
 #define GAME_H
 
 #include <memory>
+#include <random>
 #include <iostream>
 #include <wx/graphics.h>
 #include <wx/bitmap.h>
@@ -53,6 +54,8 @@ private:
     std::vector<std::shared_ptr<Item>> mItems;
     /// List for the word solution
     std::vector<int> mWord;
+    /// random generatorr
+    std::mt19937 mRandom;
 
 public:
     /// Constructor and Destructor
@@ -67,6 +70,10 @@ public:
     void Clear();
     void ShowLevelBeginPopup(int levelNumber);
     std::shared_ptr<Item> GetItems(double mX, double mY);
+    std::shared_ptr<Item> HitTest(int x, int y);
+    void Accept(ItemVisitor *visitor);
+    void ItemToTray(std::shared_ptr<Item> item);
+    std::mt19937& GetRandom() { return mRandom; }
 
 
     /**
