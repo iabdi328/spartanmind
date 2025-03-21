@@ -6,6 +6,8 @@
 
 #include "pch.h"
 #include "Item.h"
+#include <memory>
+#include <wx/graphics.h>
 
 using namespace std;
 
