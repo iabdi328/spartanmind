@@ -33,7 +33,7 @@ public:
 
     Container(Game * game);
 
-    void Add(std::shared_ptr<Item> item);
+    void Add(std::shared_ptr<Item> item) override;
 
     /**
      * Accept a visitor

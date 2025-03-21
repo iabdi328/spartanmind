@@ -40,7 +40,7 @@ public:
     /// Assignment operator
     void operator=(const Tray &) = delete;
 
-    void Add(std::shared_ptr<Item> item);
+    void Add(std::shared_ptr<Item> item) override;
     /**
      * Accept a visitor
      * @param visitor The visitor we accept
