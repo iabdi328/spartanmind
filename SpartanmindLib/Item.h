@@ -12,6 +12,7 @@
 #include "ItemVisitor.h"
 #include <string>
 #include <wx/image.h>
+#include <wx/graphics.h>
 #include <memory>
 
 class Game;
@@ -93,7 +94,7 @@ public:
       * @param x position
       * @param y position
       */
-     void SetLocation(double x, double y) { mX = x; mY = y; };
+     virtual void SetLocation(double x, double y) { mX = x; mY = y; };
 
       /**
        * Base update class
@@ -113,6 +114,20 @@ public:
        */
       virtual void Accept(ItemVisitor* visitor){};
 
+     /**
+      * Tells program if this item is a letter
+      * @return
+      */
+     virtual bool IsLetter() { return false; };
+
+
+    /**
+    * Tells program if this item is a container
+    * @return
+    */
+    virtual bool IsContainer() { return false; };
+
+    virtual void Add(std::shared_ptr<Item> item) {};
 };
 
 #endif //ITEM_H

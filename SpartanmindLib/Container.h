@@ -40,6 +40,13 @@ public:
      * @param visitor The visitor we accept
      */
     void Accept(ItemVisitor* visitor) override { visitor->VisitContainer(this); }
+
+    /**
+     * Tells the program that this is a container
+     * @return true
+     */
+    bool IsContainer() override {return true;};
+
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_CONTAINER_H

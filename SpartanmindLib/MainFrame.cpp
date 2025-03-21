@@ -23,8 +23,8 @@ void MainFrame::Initialize()
     wxString level0File = "resources/levels/level1.xml";
     long width = 20, height = 15, tileWidth = 48, tileHeight = 48;
 
-    int totalWidth = static_cast<int>(width * tileWidth);
-    int totalHeight = static_cast<int>(height * tileHeight);
+    int totalWidth = (int)(width * tileWidth);
+    int totalHeight = (int)(height * tileHeight);
 
 
     Create(nullptr, wxID_ANY, "Spartanmind", wxDefaultPosition, wxSize(totalWidth, totalHeight));

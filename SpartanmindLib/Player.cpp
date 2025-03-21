@@ -212,10 +212,12 @@ void Player::Headbutt() {
         mHeadbuttTimer = 0;  // Start at 0, not HeadbuttDuration
         mBaseAngle = HeadbuttAngle;
         printf("Sparty is headbutting! Head tilting to %.2f radians\n", HeadbuttAngle);
-        std::shared_ptr<Item> container = mGameWorld->GetItems(mX, mY);
-        if (container != nullptr)
+        std::shared_ptr<Item> letter = mGameWorld->GetItems(mX, mY);
+        if (!letter) return;
+        std::cout << mX << ", " << mY << std::endl;
+        if (mX > 1100 && mX < 1300 && letter->IsLetter() && letter)
         {
-            // letter->SetLocation(0, 0);
+            letter->SetLocation(100, 100);
         }
     }
 }

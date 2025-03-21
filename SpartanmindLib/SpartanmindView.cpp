@@ -167,8 +167,7 @@ void SpartanmindView::OnMouseClick(wxMouseEvent& event)
  */
 void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 {
-//    if (!mGame) return;
-
+    //    if (!mGame) return;
     auto player = mGame.GetPlayer();
     if (!player) return;
 
@@ -178,9 +177,23 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     }
     else if (event.GetKeyCode() == WXK_SPACE)
     {
+        // if (player->GetX() > 1070 && player->GetX() < 1200)
+        // {
+        //     return;
+        // }
         player->Eat();
-        mGrabbedItem = mGame.HitTest((player->GetX()+player->GetWidth()),
-                                     (player->GetY()+player->GetHeight()));
+        mGrabbedItem = mGame.HitTest((player->GetX() + 70),
+                                     (player->GetY() + 70));
+        if (mGrabbedItem == nullptr)
+        {
+            return;
+        }
+        if ((mGrabbedItem->GetX() > 1000 && mGrabbedItem->GetX() < 1300) && ((mGrabbedItem->GetY() > 500 || mGrabbedItem->GetY() < 800)))
+        {
+            std::cout << "you're hitting the present mate" << std::endl;
+            return;
+        }
+
         if(mGrabbedItem != nullptr)
         {
             TrayVisitor visitor2;
@@ -197,45 +210,47 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
         }
     }
     // if any letter between A or Z is pressed
-//    if (event.GetKeyCode() >= 'A' && event.GetKeyCode() <= 'Z')
-//    {
-//        player->Eat();
-//        // getting the letter that was pressed
-//        int letterPressed = event.GetKeyCode() - 48;
-//        TrayVisitor visitor;
-//        mGame.Accept(&visitor);
-//        std::vector<std::shared_ptr<Item>> trayItems = visitor.GetLetters();
-//        // looping through tray items
-//        for(auto item : trayItems)
-//        {
-//            Letter* letter = dynamic_cast<Letter*>(item.get());
-//            if(letter->GetValue() == letterPressed)
-//            {
-//                double x = player->GetX();
-//                double y = player->GetY();
-//                std::tuple<int,int> cell = mGame.Cords2Cell(x, y);
-//                int col = std::get<0>(cell);
-//                int row = std::get<1>(cell);
-//                if (!mGame.CellOccupied(col * mGame.GetTileHeight() + mGame
-//                    .GetPlayer()->GetWidth(), (row + 1) * mGame.GetTileHeight()+ mGame
-//                    .GetPlayer()->GetHeight()))
-//                {
-//                    mGame.RemoveTrayItems(item);
-//
-//                    double x = col * mGame.GetTileHeight() + mGame
-//                        .GetPlayer()->GetWidth();
-//                    double y = (row + 1) * mGame.GetTileHeight()+ mGame
-//                        .GetPlayer()->GetHeight();
-//
-//                    letter->SetLocation(col * mGame.GetTileHeight() + mGame
-//                                           .GetPlayer()->GetWidth(),
-//                                       (row + 1) * mGame.GetTileHeight()+ mGame
-//                                           .GetPlayer()->GetHeight());
-//
-//                }
-//            }
-//        }
-//    }
+   if (event.GetKeyCode() >= 65 && event.GetKeyCode() <= 90)
+   {
+       std::cout << "event.KeyCode" << event.GetKeyCode() << std::endl;
+
+       player->Eat();
+       // getting the letter that was pressed
+       int letterPressed = event.GetKeyCode() - 65;
+       TrayVisitor visitor;
+       mGame.Accept(&visitor);
+       std::vector<std::shared_ptr<Item>> trayItems = visitor.GetLetters();
+       // looping through tray items
+       for(auto item : trayItems)
+       {
+           Letter* letter = dynamic_cast<Letter*>(item.get());
+           if(letter->GetValue() == letterPressed)
+           {
+               double x = player->GetX();
+               double y = player->GetY();
+               std::tuple<int,int> cell = mGame.Cords2Cell(x, y);
+               int col = std::get<0>(cell);
+               int row = std::get<1>(cell);
+               if (!mGame.CellOccupied(col * mGame.GetTileHeight() + mGame
+                   .GetPlayer()->GetWidth(), (row + 1) * mGame.GetTileHeight()+ mGame
+                   .GetPlayer()->GetHeight()))
+               {
+                   mGame.RemoveTrayItems(item);
+
+                   double x = col * mGame.GetTileHeight() + mGame
+                       .GetPlayer()->GetWidth();
+                   double y = (row + 1) * mGame.GetTileHeight()+ mGame
+                       .GetPlayer()->GetHeight();
+
+                   letter->SetLocation(col * mGame.GetTileHeight() + mGame
+                                          .GetPlayer()->GetWidth(),
+                                      (row + 1) * mGame.GetTileHeight()+ mGame
+                                          .GetPlayer()->GetHeight());
+
+               }
+           }
+       }
+   }
 
     event.Skip(); // Let other key events process
 }

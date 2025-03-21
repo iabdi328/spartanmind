@@ -43,17 +43,22 @@ private:
 
     /// Background image for the level.
     std::unique_ptr<wxBitmap> mBackground;
+
     /// The scoreboard instance.
     Scoreboard mScoreboard;
+
     /// player object
     std::shared_ptr<Player> mPlayer;
+
     /// Pop Up message
     PopUps mPopUps;
 
     /// All the items to populate our game
     std::vector<std::shared_ptr<Item>> mItems;
+
     /// List for the word solution
     std::vector<int> mWord;
+
     /// random generatorr
     std::mt19937 mRandom;
 
@@ -186,6 +191,7 @@ public:
 
     void SubtractTimeFromScoreboard(double seconds);
 
+    void AddContainerLetters(std::shared_ptr<Letter> letter);
 };
 
 #endif // GAME_H

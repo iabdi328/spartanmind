@@ -26,5 +26,10 @@ Container::Container(Game * game) : Item(game)
  */
 void Container::Add(std::shared_ptr<Item> item)
 {
+    std::cout << "Here is one containere letter: " << item;
     mContainedItems.push_back(item);
+    for (auto item : mContainedItems)
+    {
+        std::cout << "Here is one containere letter: " << item;
+    }
 }

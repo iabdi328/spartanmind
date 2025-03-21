@@ -37,6 +37,7 @@ public:
     void Accept(ItemVisitor* visitor) override { visitor->VisitLetter(this); }
     int GetValue() { return mValue; }
 
+    bool IsLetter() override { return true; }
 };
 
 

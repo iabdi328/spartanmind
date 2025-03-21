@@ -183,14 +183,15 @@ std::shared_ptr<Item> Game::GetItems(double mX, double mY)
         double itemWidth = 48;
         double itemHeight = 48;
 
-        // std::cout << "itemX: " << itemX << endl;
-        // std::cout << "itemY: " << itemY << endl;
+        std::cout << "itemX: " << itemX << endl;
+        std::cout << "itemY: " << itemY << endl;
         if ((mX >= itemX) && (mX <= itemX + itemWidth) && (mY >= itemY) && (mY <= itemY + itemHeight))
         {
             cout << "Item Location: (" << itemX << ", " << itemY << ")" << endl;
             return item;
         }
     }
+    // std::cout << "this is not the issue" << std::endl;
     return nullptr;
 }
 
@@ -289,4 +290,16 @@ bool Game::CellOccupied(double x, double y){
 void Game::SubtractTimeFromScoreboard(double seconds)
 {
     mScoreboard.SubtractTime(seconds);
+}
+
+
+void Game::AddContainerLetters(std::shared_ptr<Letter> letter)
+{
+    for (std::shared_ptr<Item> item : mItems)
+    {
+        if (item->IsContainer())
+        {
+            item->Add(letter);
+        }
+    }
 }

@@ -110,7 +110,7 @@ public:
     Player(Game *game, std::wstring headImage, std::wstring mouthImage);
     virtual ~Player() {}
 
-    void SetLocation(double x, double y);
+    void SetLocation(double x, double y) override;
     void Update(double elapsedTime) override;
     void Draw(std::shared_ptr<wxGraphicsContext> graphics);
     void Eat();

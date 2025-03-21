@@ -33,6 +33,8 @@ set(SOURCE_FILES
         PopUps.h
         TrayVisitor.cpp
         TrayVisitor.h
+        ContainerLetter.cpp
+        ContainerLetter.h
 )
 
 set(wxBUILD_PRECOMP OFF)
