@@ -205,6 +205,10 @@ void Game::Accept(ItemVisitor *visitor)
     }
 }
 
+/**
+ * Moves the letter items to the tray
+ * @param item smart pointer
+ */
 void Game::ItemToTray(std::shared_ptr<Item> item)
 {
     auto loc = find(std::begin(mItems), std::end(mItems), item);
@@ -218,6 +222,11 @@ void Game::ItemToTray(std::shared_ptr<Item> item)
         visitor.GetTray()->Add(item);
     }
 }
+
+/**
+ * Removes the item from the tray
+ * @param item smart pointer
+ */
 void Game::RemoveTrayItems(std::shared_ptr<Item> item)
 {
     TrayVisitor visitor;
@@ -228,10 +237,17 @@ void Game::RemoveTrayItems(std::shared_ptr<Item> item)
     Add(item);
 }
 
+/**
+ * Reset Scoreboard on new level to 0
+ */
 void Game::ResetScoreboard() {
     mScoreboard.Reset();
 }
 
+/**
+ * Message for when tray is full
+ * @param graphics
+ */
 void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
 {
     // Constants for easier adjustments
@@ -266,12 +282,24 @@ void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
     }
 }
 
+/**
+ * Game coordinates
+ * @param x position
+ * @param y position
+ * @return tuple
+ */
 std::tuple<int,int> Game::Cords2Cell(double x, double y){
     int col = std::floor((x / mTileWidth));
     int row = std::floor((y / mTileHeight));
     return std::make_tuple(col, row);
 }
 
+/**
+ * See if the cell already has a letter
+ * @param x position
+ * @param y position
+ * @return true if yes else false
+ */
 bool Game::CellOccupied(double x, double y){
     for (auto item : mItems)
     {
@@ -284,13 +312,19 @@ bool Game::CellOccupied(double x, double y){
     return false;
 }
 
-
+/**
+ * Subtract time for level3 feature
+ * @param seconds time
+ */
 void Game::SubtractTimeFromScoreboard(double seconds)
 {
     mScoreboard.SubtractTime(seconds);
 }
 
-
+/**
+ * Add letters to the container
+ * @param letter smart pointer
+ */
 void Game::AddContainerLetters(std::shared_ptr<Letter> letter)
 {
     for (std::shared_ptr<Item> item : mItems)

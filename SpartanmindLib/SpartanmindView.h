@@ -96,62 +96,15 @@ public:
         {12, 4},
     };
 
-    /**
-     * @brief Destructor for SpartanmindView.
-     */
     ~SpartanmindView();
-
-    /**
-     * @brief Initializes the SpartanmindView.
-     * @param parent The parent frame.
-     */
     void Initialize(wxFrame* parent);
-
-    /**
-     * @brief Handles mouse click events.
-     * @param event The mouse event information.
-     */
     void OnMouseClick(wxMouseEvent& event);
-
-    /**
-     * @brief Event handler for level zero selection.
-     * @param event The command event triggered by selecting level zero.
-     */
     void OnLevelZero(wxCommandEvent& event);
-
-    /**
-     * @brief Event handler for level one selection.
-     * @param event The command event triggered by selecting level one.
-     */
     void OnLevelOne(wxCommandEvent &event);
-
-    /**
-     * @brief Event handler for level two selection.
-     * @param event The command event triggered by selecting level two.
-     */
     void OnLevelTwo(wxCommandEvent &event);
-
-    /**
-     * @brief Event handler for level three selection.
-     * @param event The command event triggered by selecting level three.
-     */
     void OnLevelThree(wxCommandEvent &event);
-
-    /**
-     * @brief Loads the next level in the game.
-     */
     void LoadNextLevel();
-
-    /**
-     * @brief Loads a new level with the specified configuration.
-     * @param filename The file name containing the level configuration.
-     * @param levelNumber The level number to load.
-     */
     void NewLevel(const wxString &filename, int levelNumber);
-
-    /**
-     * @brief Removes 10 seconds from the game timer.
-     */
     void Remove10Seconds();
 
 

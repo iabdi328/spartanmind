@@ -609,7 +609,9 @@ void SpartanmindView::LoadNextLevel()
 
 }
 
-
+/**
+ * Remove 10 seconds from the game level3 feature
+ */
 void SpartanmindView::Remove10Seconds()
 {
     mGame.SubtractTimeFromScoreboard(10.0);
@@ -617,7 +619,9 @@ void SpartanmindView::Remove10Seconds()
     Update();
 }
 
-
+/**
+ * Destructor for the gameview
+ */
 SpartanmindView::~SpartanmindView()
 {
     if (mGameTimer)

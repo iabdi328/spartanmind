@@ -90,8 +90,8 @@
 		<letter id="i1nl" col="11" row="12" />
 		<letter id="i1ml" col="12" row="12" />
 		<letter id="i1-l" col="13" row="12" />
-		<given id="i1wd" col="7" row="4" />
-		<given id="i1id" col="9" row="4" />
+		<given id="i1gd" col="7" row="4" />
+		<given id="i1ed" col="9" row="4" />
 		<player id="i182" col="17" row="3" />
 	</items>
 </level>

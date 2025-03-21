@@ -53,6 +53,7 @@ private:
     /// Pop Up message
     PopUps mPopUps;
 
+    /// List for the Givens
     std::vector<std::shared_ptr<Given>> mGivens;
 
     /// All the items to populate our game
@@ -71,54 +72,14 @@ public:
     /// Constructor and Destructor
     Game();
 
-    /**
-     * Updates the game state.
-     * @param deltaSeconds The time elapsed since the last update, in seconds.
-     */
+
     void Update(double deltaSeconds);
-
-    /**
-     * Draws the game scene.
-     * @param gc A shared pointer to the wxGraphicsContext used for drawing.
-     * @param width The width of the drawing area.
-     * @param height The height of the drawing area.
-     */
     void OnDraw(std::shared_ptr<wxGraphicsContext> gc, int width, int height);
-
-    /**
-     * Updates the scoreboard based on the elapsed time.
-     * @param deltaSeconds The time elapsed since the last scoreboard update, in seconds.
-     */
     void UpdateScoreboard(double deltaSeconds);
-
-    /**
-     * Sets the virtual dimensions of the game world.
-     * @param virtualWidth The virtual width (e.g., in tiles).
-     * @param virtualHeight The virtual height (e.g., in tiles).
-     */
     void SetVirtualDimensions(int virtualWidth, int virtualHeight);
-
-    /**
-     * Adds an item to the game.
-     * @param item A shared pointer to the item to be added.
-     */
     void Add(std::shared_ptr<Item> item);
-
-    /**
-     * Adds an answer value to the game.
-     * @param number The answer number to add.
-     */
     void AddAnswer(int number);
-
-    /**
-     * Clears the game state, removing all items and resetting relevant variables.
-     */
     void Clear();
-
-    /**
-     * Displays a popup message at the beginning of a level.
-     * @param levelNumber The number of the level that is starting.
-     */
     void ShowLevelBeginPopup(int levelNumber);
 
     /**
@@ -129,18 +90,8 @@ public:
      */
     std::shared_ptr<Item> GetItems(double mX, double mY);
 
-    /**
-     * Performs a hit test to determine if an item exists at the given coordinates.
-     * @param x The x-coordinate for the hit test.
-     * @param y The y-coordinate for the hit test.
-     * @return A shared pointer to the item if found, otherwise nullptr.
-     */
     std::shared_ptr<Item> HitTest(int x, int y);
 
-    /**
-     * Accepts a visitor to perform operations on game items.
-     * @param visitor A pointer to the ItemVisitor object.
-     */
     void Accept(ItemVisitor *visitor);
 
     /**
@@ -155,22 +106,8 @@ public:
      */
     std::mt19937& GetRandom() { return mRandom; }
 
-    /**
-     * Checks whether a cell is occupied at the specified coordinates.
-     * @param x The x-coordinate.
-     * @param y The y-coordinate.
-     * @return True if the cell is occupied, false otherwise.
-     */
     bool CellOccupied(double x, double y);
-
-    /**
-     * Converts screen coordinates to cell indices.
-     * @param x The x-coordinate.
-     * @param y The y-coordinate.
-     * @return A tuple containing the cell indices (row, column).
-     */
     std::tuple<int,int> Cords2Cell(double x, double y);
-
 
 
     /**
@@ -273,34 +210,10 @@ public:
      */
     void SetPlayer(std::shared_ptr<Player> player) { mPlayer = player; }
 
-
-        /**
-     * Resets the scoreboard to its default state.
-     */
     void ResetScoreboard();
-
-    /**
-     * Displays the full message on the screen using the specified graphics context.
-     * @param graphics A shared pointer to the wxGraphicsContext used for drawing.
-     */
     void FullMessage(std::shared_ptr<wxGraphicsContext> graphics);
-
-    /**
-     * Removes the tray items associated with the specified item.
-     * @param item A shared pointer to the item to remove from the tray.
-     */
     void RemoveTrayItems(std::shared_ptr<Item> item);
-
-    /**
-     * Subtracts the specified amount of time from the scoreboard.
-     * @param seconds The number of seconds to subtract.
-     */
     void SubtractTimeFromScoreboard(double seconds);
-
-    /**
-     * Adds container letters to the game.
-     * @param letter A shared pointer to the letter to add.
-     */
     void AddContainerLetters(std::shared_ptr<Letter> letter);
 
     /**
@@ -350,8 +263,8 @@ public:
     void ClearGivens() { mGivens.clear(); }
 
     /**
-     * Adds a given object to the list.
-     * @param given A shared pointer to the Given object to add.
+     * Add the givens
+     * @param given smart pointer
      */
     void AddGiven(std::shared_ptr<Given> given) { mGivens.push_back(given); }
 

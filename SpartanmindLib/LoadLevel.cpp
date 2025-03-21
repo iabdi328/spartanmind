@@ -234,11 +234,16 @@ void LoadLevel::LetterNode(wxXmlNode *node)
 
     if (parent->GetName() == "container")
     {
-        if(tagName == L"letter")
+        if (tagName == L"letter")
         {
 
+            double containerLetterCol = 0;
+            double containerLetterRow = 0;
+            node->GetAttribute(L"col").ToDouble(&containerLetterCol);
+            node->GetAttribute(L"row").ToDouble(&containerLetterRow);
+
             shared_ptr<Letter> letter = make_shared<Letter>(mGame, value, image);
-            letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
+            letter->SetLocation(containerLetterCol * mGame->GetTileHeight(), containerLetterRow * mGame->GetTileWidth());
             mGame->Add(letter);
             mGame->AddContainerLetters(letter);
         }
@@ -266,7 +271,8 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                                 shared_ptr<Item> letter = make_shared<Letter>(mGame, value, image);
                                 letter->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
                                 mGame->Add(letter);
-                            } else if (tagName == L"given")
+                            }
+                            else if (tagName == L"given")
                             {
                                 shared_ptr<Given> given = make_shared<Given>(mGame, value, image);
                                 given->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
@@ -396,9 +402,11 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
                         auto name = letters->GetAttribute("id").ToStdWstring();
                         LetterNode(letters);
                     }
+
                     shared_ptr<Item> presentFront = make_shared<Item>(mGame, loc + L"present-front.png", loc + L"present-front.png");
                     presentFront->SetLocation(col * mGame->GetTileWidth(), row * mGame->GetTileHeight() - 30);
                     mGame->Add(presentFront);
+
                 }
             }
         }
