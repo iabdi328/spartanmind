@@ -221,16 +221,16 @@ void SpartanmindView::OnLevelThree(wxCommandEvent& event)
  */
 void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
 {
-    // Reset the game state
-    mGame.Clear(); // Assuming this clears the current game state
+    mGame.ResetScoreboard();     // ✅ Reset scoreboard timer
+    mStopWatch.Start();          // ✅ Restart stopwatch
+    mTime = 0;                   // ✅ Reset last frame time
 
+    mGame.Clear();
     mGameIsActive = false;
     mNewLevel = true;
 
-    // Set the new level number in the game
     mGame.SetLevel(levelNumber);
 
-    // Load the new level content
     LoadLevel area(&mGame);
     area.Load(filename);
 

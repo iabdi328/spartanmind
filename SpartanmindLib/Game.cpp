@@ -169,3 +169,9 @@ std::shared_ptr<Item> Game::GetItems(double mX, double mY)
     }
     return nullptr;
 }
+
+
+
+void Game::ResetScoreboard() {
+    mScoreboard.Reset();
+}

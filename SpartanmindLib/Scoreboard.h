@@ -30,6 +30,9 @@ public:
      */
     double GetElapsedTime() const { return mElapsedTime; };
 
+    void Reset();
+
+
 };
 
 #endif //SCOREBOARD_H

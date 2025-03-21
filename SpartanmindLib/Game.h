@@ -169,6 +169,9 @@ public:
      */
     void SetPlayer(std::shared_ptr<Player> player) { mPlayer = player; }
 
+
+    void ResetScoreboard();
+
 };
 
 #endif // GAME_H

@@ -46,3 +46,9 @@ void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
 
     gc->DrawText(timeStr, ScoreboardTopLeft.x, ScoreboardTopLeft.y);
 }
+
+
+
+void Scoreboard::Reset() {
+ mElapsedTime = 0;
+}
