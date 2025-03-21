@@ -21,13 +21,15 @@ private:
     /// Smart pointer to the game
 	std::shared_ptr<Game> mGame;
     /// Smart pointer to the game view
-	SpartanmindView* mSpartanmindView;
+	SpartanmindView* mSpartanmindView = nullptr;
 
 public:
 	void Initialize();
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnRemoveTime(wxCommandEvent& event);
+	void OnClose(wxCloseEvent& event);
+
 
 };
 

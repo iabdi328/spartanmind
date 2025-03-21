@@ -9,12 +9,16 @@
 #include "ids.h"
 #include "Game.h"
 #include <wx/xml/xml.h>
+#include <wx/wfstream.h>
+
+
 
 /**
  * Initializes MainFrame with custom settings.
  */
 void MainFrame::Initialize()
 {
+
     mGame = std::make_shared<Game>();
     wxString level0File = "resources/levels/level1.xml";
     long width = 20, height = 15, tileWidth = 48, tileHeight = 48;
@@ -61,9 +65,10 @@ void MainFrame::Initialize()
 
     SetStatusText("Welcome to Spartanmind!");
 
-    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
-    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
-    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnRemoveTime, this, IDM_REMOVE_TIME);
+    Bind(wxEVT_MENU, &MainFrame::OnExit, this, wxID_EXIT);
+    Bind(wxEVT_MENU, &MainFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &MainFrame::OnRemoveTime, this, IDM_REMOVE_TIME);
+    Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 
 
 
@@ -85,11 +90,11 @@ void MainFrame::OnExit(wxCommandEvent& event)
  * Handles the about menu button
  * @param event click event
  */
-void MainFrame::OnAbout(wxCommandEvent& event)
-{
-    wxMessageBox("Welcome to Spartanmind!",
-                 "About Spartanmind", wxOK | wxICON_INFORMATION);
+void MainFrame::OnAbout(wxCommandEvent& event) {
+ wxMessageBox("Welcome to Spartanmind!",
+              "About Spartanmind", wxOK | wxICON_INFORMATION);
 }
+
 
 
 void MainFrame::OnRemoveTime(wxCommandEvent& event)
@@ -99,4 +104,16 @@ void MainFrame::OnRemoveTime(wxCommandEvent& event)
   mSpartanmindView->Remove10Seconds();
  }
 
+}
+
+
+void MainFrame::OnClose(wxCloseEvent& event)
+{
+ if (mSpartanmindView)
+ {
+  mSpartanmindView->Destroy();
+  mSpartanmindView = nullptr;
+ }
+
+ Destroy();  // Destroy this frame
 }

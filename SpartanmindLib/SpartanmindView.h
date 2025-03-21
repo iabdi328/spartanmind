@@ -42,7 +42,7 @@ private:
 	void OnTimer(wxTimerEvent& event);
 
 public:
-
+	~SpartanmindView();
     void Initialize(wxFrame* parent);
     void OnMouseClick(wxMouseEvent& event);
     void OnLevelZero(wxCommandEvent& event);

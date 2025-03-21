@@ -34,6 +34,7 @@ void SpartanmindView::Initialize(wxFrame *parent)
     Bind(wxEVT_KEY_DOWN, &SpartanmindView::OnKeyDown, this);
     Bind(wxEVT_LEFT_DOWN, &SpartanmindView::OnMouseClick, this);
 
+
     // Bind functions from MainFrame
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED, &SpartanmindView::OnLevelZero, this,
                  IDM_LEVEL0);
@@ -100,7 +101,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
 //        }
 //    }
 
-    Refresh(false);
+
 
 }
 
@@ -349,10 +350,18 @@ void SpartanmindView::LoadNextLevel()
 
 void SpartanmindView::Remove10Seconds()
 {
-    wxLogMessage("SpartanmindView::Remove10Seconds called");
-
     mGame.SubtractTimeFromScoreboard(10.0);
-
     Refresh();
     Update();
+}
+
+
+SpartanmindView::~SpartanmindView()
+{
+    if (mGameTimer)
+    {
+        mGameTimer->Stop();
+        delete mGameTimer;
+        mGameTimer = nullptr;
+    }
 }
