@@ -7,8 +7,8 @@
 #include "TrayVisitor.h"
 
 /**
- * Visit Xray
- * @param xray Xray we are visiting
+ * Visit tray
+ * @param tray Tray we are visiting
  */
 void TrayVisitor::VisitTray(Tray* tray)
 {
@@ -22,7 +22,7 @@ void TrayVisitor::VisitTray(Tray* tray)
 
 /**
  * Visit Given Number
- * @param givenNumber Given Number we are visiting
+ * @param letter Given Letter we are visiting
  */
 void TrayVisitor::VisitLetter(Letter *letter)
 {
@@ -30,7 +30,8 @@ void TrayVisitor::VisitLetter(Letter *letter)
 }
 
 /**
- * Is the Xray full
+ * Is the Tray full
+ *
  * @return
  */
 bool TrayVisitor::IsFull()

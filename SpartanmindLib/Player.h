@@ -106,25 +106,80 @@ private:
 
     const double EatingDuration = 0.5;  ///< Eating lasts 0.5s
     const double EatingAngle = 1;  ///< Max mouth open angle
-
+    // eating sound for sparty eating animation
     wxSound mEatSound;
+    // headbutt sound for sparty headbutt animation
     wxSound mHeadbuttSound;
 
 public:
+    /**
+     * @brief Constructs a new Player object.
+     * @param game Pointer to the game this player is associated with.
+     * @param headImage The file path for the player's head image.
+     * @param mouthImage The file path for the player's mouth image.
+     */
     Player(Game *game, std::wstring headImage, std::wstring mouthImage);
+
+    /**
+     * @brief Virtual destructor for Player.
+     */
     virtual ~Player() {}
 
+    /**
+     * @brief Sets the player's location.
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     */
     void SetLocation(double x, double y) override;
+
+    /**
+     * @brief Updates the player's state.
+     * @param elapsedTime The elapsed time since the last update.
+     */
     void Update(double elapsedTime) override;
+
+    /**
+     * @brief Draws the player.
+     * @param graphics A shared pointer to the wxGraphicsContext used for drawing.
+     */
     void Draw(std::shared_ptr<wxGraphicsContext> graphics);
+
+    /**
+     * @brief Makes the player perform the eat action.
+     */
     void Eat();
+
+    /**
+     * @brief Makes the player perform the headbutt action.
+     */
     void Headbutt();
+
+    /**
+     * @brief Computes the player's current position.
+     * @return A wxRealPoint representing the player's position.
+     */
     wxRealPoint ComputePosition();
 
+    /**
+     * @brief Sets the player's position.
+     * @param x The new x-coordinate.
+     * @param y The new y-coordinate.
+     */
     void SetPosition(double x, double y);
+
+    /**
+     * @brief Sets the player's starting location.
+     * @param x The starting x-coordinate.
+     * @param y The starting y-coordinate.
+     */
     void SetStartingLocation(double x, double y);
 
+    /**
+     * @brief Retrieves the player's current x-coordinate.
+     * @return The x-coordinate as a double.
+     */
     double GetX() const { return mX; }
+
 
     /**
      * Get Y

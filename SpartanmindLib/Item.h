@@ -126,7 +126,10 @@ public:
     * @return
     */
     virtual bool IsContainer() { return false; };
-
+    /**
+    * @brief Retrieves the tray associated with this visitor.
+    * @return A pointer or reference to the tray.
+    */
     virtual void Add(std::shared_ptr<Item> item) {};
 };
 

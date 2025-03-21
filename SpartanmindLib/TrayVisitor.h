@@ -12,6 +12,12 @@
 #ifndef PROJECT1_SPARTANMINDLIB_TRAYVISITOR_H
 #define PROJECT1_SPARTANMINDLIB_TRAYVISITOR_H
 
+/**
+ * @brief Visitor for Tray objects.
+ *
+ * This class implements the visitor pattern for Tray objects, allowing operations
+ * to be performed on Tray elements without modifying their classes.
+ */
 class TrayVisitor : public ItemVisitor
 {
 private:
@@ -23,6 +29,11 @@ private:
     std::vector<std::shared_ptr<Item>> mLetters;
 
 public:
+    /**
+     * Get the tray items
+     * ptr to tray
+     * @return tray
+     */
     Tray* GetTray() const { return mTray; }
 
     virtual void VisitTray(Tray* tray) override;

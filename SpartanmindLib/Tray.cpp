@@ -22,7 +22,10 @@ Tray::Tray(Game *game, int capacity, std::wstring &filename) : Item (game,
 {
     mCapacity = capacity;
 }
-
+/**
+ * Adds an item to the tray.
+ * @param item A shared pointer to the item to be added.
+ */
 void Tray::Add(std::shared_ptr<Item> item)
 {
     std::uniform_real_distribution<> distribution(0, 80);
@@ -33,7 +36,10 @@ void Tray::Add(std::shared_ptr<Item> item)
     item->SetLocation(trayX, trayY);
     mTrayItems.push_back(item);
 }
-
+/**
+ * Removes the specified item from the tray.
+ * @param item A shared pointer to the item to be removed.
+ */
 void Tray::Remove(std::shared_ptr<Item> item)
 {
     auto loc = std::find(mTrayItems.begin(), mTrayItems.end(), item);
@@ -42,7 +48,10 @@ void Tray::Remove(std::shared_ptr<Item> item)
         mTrayItems.erase(loc);
     }
 }
-
+/**
+ * Draws the tray and all contained items.
+ * @param graphics A shared pointer to the wxGraphicsContext used for drawing.
+ */
 void Tray::Draw(const std::shared_ptr<wxGraphicsContext>& graphics) {
 
     Item::Draw(graphics);

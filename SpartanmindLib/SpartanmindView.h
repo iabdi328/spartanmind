@@ -42,50 +42,118 @@ private:
 	void OnTimer(wxTimerEvent& event);
 
 public:
-	std::vector<std::pair<int, int>> mLevelZeroSlots = {
-		{7, 4},
-		{8, 4},
-		{9, 4},
-		{10, 4},
-		{11, 4},
-		{12, 4},
-	};
-    std::vector<std::pair<int, int>> mLevelOneSlots = {
-	    {7, 4},
-	    {8, 4},
-	    {9, 4},
-	    {10, 4},
-	    {11, 4},
-	    {12, 4},
+	    /**
+     * @brief Contains the slot positions for level zero.
+     * Each pair represents grid coordinates for level zero slots.
+     */
+    std::vector<std::pair<int, int>> mLevelZeroSlots = {
+        {7, 4},
+        {8, 4},
+        {9, 4},
+        {10, 4},
+        {11, 4},
+        {12, 4},
     };
-	std::vector<std::pair<int, int>> mLevelTwoSlots = {
-		{11, 6},
-		{12, 6},
-	    {13, 6},
-		{14, 6},
-		{15, 6},
-		{16, 6},
-		{17, 6},
-		{18, 6}
-	};
-	std::vector<std::pair<int, int>> mLevelThreeSlots = {
-		{7, 4},
-		{8, 4},
-		{9, 4},
-		{10, 4},
-		{11, 4},
-		{12, 4},
-	};
+
+    /**
+     * @brief Contains the slot positions for level one.
+     * Each pair represents grid coordinates for level one slots.
+     */
+    std::vector<std::pair<int, int>> mLevelOneSlots = {
+        {7, 4},
+        {8, 4},
+        {9, 4},
+        {10, 4},
+        {11, 4},
+        {12, 4},
+    };
+
+    /**
+     * @brief Contains the slot positions for level two.
+     * Each pair represents grid coordinates for level two slots.
+     */
+    std::vector<std::pair<int, int>> mLevelTwoSlots = {
+        {11, 6},
+        {12, 6},
+        {13, 6},
+        {14, 6},
+        {15, 6},
+        {16, 6},
+        {17, 6},
+        {18, 6}
+    };
+
+    /**
+     * @brief Contains the slot positions for level three.
+     * Each pair represents grid coordinates for level three slots.
+     */
+    std::vector<std::pair<int, int>> mLevelThreeSlots = {
+        {7, 4},
+        {8, 4},
+        {9, 4},
+        {10, 4},
+        {11, 4},
+        {12, 4},
+    };
+
+    /**
+     * @brief Destructor for SpartanmindView.
+     */
     ~SpartanmindView();
+
+    /**
+     * @brief Initializes the SpartanmindView.
+     * @param parent The parent frame.
+     */
     void Initialize(wxFrame* parent);
+
+    /**
+     * @brief Handles mouse click events.
+     * @param event The mouse event information.
+     */
     void OnMouseClick(wxMouseEvent& event);
+
+    /**
+     * @brief Event handler for level zero selection.
+     * @param event The command event triggered by selecting level zero.
+     */
     void OnLevelZero(wxCommandEvent& event);
+
+    /**
+     * @brief Event handler for level one selection.
+     * @param event The command event triggered by selecting level one.
+     */
     void OnLevelOne(wxCommandEvent &event);
+
+    /**
+     * @brief Event handler for level two selection.
+     * @param event The command event triggered by selecting level two.
+     */
     void OnLevelTwo(wxCommandEvent &event);
+
+    /**
+     * @brief Event handler for level three selection.
+     * @param event The command event triggered by selecting level three.
+     */
     void OnLevelThree(wxCommandEvent &event);
+
+    /**
+     * @brief Loads the next level in the game.
+     */
     void LoadNextLevel();
+
+    /**
+     * @brief Loads a new level with the specified configuration.
+     * @param filename The file name containing the level configuration.
+     * @param levelNumber The level number to load.
+     */
     void NewLevel(const wxString &filename, int levelNumber);
-	void Remove10Seconds();
+
+    /**
+     * @brief Removes 10 seconds from the game timer.
+     */
+    void Remove10Seconds();
+
 
 };
 

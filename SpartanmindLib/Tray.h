@@ -47,14 +47,25 @@ public:
      */
     void Accept(ItemVisitor* visitor) override { visitor->VisitTray(this); }
 
+    /**
+     * Retrieves all items contained in the tray.
+     * @return A vector of shared pointers to items in the tray.
+     */
     std::vector<std::shared_ptr<Item>> GetrayItems() { return mTrayItems; }
+
+    /**
+     * Checks whether the tray is full.
+     * @return True if the tray is full (i.e., the number of items is equal to or exceeds the capacity), false otherwise.
+     */
     bool IsFull()
     {
         if(mTrayItems.size() < mCapacity) return false;
         return true;
     }
 
+    //draws the graphics
     void Draw(const std::shared_ptr<wxGraphicsContext> &graphics) override;
+    //removes letters from tray
     void Remove(std::shared_ptr<Item> item);
 };
 
