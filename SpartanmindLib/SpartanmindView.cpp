@@ -209,13 +209,15 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
             }
         }
     }
+
     // if any letter between A or Z is pressed
-   if (event.GetKeyCode() >= 65 && event.GetKeyCode() <= 90)
+   if (event.GetKeyCode() >= 65 && event.GetKeyCode() <= 90 || event.GetKeyCode() == 45)
    {
        std::cout << "event.KeyCode" << event.GetKeyCode() << std::endl;
 
        player->Eat();
        // getting the letter that was pressed
+       // if (event.GetKeyCode() == )
        int letterPressed = event.GetKeyCode() - 65;
        TrayVisitor visitor;
        mGame.Accept(&visitor);

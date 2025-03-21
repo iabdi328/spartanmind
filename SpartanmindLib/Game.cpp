@@ -183,8 +183,6 @@ std::shared_ptr<Item> Game::GetItems(double mX, double mY)
         double itemWidth = 48;
         double itemHeight = 48;
 
-        std::cout << "itemX: " << itemX << endl;
-        std::cout << "itemY: " << itemY << endl;
         if ((mX >= itemX) && (mX <= itemX + itemWidth) && (mY >= itemY) && (mY <= itemY + itemHeight))
         {
             cout << "Item Location: (" << itemX << ", " << itemY << ")" << endl;
