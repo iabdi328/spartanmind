@@ -255,7 +255,6 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        mGame.SetUserGuess(4, 13);
        mGame.SetUserGuess(5, 6);
 
-
        /// Create the solution and user guess variables
        vector<int> mWord = mGame.GetWord();
        vector<int> mUserGuess = mGame.GetUserGuess();
