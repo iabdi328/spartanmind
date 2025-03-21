@@ -262,6 +262,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        if (mWord == mUserGuess)
        {
             std::cout << "You Win!" << std::endl;
+            LoadNextLevel();
        }
 
        std::cout << "Word: ";
