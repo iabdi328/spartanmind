@@ -12,6 +12,7 @@
 #include <wx/geometry.h>
 #include <string>
 #include <wx/graphics.h>
+#include <wx/sound.h>
 
 class Game;
 
@@ -105,6 +106,9 @@ private:
 
     const double EatingDuration = 0.5;  ///< Eating lasts 0.5s
     const double EatingAngle = 1;  ///< Max mouth open angle
+
+    wxSound mEatSound;
+    wxSound mHeadbuttSound;
 
 public:
     Player(Game *game, std::wstring headImage, std::wstring mouthImage);
