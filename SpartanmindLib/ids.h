@@ -16,6 +16,7 @@ enum IDs {
     IDM_LEVEL1 = wxID_HIGHEST + 2,
     IDM_LEVEL2 = wxID_HIGHEST + 3,
     IDM_LEVEL3 = wxID_HIGHEST + 4,
+	IDM_REMOVE_TIME,
 
     IDM_SOLVE,
 

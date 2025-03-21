@@ -39,13 +39,18 @@ void MainFrame::Initialize()
     auto fileMenu = new wxMenu();
     auto levelsMenu = new wxMenu();
     auto helpMenu = new wxMenu();
+    auto TimerMenu = new wxMenu();
+
 
     menuBar->Append(fileMenu, "&File");
     menuBar->Append(levelsMenu, "&Levels");
     menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(TimerMenu, "&Timer");
 
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the program");
     fileMenu->Append(IDM_SOLVE, "Solve", "Solve the game");
+    TimerMenu->Append(IDM_REMOVE_TIME, "Remove 10 Seconds", "Subtract 10 seconds from timer");
+
     helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
     levelsMenu->Append(IDM_LEVEL0, L"&Level 0", L"&Move to Level 0");
@@ -59,6 +64,8 @@ void MainFrame::Initialize()
 
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
+
+
 
     SetMenuBar(menuBar);
 
