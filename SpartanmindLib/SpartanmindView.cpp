@@ -15,6 +15,7 @@
 #include <wx/graphics.h>
 #include <memory>
 #include "TrayVisitor.h"
+#include <cmath>
 
 
 using namespace std;
@@ -223,8 +224,8 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        }
 
        /// Get the location clicked as its grid value 0 indexed
-       double gridPosX = (player->GetX() + 96) / 48;
-       double gridPosY = (player->GetY() + 96) / 48;
+       double gridPosX = floor((player->GetX() + 96) / 48);
+       double gridPosY = floor((player->GetY() + 96) / 48);
 
 
        /// Print sparty location for testing
@@ -277,6 +278,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        {
            std::cout << letter;
        }
+       cout << endl;
 
        // looping through tray items
        for(auto item : trayItems)
@@ -300,11 +302,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                    double y = (row + 1) * mGame.GetTileHeight()+ mGame
                        .GetPlayer()->GetHeight();
 
-                   letter->SetLocation(col * mGame.GetTileHeight() + mGame
-                                          .GetPlayer()->GetWidth(),
-                                      (row + 1) * mGame.GetTileHeight()+ mGame
-                                          .GetPlayer()->GetHeight());
-
+                   letter->SetLocation(gridPosX * 48, gridPosY * 48);
                }
            }
        }
