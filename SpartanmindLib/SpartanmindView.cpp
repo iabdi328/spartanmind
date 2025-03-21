@@ -213,15 +213,64 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     // if any letter between A or Z is pressed
    if (event.GetKeyCode() >= 65 && event.GetKeyCode() <= 90 || event.GetKeyCode() == 45)
    {
-       std::cout << "event.KeyCode" << event.GetKeyCode() << std::endl;
-
-       player->Eat();
-       // getting the letter that was pressed
-       // if (event.GetKeyCode() == )
+       /// Get letter as its 0 indexed value (a = 0, b = 1, ...etc.)
        int letterPressed = event.GetKeyCode() - 65;
+
+       /// Get the location clicked as its grid value 0 indexed
+       double gridPosX = (player->GetX() + 96) / 48;
+       double gridPosY = (player->GetY() + 96) / 48;
+
+       /// Print sparty location for testing
+        std::cout << "Sparty Location: " << gridPosX << ", " << gridPosY << std::endl;
+
+       /// Do eating animation
+       player->Eat();
+
+       /// Call visitor function
        TrayVisitor visitor;
        mGame.Accept(&visitor);
        std::vector<std::shared_ptr<Item>> trayItems = visitor.GetLetters();
+
+       int level = mGame.GetLevel();
+       if (level == 0 || level == 1 || level == 3)
+       {
+           mGame.ResizeUserGuess(6);
+       } else if(level == 2)
+       {
+           mGame.ResizeUserGuess(8);
+       }
+
+       mGame.SetUserGuess(0, 19);
+       mGame.SetUserGuess(1, 20);
+       mGame.SetUserGuess(2, 17);
+       mGame.SetUserGuess(3, 8);
+       mGame.SetUserGuess(4, 13);
+       mGame.SetUserGuess(5, 6);
+
+
+       /// Create the solution and user guess variables
+       vector<int> mWord = mGame.GetWord();
+       vector<int> mUserGuess = mGame.GetUserGuess();
+
+       if (mWord == mUserGuess)
+       {
+            std::cout << "You Win!" << std::endl;
+       }
+
+       std::cout << "Word: ";
+       for (auto letter : mWord)
+       {
+           std::cout << letter;
+       }
+
+       mUserGuess = mGame.GetUserGuess();
+        std::cout << endl;
+       cout << "User Guess: ";
+       for (auto letter : mUserGuess)
+       {
+           std::cout << letter;
+       }
+
        // looping through tray items
        for(auto item : trayItems)
        {

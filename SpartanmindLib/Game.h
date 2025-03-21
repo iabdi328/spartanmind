@@ -59,6 +59,9 @@ private:
     /// List for the word solution
     std::vector<int> mWord;
 
+    /// List for the current word guessed by user
+    std::vector<int> mUserGuess;
+
     /// random generatorr
     std::mt19937 mRandom;
 
@@ -192,6 +195,33 @@ public:
     void SubtractTimeFromScoreboard(double seconds);
 
     void AddContainerLetters(std::shared_ptr<Letter> letter);
+
+    std::vector<int> GetWord() { return mWord; }
+
+    std::vector<int> GetUserGuess()
+    {
+        return mUserGuess;
+    }
+
+    void SetUserGuess(int index, int value)
+    {
+        mUserGuess[index] = value;
+    }
+
+    void ResizeUserGuess(int size)
+    {
+        mUserGuess.resize(size, -1);
+    }
+
+    void ClearWord()
+    {
+        mWord.clear();
+    }
+
+    void ClearGuessedWord()
+    {
+        mUserGuess.clear();
+    }
 };
 
 #endif // GAME_H

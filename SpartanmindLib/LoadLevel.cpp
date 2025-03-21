@@ -33,6 +33,8 @@ LoadLevel::LoadLevel(Game *game): mGame(game)
  */
 void LoadLevel::Load(const wxString &filename)
 {
+    mGame->ClearGuessedWord();
+    mGame->ClearWord();
     wxXmlDocument xmlDoc;
 
     if(!xmlDoc.Load(filename))
@@ -109,6 +111,7 @@ void LoadLevel::Load(const wxString &filename)
             std::stringstream ss(input.ToStdString());
             int number;
             while (ss >> number) {
+
                 mGame->AddAnswer(number);
             }
         }
@@ -226,23 +229,11 @@ void LoadLevel::LetterNode(wxXmlNode *node)
     }
 
     auto parent = node->GetParent();
-
-    std::cout << "Processing letter: " << id << " inside parent: " << parent->GetName() << std::endl;
-
     double col = 0, row = 0;
-    if (node->GetAttribute(L"col").ToDouble(&col) && node->GetAttribute(L"row").ToDouble(&row))
-    {
-        std::cout << "Letter position: col=" << col << ", row=" << row << std::endl;
-    }
-    else
-    {
-        std::cout << "Warning: Letter " << id << " has no col/row attributes!" << std::endl;
-    }
+
 
     if (parent->GetName() == "container")
     {
-        std::cout << "Letter " << id << " is inside a container." << std::endl;
-
         if(tagName == L"letter")
         {
 
@@ -269,8 +260,6 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                         {
                             itemsChild->GetAttribute(L"col").ToDouble(&col);
                             itemsChild->GetAttribute(L"row").ToDouble(&row);
-
-                            std::cout << "Found letter " << id << " at col: " << col << ", row: " << row << std::endl;
 
                             if(tagName == L"letter")
                             {
@@ -401,12 +390,10 @@ void LoadLevel::ContainerNode(wxXmlNode *node)
                     itemsChild->GetAttribute(L"row").ToDouble(&row);
 
                     wxXmlNode* letters = itemsChild->GetChildren();
-                    std::cout << "Loading container letters" << std::endl;
 
                     for(; letters; letters=letters->GetNext())
                     {
                         auto name = letters->GetAttribute("id").ToStdWstring();
-                        std::cout << "Letter id: " << name << std::endl;
                         LetterNode(letters);
                     }
                     shared_ptr<Item> presentFront = make_shared<Item>(mGame, loc + L"present-front.png", loc + L"present-front.png");
