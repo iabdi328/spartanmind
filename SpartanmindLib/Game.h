@@ -74,6 +74,8 @@ public:
     void Accept(ItemVisitor *visitor);
     void ItemToTray(std::shared_ptr<Item> item);
     std::mt19937& GetRandom() { return mRandom; }
+    bool CellOccupied(double x, double y);
+    std::tuple<int,int> Cords2Cell(double x, double y);
 
 
     /**
@@ -179,6 +181,8 @@ public:
 
     void ResetScoreboard();
 
+    void FullMessage(std::shared_ptr<wxGraphicsContext> graphics);
+    void RemoveTrayItems(std::shared_ptr<Item> item);
 };
 
 #endif // GAME_H

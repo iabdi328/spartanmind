@@ -32,6 +32,8 @@ private:
 
     /// The last stopwatch time
     long mTime = 0;
+
+    double mAllTime;
     /// StopWatch instance
     wxStopWatch mStopWatch;
 

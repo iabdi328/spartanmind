@@ -34,6 +34,15 @@ void Tray::Add(std::shared_ptr<Item> item)
     mTrayItems.push_back(item);
 }
 
+void Tray::Remove(std::shared_ptr<Item> item)
+{
+    auto loc = std::find(mTrayItems.begin(), mTrayItems.end(), item);
+    if(loc != mTrayItems.end())
+    {
+        mTrayItems.erase(loc);
+    }
+}
+
 void Tray::Draw(const std::shared_ptr<wxGraphicsContext>& graphics) {
 
     Item::Draw(graphics);

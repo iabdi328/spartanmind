@@ -55,6 +55,7 @@ public:
     }
 
     void Draw(const std::shared_ptr<wxGraphicsContext> &graphics) override;
+    void Remove(std::shared_ptr<Item> item);
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_TRAY_H

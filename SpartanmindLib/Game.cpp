@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <wx/log.h>
 #include <wx/graphics.h>
+#include <wx/tokenzr.h>
 #include "Item.h"
 #include "PopUps.h"
 #include "TrayVisitor.h"
@@ -217,7 +218,68 @@ void Game::ItemToTray(std::shared_ptr<Item> item)
         visitor.GetTray()->Add(item);
     }
 }
+void Game::RemoveTrayItems(std::shared_ptr<Item> item)
+{
+    TrayVisitor visitor;
+    this->Accept(&visitor);
+    if(visitor.GetTray() != nullptr){
+        visitor.GetTray()->Remove(item);
+    }
+    Add(item);
+}
 
 void Game::ResetScoreboard() {
     mScoreboard.Reset();
+}
+
+void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
+{
+    // Constants for easier adjustments
+    const int rectWidth = 400, rectHeight = 150, rectX = (mWidth * mTileWidth - rectWidth) / 2, rectY = (mHeight * mTileHeight - rectHeight) / 2;;
+    const int levelFontSize = 80, instructionFontSize = 35;
+    const double spacing = 10;  // Adjust this to change spacing between instruction lines
+
+    // Draw a filled rectangle
+    graphics->SetBrush(*wxWHITE_BRUSH);
+    graphics->SetPen(*wxTRANSPARENT_PEN);
+    graphics->DrawRectangle(rectX, rectY, rectWidth, rectHeight);
+
+    // Function to simplify text drawing
+    auto drawTextCentered = [&](const wxString& text, int fontSize, const wxColour& color) {
+        wxFont font(fontSize, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+        graphics->SetFont(font, color);
+
+        double textWidth, textHeight;
+        graphics->GetTextExtent(text, &textWidth, &textHeight);
+
+        double xPos = rectX + (rectWidth - textWidth) / 2;  // Centered horizontally
+        double yPos = rectY + (rectHeight - textHeight) / 2;  // Centered vertically
+
+        graphics->DrawText(text, xPos, yPos);  // Draw the text
+    };
+
+    // Draw instructions with adjusted spacing and checking for overflow
+    wxStringTokenizer tokenizer("I'm Full", "\n");
+    while (tokenizer.HasMoreTokens()) {
+        wxString instruction = tokenizer.GetNextToken();
+        drawTextCentered(instruction, instructionFontSize, *wxBLACK);
+    }
+}
+
+std::tuple<int,int> Game::Cords2Cell(double x, double y){
+    int col = std::floor((x / mTileWidth));
+    int row = std::floor((y / mTileHeight));
+    return std::make_tuple(col, row);
+}
+
+bool Game::CellOccupied(double x, double y){
+    for (auto item : mItems)
+    {
+        if (item->GetX() == x && item->GetY() == y)
+        {
+            std::cout << "Found in cell Row: " << x << " Col: " << y << std::endl;
+            return true;
+        }
+    }
+    return false;
 }

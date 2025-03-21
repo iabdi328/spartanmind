@@ -81,6 +81,25 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     mGame.Update(elapsed);
     mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
+
+//    TrayVisitor visitor;
+//    mGame.Accept(&visitor);
+//    bool isFull = visitor.IsFull();
+//    if(isFull)
+//    {
+//        double currentTime = mStopWatch.Time() * 0.001;
+//        double secondsSinceMessage = currentTime - mAllTime;
+//        if(secondsSinceMessage < 3)
+//        {
+//            mGame.FullMessage(gc);
+//        }
+//        else
+//        {
+//            // After 3 seconds, the message phase is over, so we mark it as such and move on
+//            isFull = false;
+//        }
+//    }
+
     Refresh(false);
 
 }
@@ -165,6 +184,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
         {
             TrayVisitor visitor2;
             TrayVisitor visitor;
+            mAllTime = mStopWatch.Time() * 0.001;
             mGame.Accept(&visitor2);
             mGrabbedItem->Accept(&visitor);
             bool isLetter = visitor.IsFound();
@@ -175,6 +195,46 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
             }
         }
     }
+    // if any letter between A or Z is pressed
+//    if (event.GetKeyCode() >= 'A' && event.GetKeyCode() <= 'Z')
+//    {
+//        player->Eat();
+//        // getting the letter that was pressed
+//        int letterPressed = event.GetKeyCode() - 48;
+//        TrayVisitor visitor;
+//        mGame.Accept(&visitor);
+//        std::vector<std::shared_ptr<Item>> trayItems = visitor.GetLetters();
+//        // looping through tray items
+//        for(auto item : trayItems)
+//        {
+//            Letter* letter = dynamic_cast<Letter*>(item.get());
+//            if(letter->GetValue() == letterPressed)
+//            {
+//                double x = player->GetX();
+//                double y = player->GetY();
+//                std::tuple<int,int> cell = mGame.Cords2Cell(x, y);
+//                int col = std::get<0>(cell);
+//                int row = std::get<1>(cell);
+//                if (!mGame.CellOccupied(col * mGame.GetTileHeight() + mGame
+//                    .GetPlayer()->GetWidth(), (row + 1) * mGame.GetTileHeight()+ mGame
+//                    .GetPlayer()->GetHeight()))
+//                {
+//                    mGame.RemoveTrayItems(item);
+//
+//                    double x = col * mGame.GetTileHeight() + mGame
+//                        .GetPlayer()->GetWidth();
+//                    double y = (row + 1) * mGame.GetTileHeight()+ mGame
+//                        .GetPlayer()->GetHeight();
+//
+//                    letter->SetLocation(col * mGame.GetTileHeight() + mGame
+//                                           .GetPlayer()->GetWidth(),
+//                                       (row + 1) * mGame.GetTileHeight()+ mGame
+//                                           .GetPlayer()->GetHeight());
+//
+//                }
+//            }
+//        }
+//    }
 
     event.Skip(); // Let other key events process
 }

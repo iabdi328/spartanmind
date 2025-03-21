@@ -35,6 +35,7 @@ public:
      * @param visitor The visitor we accept
      */
     void Accept(ItemVisitor* visitor) override { visitor->VisitLetter(this); }
+    int GetValue() { return mValue; }
 
 };
 
