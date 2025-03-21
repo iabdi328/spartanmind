@@ -48,6 +48,7 @@ void SpartanmindView::Initialize(wxFrame *parent)
     parent->Bind(wxEVT_COMMAND_MENU_SELECTED,  &SpartanmindView::OnLevelThree, this,
                  IDM_LEVEL3);
 
+    mStopWatch.Start();
     const wxString filename = L"../levels/level1.xml";
 
     LoadLevel load(&mGame);
@@ -86,23 +87,23 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
 
-//    TrayVisitor visitor;
-//    mGame.Accept(&visitor);
-//    bool isFull = visitor.IsFull();
-//    if(isFull)
-//    {
-//        double currentTime = mStopWatch.Time() * 0.001;
-//        double secondsSinceMessage = currentTime - mAllTime;
-//        if(secondsSinceMessage < 3)
-//        {
-//            mGame.FullMessage(gc);
-//        }
-//        else
-//        {
-//            // After 3 seconds, the message phase is over, so we mark it as such and move on
-//            isFull = false;
-//        }
-//    }
+    TrayVisitor visitor;
+    mGame.Accept(&visitor);
+    bool isFull = visitor.IsFull();
+    if(isFull)
+    {
+        double currentTime = mStopWatch.Time() * 0.001;
+        double secondsSinceMessage = currentTime - mAllTime;
+        if(secondsSinceMessage < 3)
+        {
+            mGame.FullMessage(gc);
+        }
+        else
+        {
+            // After 3 seconds, the message phase is over, so we mark it as such and move on
+            isFull = false;
+        }
+    }
 
 
 
@@ -117,21 +118,20 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
 //    if (!mGame) return;
 
     // Get elapsed time in milliseconds since the stopwatch was started.
-    long deltaMs = mStopWatch.Time();
-    // Restart the stopwatch for the next interval.
-    mStopWatch.Start();
-    double deltaSeconds = deltaMs / 2000.0;
+    auto newTime = mStopWatch.Time();
+    auto elapsed = (double)(newTime - mTime) * 0.001;
+    mTime = newTime;
 
     // Update game logic and scoreboard using the actual elapsed time.
-    mGame.Update(deltaSeconds);
-    mGame.UpdateScoreboard(deltaSeconds);
+    mGame.Update(elapsed);
+    mGame.UpdateScoreboard(elapsed);
 
     // Move Sparty
     std::shared_ptr<Player> player(mGame.GetPlayer());
 
     if (player != nullptr)
     {
-        player->Update(deltaSeconds);
+        player->Update(elapsed);
     }
 
     Refresh();
@@ -493,6 +493,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                    if (mWord == mUserGuess)
                    {
                        std::cout << "You Win!" << std::endl;
+                       LoadNextLevel();
                    }
                }
            }
