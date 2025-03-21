@@ -26,7 +26,9 @@ const double HeadbuttTime = 0.5;
  * @param mouthImage mouth image file path
  */
 Player::Player(Game *game, std::wstring headImage, std::wstring mouthImage)
-    : Item(game, headImage)
+    : Item(game, headImage),
+        mEatSound("sounds/eat.wav"),
+        mHeadbuttSound("sounds/headbut.wav")
 {
     mGameWorld = game;
     mEating = false;
@@ -206,6 +208,11 @@ void Player::SetPosition(double x, double y) {
  * Headbutt Function
  */
 void Player::Headbutt() {
+
+    if (mHeadbuttSound.IsOk())
+        mHeadbuttSound.Play(wxSOUND_ASYNC);
+
+
     if (!mHeadbutt)
     {
         mHeadbutt = true;
@@ -219,6 +226,9 @@ void Player::Headbutt() {
         {
             letter->SetLocation(100, 100);
         }
+
+
+
     }
 }
 
@@ -231,6 +241,8 @@ void Player::Eat() {
         mEatingTimer = 0;  // Start at 0, not EatingDuration
         mAuxAngle = EatingAngle;
         printf("Sparty is eating! Mouth opening to %.2f radians\n", EatingAngle);
+        if (mEatSound.IsOk())
+            mEatSound.Play(wxSOUND_ASYNC);
     }
 }
 
