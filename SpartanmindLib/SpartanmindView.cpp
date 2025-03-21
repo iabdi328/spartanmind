@@ -221,9 +221,9 @@ void SpartanmindView::OnLevelThree(wxCommandEvent& event)
  */
 void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
 {
-    mGame.ResetScoreboard();     // ✅ Reset scoreboard timer
-    mStopWatch.Start();          // ✅ Restart stopwatch
-    mTime = 0;                   // ✅ Reset last frame time
+    mGame.ResetScoreboard();
+    mStopWatch.Start();
+    mTime = 0;
 
     mGame.Clear();
     mGameIsActive = false;
