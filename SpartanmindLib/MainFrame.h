@@ -27,6 +27,8 @@ public:
 	void Initialize();
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnRemoveTime(wxCommandEvent& event);
+
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_MAINFRAME_H

@@ -183,6 +183,9 @@ public:
 
     void FullMessage(std::shared_ptr<wxGraphicsContext> graphics);
     void RemoveTrayItems(std::shared_ptr<Item> item);
+
+    void SubtractTimeFromScoreboard(double seconds);
+
 };
 
 #endif // GAME_H

@@ -32,6 +32,9 @@ public:
 
     void Reset();
 
+    void SubtractTime(double seconds);
+
+
 
 };
 

@@ -16,6 +16,7 @@
 #include "TrayVisitor.h"
 using namespace std;
 
+
 /**
  * Game Constructor
  */
@@ -282,4 +283,11 @@ bool Game::CellOccupied(double x, double y){
         }
     }
     return false;
+}
+
+
+void Game::SubtractTimeFromScoreboard(double seconds)
+{
+    mScoreboard.SubtractTime(seconds);
+
 }

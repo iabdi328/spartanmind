@@ -52,3 +52,15 @@ void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
 void Scoreboard::Reset() {
  mElapsedTime = 0;
 }
+
+void Scoreboard::SubtractTime(double seconds)
+{
+ if (mElapsedTime >= seconds)
+ {
+  mElapsedTime -= seconds;
+ }
+ else
+ {
+  mElapsedTime = 0; // Prevent negative time
+ }
+}

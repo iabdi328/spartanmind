@@ -345,3 +345,14 @@ void SpartanmindView::LoadNextLevel()
     }
 
 }
+
+
+void SpartanmindView::Remove10Seconds()
+{
+    wxLogMessage("SpartanmindView::Remove10Seconds called");
+
+    mGame.SubtractTimeFromScoreboard(10.0);
+
+    Refresh();
+    Update();
+}

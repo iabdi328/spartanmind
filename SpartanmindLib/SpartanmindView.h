@@ -51,6 +51,8 @@ public:
     void OnLevelThree(wxCommandEvent &event);
     void LoadNextLevel();
     void NewLevel(const wxString &filename, int levelNumber);
+	void Remove10Seconds();
+
 };
 
 #endif // PROJECT1_SPARTANMINDLIB_SPARTANMINDVIEW_H

@@ -27,10 +27,9 @@ void MainFrame::Initialize()
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
 
-    auto spartanMindView = new SpartanmindView();
-    spartanMindView->Initialize(this);
-
-    sizer->Add(spartanMindView, 1, wxEXPAND | wxALL);
+    mSpartanmindView = new SpartanmindView();
+    mSpartanmindView->Initialize(this);
+    sizer->Add(mSpartanmindView, 1, wxEXPAND | wxALL);
 
     SetSizer(sizer);
     Layout();
@@ -64,6 +63,8 @@ void MainFrame::Initialize()
 
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnExit, this, wxID_EXIT);
     Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_COMMAND_MENU_SELECTED, &MainFrame::OnRemoveTime, this, IDM_REMOVE_TIME);
+
 
 
 
@@ -88,4 +89,14 @@ void MainFrame::OnAbout(wxCommandEvent& event)
 {
     wxMessageBox("Welcome to Spartanmind!",
                  "About Spartanmind", wxOK | wxICON_INFORMATION);
+}
+
+
+void MainFrame::OnRemoveTime(wxCommandEvent& event)
+{
+ if (mSpartanmindView)
+ {
+  mSpartanmindView->Remove10Seconds();
+ }
+
 }
