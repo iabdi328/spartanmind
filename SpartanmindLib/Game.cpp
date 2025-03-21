@@ -167,7 +167,7 @@ void Game::Clear()
 void Game::ShowLevelBeginPopup(int levelNumber)
 {
     std::wstring message = L"Level " + std::to_wstring(levelNumber) + L" Begins!";
-    mPopUps.ShowPopup(message, 3.0);
+    mPopUps.ShowPopup(message, 1.0);
 }
 
 std::shared_ptr<Item> Game::GetItems(double mX, double mY)

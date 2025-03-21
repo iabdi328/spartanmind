@@ -271,8 +271,8 @@ void LoadLevel::LetterNode(wxXmlNode *node)
                                 shared_ptr<Given> given = make_shared<Given>(mGame, value, image);
                                 given->SetLocation(col * mGame->GetTileHeight(), row * mGame->GetTileWidth());
                                 mGame->Add(given);
+                                mGame->AddGiven(given);
                             }
-
                         }
                     }
                 }

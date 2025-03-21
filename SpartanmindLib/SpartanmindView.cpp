@@ -16,6 +16,9 @@
 #include <memory>
 #include "TrayVisitor.h"
 #include <cmath>
+#include <algorithm>  // For std::find
+
+#include "Given.h"
 
 
 using namespace std;
@@ -238,31 +241,52 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        TrayVisitor visitor;
        mGame.Accept(&visitor);
        std::vector<std::shared_ptr<Item>> trayItems = visitor.GetLetters();
+       std::vector<std::shared_ptr<Given>> givens = mGame.GetGivens();
 
        int level = mGame.GetLevel();
-       if (level == 0 || level == 1 || level == 3)
-       {
-           mGame.ResizeUserGuess(6);
-       } else if(level == 2)
-       {
-           mGame.ResizeUserGuess(8);
-       }
+       cout << endl << "level: " << level << endl;
 
-       mGame.SetUserGuess(0, 19);
-       mGame.SetUserGuess(1, 20);
-       mGame.SetUserGuess(2, 17);
-       mGame.SetUserGuess(3, 8);
-       mGame.SetUserGuess(4, 13);
-       mGame.SetUserGuess(5, 6);
+       // Assuming mLevelZeroSlots, mLevelOneSlots, mLevelTwoSlots, mLevelThreeSlots, and mGame are defined
+
+           switch (level) {
+           case 0:
+                   if (std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelZeroSlots.end()) {
+                       return;
+                   }
+               mGame.ResizeUserGuess(6);
+               break;
+           case 1:
+                   if (std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelOneSlots.end()) {
+                       return;
+                   }
+               mGame.ResizeUserGuess(6);
+               break;
+           case 2:
+                   if (std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelTwoSlots.end()) {
+                       return;
+                   }
+               mGame.ResizeUserGuess(8);
+               break;
+           case 3:
+                   if (std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(gridPosX, gridPosY)) == mLevelThreeSlots.end()) {
+                       return;
+                   }
+               mGame.ResizeUserGuess(6);
+               break;
+           default:
+               return;
+           }
+
+       // mGame.SetUserGuess(0, 19);
+       // mGame.SetUserGuess(1, 20);
+       // mGame.SetUserGuess(2, 17);
+       // mGame.SetUserGuess(3, 8);
+       // mGame.SetUserGuess(4, 13);
+       // mGame.SetUserGuess(5, 6);
 
        /// Create the solution and user guess variables
        vector<int> mWord = mGame.GetWord();
        vector<int> mUserGuess = mGame.GetUserGuess();
-
-       if (mWord == mUserGuess)
-       {
-            std::cout << "You Win!" << std::endl;
-       }
 
        std::cout << "Word: ";
        for (auto letter : mWord)
@@ -270,14 +294,11 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
            std::cout << letter;
        }
 
-       mUserGuess = mGame.GetUserGuess();
-        std::cout << endl;
-       cout << "User Guess: ";
+       std::cout << "User Guess: " << endl;
        for (auto letter : mUserGuess)
        {
            std::cout << letter;
        }
-       cout << endl;
 
        // looping through tray items
        for(auto item : trayItems)
@@ -300,8 +321,182 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                        .GetPlayer()->GetWidth();
                    double y = (row + 1) * mGame.GetTileHeight()+ mGame
                        .GetPlayer()->GetHeight();
+                   cout << "level: " << level << endl;
+                   switch (level)
+                   {
+                   case 0:
+                       {
+                           for (auto item : givens)
+                           {
+                               cout << endl << "item" << endl;
+                               double givenPosX= floor(((*item).GetX() + 96) / 48) - 2;
+                               double givenPosY = floor(((*item).GetY() + 96) / 48) - 2;
+                               int givenValue = (*item).GetValue();
+                               cout << endl << "givenValue: " << givenValue << endl;
+                               cout << endl << "givenPosX: " << givenPosX << endl;
+                               cout << endl << "givenPosY: " << givenPosY << endl;
+                               auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               if (index != mLevelZeroSlots.end())
+                               {
+                                   std::cout << "distance: " << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
+                                   mGame.SetUserGuess(std::distance(mLevelZeroSlots.begin(), index), givenValue);
+                               } else
+                               {
+                                   std::cout << "This is not a valid location!" << std::endl;
+                               }
+
+                               cout << "Given value x: " << givenPosX << endl;
+                               cout << "Given value y: " << givenPosY << endl;
+                           }
+                           for (auto item : givens)
+                           {
+                               double givenPosX= floor(((*item).GetX() + 96) / 48);
+                               double givenPosY = floor(((*item).GetY() + 96) / 48);
+                               int givenValue = (*item).GetValue();
+                               auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               if (index != mLevelZeroSlots.end())
+                               {
+                                   // std::cout << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
+                                   mGame.SetUserGuess(std::distance(mLevelZeroSlots.begin(), index), givenValue);
+                               } else
+                               {
+                                   std::cout << "This is not a valid location!" << std::endl;
+                               }
+
+                               cout << "Given value x: " << givenPosX << endl;
+                               cout << "Given value y: " << givenPosY << endl;
+                           }
+                           auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           if (index != mLevelZeroSlots.end())
+                           {
+                               // std::cout << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
+                               mGame.SetUserGuess(std::distance(mLevelZeroSlots.begin(), index), letterPressed);
+                           } else
+                           {
+                               std::cout << "This is not a valid location!" << std::endl;
+                           }
+                       }
+                       break;
+                   case 1:
+                       {
+                           for (auto item : givens)
+                           {
+                               cout << endl << "item" << endl;
+                               double givenPosX= floor(((*item).GetX() + 96) / 48) - 2;
+                               double givenPosY = floor(((*item).GetY() + 96) / 48) - 2;
+                               int givenValue = (*item).GetValue();
+                               cout << endl << "givenValue: " << givenValue << endl;
+                               cout << endl << "givenPosX: " << givenPosX << endl;
+                               cout << endl << "givenPosY: " << givenPosY << endl;
+                               auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               if (index != mLevelOneSlots.end())
+                               {
+                                   std::cout << "distance: " << std::distance(mLevelOneSlots.begin(), index) << std::endl;
+                                   mGame.SetUserGuess(std::distance(mLevelOneSlots.begin(), index), givenValue);
+                               } else
+                               {
+                                   std::cout << "This is not a valid location!" << std::endl;
+                               }
+
+                               cout << "Given value x: " << givenPosX << endl;
+                               cout << "Given value y: " << givenPosY << endl;
+                           }
+                           auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           if (index != mLevelOneSlots.end())
+                           {
+                               // std::cout << std::distance(mLevelOneSlots.begin(), index) << std::endl;
+                               mGame.SetUserGuess(std::distance(mLevelOneSlots.begin(), index), letterPressed);
+                           } else
+                           {
+                               std::cout << "This is not a valid location!" << std::endl;
+                           }
+                       }
+                       break;
+                   case 2:
+                       {
+                           for (auto item : givens)
+                           {
+                               cout << endl << "item" << endl;
+                               double givenPosX = floor(((*item).GetX() + 96) / 48) - 2;
+                               double givenPosY = floor(((*item).GetY() + 96) / 48) - 2;
+                               int givenValue = (*item).GetValue();
+                               cout << endl << "givenValue: " << givenValue << endl;
+                               cout << endl << "givenPosX: " << givenPosX << endl;
+                               cout << endl << "givenPosY: " << givenPosY << endl;
+                               auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               if (index != mLevelTwoSlots.end())
+                               {
+                                   std::cout << "distance: " << std::distance(mLevelTwoSlots.begin(), index) << std::endl;
+                                   mGame.SetUserGuess(std::distance(mLevelTwoSlots.begin(), index), givenValue);
+                               }
+                               else
+                               {
+                                   std::cout << "This is not a valid location!" << std::endl;
+                               }
+
+                               cout << "Given value x: " << givenPosX << endl;
+                               cout << "Given value y: " << givenPosY << endl;
+                           }
+                           auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           if (index != mLevelTwoSlots.end())
+                           {
+                               mGame.SetUserGuess(std::distance(mLevelTwoSlots.begin(), index), letterPressed);
+                           }
+                           else
+                           {
+                               std::cout << "This is not a valid location!" << std::endl;
+                           }
+                       }
+                       break;
+                   case 3:
+                       {
+                           for (auto item : givens)
+                           {
+                               cout << endl << "item" << endl;
+                               double givenPosX= floor(((*item).GetX() + 96) / 48) - 2;
+                               double givenPosY = floor(((*item).GetY() + 96) / 48) - 2;
+                               int givenValue = (*item).GetValue();
+                               cout << endl << "givenValue: " << givenValue << endl;
+                               cout << endl << "givenPosX: " << givenPosX << endl;
+                               cout << endl << "givenPosY: " << givenPosY << endl;
+                               auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               if (index != mLevelThreeSlots.end())
+                               {
+                                   std::cout << "distance: " << std::distance(mLevelThreeSlots.begin(), index) << std::endl;
+                                   mGame.SetUserGuess(std::distance(mLevelThreeSlots.begin(), index), givenValue);
+                               } else
+                               {
+                                   std::cout << "This is not a valid location!" << std::endl;
+                               }
+                           }
+                           auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           if (index != mLevelThreeSlots.end())
+                           {
+                               // std::cout << std::distance(mLevelThreeSlots.begin(), index) << std::endl;
+                               mGame.SetUserGuess(std::distance(mLevelThreeSlots.begin(), index), letterPressed);
+                           } else
+                           {
+                               std::cout << "This is not a valid location!" << std::endl;
+                           }
+                       }
+                       break;
+                   default:
+                       return;
+                   }
 
                    letter->SetLocation(gridPosX * 48, gridPosY * 48);
+                   mUserGuess = mGame.GetUserGuess();
+                   std::cout << endl;
+                   cout << "User Guess: ";
+                   for (auto letter : mUserGuess)
+                   {
+                       std::cout << letter;
+                   }
+                   cout << endl;
+                   if (mWord == mUserGuess)
+                   {
+                       std::cout << "You Win!" << std::endl;
+                   }
                }
            }
        }
