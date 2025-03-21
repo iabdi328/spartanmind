@@ -215,10 +215,17 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
    {
        /// Get letter as its 0 indexed value (a = 0, b = 1, ...etc.)
        int letterPressed = event.GetKeyCode() - 65;
+       std::shared_ptr<Item> item = mGame.HitTest(player->GetX() + 70, player->GetY() + 70);
+       if (item != nullptr)
+       {
+           cout << endl << "Letter is already there!" << endl << endl;
+           return;
+       }
 
        /// Get the location clicked as its grid value 0 indexed
        double gridPosX = (player->GetX() + 96) / 48;
        double gridPosY = (player->GetY() + 96) / 48;
+
 
        /// Print sparty location for testing
         std::cout << "Sparty Location: " << gridPosX << ", " << gridPosY << std::endl;
