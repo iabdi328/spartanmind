@@ -239,7 +239,7 @@ public:
      * Resizes the user's guess vector to the specified size.
      * @param size The new size for the user's guess vector. New elements will be set to -1.
      */
-    void ResizeUserGuess(int size) { mUserGuess.resize(size, -1); }
+ void ResizeUserGuess(int size) { mUserGuess.assign(size, -1); }
 
     /**
      * Clears the current word.

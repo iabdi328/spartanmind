@@ -106,6 +106,8 @@ public:
     void LoadNextLevel();
     void NewLevel(const wxString &filename, int levelNumber);
     void Remove10Seconds();
+	void ShowResultPopup();
+	bool mPopupShown = false;
 
 
 };
