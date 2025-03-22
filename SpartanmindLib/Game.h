@@ -71,6 +71,8 @@ private:
     /// All container letters
     std::vector<std::shared_ptr<Letter>> mContainerLetters;
 
+
+
 public:
     /// Constructor and Destructor
     Game();
@@ -216,6 +218,7 @@ public:
     void ResetScoreboard();
     void FullMessage(std::shared_ptr<wxGraphicsContext> graphics);
     void ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double currentTime);
+    void CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, double currentTime, int matched, int existing);
     void RemoveTrayItems(std::shared_ptr<Item> item);
     void SubtractTimeFromScoreboard(double seconds);
     void AddContainerLetters(std::shared_ptr<Letter> letter);

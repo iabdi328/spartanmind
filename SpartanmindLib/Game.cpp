@@ -327,6 +327,51 @@ void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double curr
     }
 }
 
+void Game::CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, double currentTime, int matched, int existing)
+{
+    // Constants for easier adjustments
+    const int rectWidth = 400, rectHeight = 300, rectX = (mWidth * mTileWidth - rectWidth) / 2, rectY = (mHeight * mTileHeight - rectHeight) / 2;
+    const int levelFontSize = 80, instructionFontSize = 35;
+    const double spacing = 10;  // Adjust this to change spacing between instruction lines
+
+    // Draw a filled rectangle
+    graphics->SetBrush(*wxWHITE_BRUSH);
+    graphics->SetPen(*wxTRANSPARENT_PEN);
+    graphics->DrawRectangle(rectX, rectY, rectWidth, rectHeight);
+
+    // Function to simplify text drawing
+    auto drawTextCentered = [&](const wxString& text, int fontSize, const wxColour& color, double& yPos) {
+        wxFont font(fontSize, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+        graphics->SetFont(font, color);
+
+        double textWidth, textHeight;
+        graphics->GetTextExtent(text, &textWidth, &textHeight);
+
+        double xPos = rectX + (rectWidth - textWidth) / 2;  // Centered horizontally
+
+        graphics->DrawText(text, xPos, yPos);  // Draw the text
+
+        // Move yPos down for the next line
+        yPos += textHeight + spacing;
+    };
+
+    // Draw "Incorrect!" text first
+    double yPos = rectY + (rectHeight - instructionFontSize) / 2;  // Start from the center
+    wxStringTokenizer tokenizer("You're incorrect!", "\n");
+    while (tokenizer.HasMoreTokens()) {
+        wxString instruction = tokenizer.GetNextToken();
+        drawTextCentered(instruction, instructionFontSize, *wxBLACK, yPos);
+    }
+
+    // Draw "Matched letters: " below "You're incorrect!"
+    wxString matchedLettersText = wxString::Format("Matched letters: %d", matched);
+    drawTextCentered(matchedLettersText, instructionFontSize, *wxBLACK, yPos);
+
+    // Draw "Existing letters: " below "Matched letters: "
+    wxString existingLettersText = wxString::Format("Existing letters: %d", existing);
+    drawTextCentered(existingLettersText, instructionFontSize, *wxBLACK, yPos);
+}
+
 /**
  * Game coordinates
  * @param x position
