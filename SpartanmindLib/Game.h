@@ -263,6 +263,12 @@ public:
     std::vector<std::shared_ptr<Given>> GetGivens() { return mGivens; }
 
     /**
+     * Get all items in the game
+     * @return vector of all game items
+     */
+    std::vector<std::shared_ptr<Item>> GetAllItems() const { return mItems; }
+
+    /**
      * Clears the list of given objects.
      */
     void ClearGivens() { mGivens.clear(); }

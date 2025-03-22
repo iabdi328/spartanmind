@@ -40,7 +40,7 @@ public:
      */
     void Accept(ItemVisitor* visitor) override { visitor->VisitGiven(this); }
 
-    int GetValue() { return mValue; }
+    int GetValue() const override { return mValue; }
 };
 
 

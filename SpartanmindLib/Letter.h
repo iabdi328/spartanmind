@@ -40,13 +40,14 @@ public:
      * Retrieves the value of the letter.
      * @return The numerical value associated with this letter.
      */
-    int GetValue() { return mValue; }
+    int GetValue() const override { return mValue; }
 
     /**
      * Determines whether this object represents a letter.
      * @return Always true for letter objects.
      */
     bool IsLetter() override { return true; }
+
 
 };
 

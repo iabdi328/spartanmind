@@ -48,6 +48,8 @@ public:
      */
     bool IsContainer() override {return true;};
 
+    int GetValue() const override { return -1; }
+
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_CONTAINER_H

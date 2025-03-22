@@ -120,6 +120,12 @@ public:
       */
      virtual bool IsLetter() { return false; };
 
+    /**
+     * Get the letter value (if applicable).
+     * @return int value, or -1 if not a letter
+     */
+    virtual int GetValue() const { return -1; }
+
 
     /**
     * Tells program if this item is a container
@@ -131,6 +137,7 @@ public:
     * @return A pointer or reference to the tray.
     */
     virtual void Add(std::shared_ptr<Item> item) {};
+
 };
 
 #endif //ITEM_H

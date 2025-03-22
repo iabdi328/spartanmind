@@ -67,6 +67,8 @@ public:
     void Draw(const std::shared_ptr<wxGraphicsContext> &graphics) override;
     //removes letters from tray
     void Remove(std::shared_ptr<Item> item);
+
+    int GetValue() const override { return -1; };
 };
 
 #endif //PROJECT1_SPARTANMINDLIB_TRAY_H

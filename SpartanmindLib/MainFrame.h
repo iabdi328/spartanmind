@@ -24,33 +24,12 @@ private:
 	SpartanmindView* mSpartanmindView = nullptr;
 
 public:
-	/**
-	 * Initializes the application.
-	 */
+
 	void Initialize();
-
-	/**
-	 * Handles the exit command.
-	 * @param event The wxCommandEvent triggered by the exit action.
-	 */
 	void OnExit(wxCommandEvent& event);
-
-	/**
-	 * Displays the About dialog.
-	 * @param event The wxCommandEvent triggered by the About action.
-	 */
 	void OnAbout(wxCommandEvent& event);
-
-	/**
-	 * Handles the removal of time from the game.
-	 * @param event The wxCommandEvent triggered when time removal is requested.
-	 */
-	void OnRemoveTime(wxCommandEvent& event);
-
-	/**
-	 * Handles the window close event.
-	 * @param event The wxCloseEvent triggered when the window is closing.
-	 */
+    void OnSolve(wxCommandEvent& event);
+    void OnRemoveTime(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);
 
 

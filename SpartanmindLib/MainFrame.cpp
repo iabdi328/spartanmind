@@ -67,6 +67,7 @@ void MainFrame::Initialize()
 
     Bind(wxEVT_MENU, &MainFrame::OnExit, this, wxID_EXIT);
     Bind(wxEVT_MENU, &MainFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &MainFrame::OnSolve, this, IDM_SOLVE);
     Bind(wxEVT_MENU, &MainFrame::OnRemoveTime, this, IDM_REMOVE_TIME);
     Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
 
@@ -90,13 +91,22 @@ void MainFrame::OnExit(wxCommandEvent& event)
  * Handles the about menu button
  * @param event click event
  */
-void MainFrame::OnAbout(wxCommandEvent& event) {
+void MainFrame::OnAbout(wxCommandEvent& event)
+{
  wxMessageBox("Welcome to Spartanmind!",
               "About Spartanmind", wxOK | wxICON_INFORMATION);
 }
 
 
+void MainFrame::OnSolve(wxCommandEvent& event)
+{
+    mSpartanmindView->OnSolveGame();
+}
 
+/**
+ * Removes an item
+ * @param event command event for time
+ */
 void MainFrame::OnRemoveTime(wxCommandEvent& event)
 {
  if (mSpartanmindView)
@@ -106,14 +116,16 @@ void MainFrame::OnRemoveTime(wxCommandEvent& event)
 
 }
 
-
+/**
+ * On Game close
+ * @param event menu commend event
+ */
 void MainFrame::OnClose(wxCloseEvent& event)
 {
- if (mSpartanmindView)
- {
-  mSpartanmindView->Destroy();
-  mSpartanmindView = nullptr;
- }
-
- Destroy();  // Destroy this frame
+    if (mSpartanmindView)
+    {
+        mSpartanmindView->Destroy();
+        mSpartanmindView = nullptr;
+    }
+    Destroy();
 }
