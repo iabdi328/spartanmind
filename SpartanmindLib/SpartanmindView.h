@@ -30,6 +30,8 @@ private:
     ///New level
     bool mNewLevel = false;
 
+    bool mInvalidPlace = false;
+
     /// The last stopwatch time
     long mTime = 0;
 
@@ -40,6 +42,8 @@ private:
 	void OnPaint(wxPaintEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnTimer(wxTimerEvent& event);
+
+
 
 public:
 	    /**

@@ -16,6 +16,7 @@
 #include <memory>
 #include "TrayVisitor.h"
 #include <cmath>
+#include <wx/tokenzr.h>
 
 #include "Given.h"
 
@@ -105,8 +106,21 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
         }
     }
 
-
-
+    if(mInvalidPlace)
+    {
+        std::cout << "invalid place" << std::endl;
+        double currentTime = mStopWatch.Time() * 0.001;
+        double secondsSinceMessage = currentTime - mAllTime;
+        if(secondsSinceMessage < 3)
+        {
+            mGame.ThereMessage(gc, secondsSinceMessage);
+        }
+        else
+        {
+            // After 3 seconds, the message phase is over, so we mark it as such and move on
+            mInvalidPlace = false;
+        }
+    }
 }
 
 /**
@@ -216,14 +230,14 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
     // if any letter between A or Z is pressed
    if (event.GetKeyCode() >= 65 && event.GetKeyCode() <= 90 || event.GetKeyCode() == 45)
    {
+       mAllTime = mStopWatch.Time() * 0.001;
+       if (mGrabbedItem == nullptr)
+       {
+           return;
+       }
        /// Get letter as its 0 indexed value (a = 0, b = 1, ...etc.)
        int letterPressed = event.GetKeyCode() - 65;
        std::shared_ptr<Item> item = mGame.HitTest(player->GetX() + 70, player->GetY() + 70);
-       if (item != nullptr)
-       {
-           cout << endl << "Letter is already there!" << endl << endl;
-           return;
-       }
 
        /// Get the location clicked as its grid value 0 indexed
        double gridPosX = floor((player->GetX() + 96) / 48);
@@ -303,6 +317,12 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
            Letter* letter = dynamic_cast<Letter*>(item.get());
            if(letter->GetValue() == letterPressed)
            {
+               if (item != nullptr)
+               {
+                   mInvalidPlace = true;
+                   cout << endl << "Letter is already there!" << endl << endl;
+                   return;
+               }
                double x = player->GetX();
                double y = player->GetY();
                std::tuple<int,int> cell = mGame.Cords2Cell(x, y);

@@ -284,6 +284,50 @@ void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
 }
 
 /**
+ * Message for when tray is full
+ * @param graphics
+ */
+void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double currentTime)
+{
+    std::cout << "ThereMessage" << std::endl;
+    std::cout << currentTime << std::endl;
+    double movingY =  (currentTime * 600);
+    int startingY = 800 - movingY;
+    // Constants for easier adjustments
+    const int rectWidth = 600, rectHeight = 50, rectX = (mWidth * mTileWidth - rectWidth) / 2, rectY = startingY;;
+    const int levelFontSize = 80, instructionFontSize = 35;
+    const double spacing = 10;  // Adjust this to change spacing between instruction lines
+
+    // Draw a filled rectangle
+    graphics->SetBrush(*wxBLACK_BRUSH);
+    graphics->DrawRectangle(rectX - 10, rectY - 10, rectWidth + 20, rectHeight + 20);
+    graphics->SetBrush(*wxWHITE_BRUSH);
+    graphics->SetPen(*wxTRANSPARENT_PEN);
+    graphics->DrawRectangle(rectX, rectY, rectWidth, rectHeight);
+
+    // Function to simplify text drawing
+    auto drawTextCentered = [&](const wxString& text, int fontSize, const wxColour& color) {
+        wxFont font(fontSize, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+        graphics->SetFont(font, color);
+
+        double textWidth, textHeight;
+        graphics->GetTextExtent(text, &textWidth, &textHeight);
+
+        double xPos = rectX + (rectWidth - textWidth) / 2;  // Centered horizontally
+        double yPos = startingY;  // Centered vertically
+
+        graphics->DrawText(text, xPos, yPos);  // Draw the text
+    };
+
+    // Draw instructions with adjusted spacing and checking for overflow
+    wxStringTokenizer tokenizer("Something is already there!", "\n");
+    while (tokenizer.HasMoreTokens()) {
+        wxString instruction = tokenizer.GetNextToken();
+        drawTextCentered(instruction, instructionFontSize, *wxRED);
+    }
+}
+
+/**
  * Game coordinates
  * @param x position
  * @param y position
