@@ -29,10 +29,14 @@ private:
     bool mGameIsActive;
     ///New level
     bool mNewLevel = false;
-
+    /**
+     *sets to false
+     */
     bool mInvalidPlace = false;
 
-    /// The last stopwatch time
+    /**
+     *sets time to zero
+     */
     long mTime = 0;
 
     double mAllTime;

@@ -47,7 +47,10 @@ public:
      * @return true
      */
     bool IsContainer() override {return true;};
-
+    /**
+     * Tells the program that this is a container
+     * @return -1
+     */
     int GetValue() const override { return -1; }
 
 };

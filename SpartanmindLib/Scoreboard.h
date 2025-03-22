@@ -29,9 +29,13 @@ public:
      * @return elapsed time
      */
     double GetElapsedTime() const { return mElapsedTime; };
-
+    /**
+     *resets
+     */
     void Reset();
-
+    /**
+     *subtracts time
+     */
     void SubtractTime(double seconds);
 
 

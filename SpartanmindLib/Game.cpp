@@ -208,7 +208,6 @@ void Game::Accept(ItemVisitor *visitor)
 
 /**
  * Moves the letter items to the tray
- * @param item smart pointer
  */
 void Game::ItemToTray(std::shared_ptr<Item> item)
 {
@@ -285,7 +284,7 @@ void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
 
 /**
  * Message for when tray is full
- * @param graphics
+ * @param currentTime
  */
 void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double currentTime)
 {

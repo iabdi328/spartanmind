@@ -67,7 +67,10 @@ public:
     void Draw(const std::shared_ptr<wxGraphicsContext> &graphics) override;
     //removes letters from tray
     void Remove(std::shared_ptr<Item> item);
-
+    /**
+     * Tells the program to get certian value
+     * @return -1
+     */
     int GetValue() const override { return -1; };
 };
 

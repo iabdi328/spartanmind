@@ -28,6 +28,10 @@ public:
 	void Initialize();
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	/**
+	 * solve
+	 *
+	 */
     void OnSolve(wxCommandEvent& event);
     void OnRemoveTime(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);

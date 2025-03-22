@@ -106,9 +106,15 @@ private:
 
     const double EatingDuration = 0.5;  ///< Eating lasts 0.5s
     const double EatingAngle = 1;  ///< Max mouth open angle
-    // eating sound for sparty eating animation
+    /**
+     * Tells the program that this is a container
+     *
+     */
     wxSound mEatSound;
-    // headbutt sound for sparty headbutt animation
+    /**
+     * Tells the program that this is a container
+     *
+     */
     wxSound mHeadbuttSound;
 
 public:
