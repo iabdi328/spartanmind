@@ -327,6 +327,14 @@ void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double curr
     }
 }
 
+/**
+ * CheckSolutionPopup
+ * @param graphics context
+ * @param currentTime time
+ * @param matched matched
+ * @param existing existing
+ * @param message the message
+ */
 void Game::CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, double currentTime, int matched, int existing, string message)
 {
     // Constants for easier adjustments

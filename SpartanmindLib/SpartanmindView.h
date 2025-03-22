@@ -124,7 +124,17 @@ public:
     void LoadNextLevel();
     void NewLevel(const wxString &filename, int levelNumber);
     void Remove10Seconds();
+
+    /**
+     * Matched set
+     * @param val value
+     */
     void SetMatched(int val) {mMatched = val;}
+
+    /**
+     * Already exists
+     * @param val value
+     */
     void SetExisting(int val) {mExisting = val;}
 
 

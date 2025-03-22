@@ -25,6 +25,7 @@
 
 using namespace std;
 
+/// Default letter size.
 const int DEFAULT_TILE_SIZE = 48;
 
 /**
