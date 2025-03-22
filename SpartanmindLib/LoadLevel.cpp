@@ -236,12 +236,13 @@ void LoadLevel::LetterNode(wxXmlNode *node)
     {
         if (tagName == L"letter")
         {
-
             double containerLetterCol = 0;
             double containerLetterRow = 0;
             node->GetAttribute(L"col").ToDouble(&containerLetterCol);
             node->GetAttribute(L"row").ToDouble(&containerLetterRow);
-
+            wxScopedCharBuffer valueAscii = node->GetAttribute("id").substr(2, 3).ToAscii();
+            int value = int(valueAscii[0]) - 97;
+            cout << int(valueAscii[0]) << endl;
             shared_ptr<Letter> letter = make_shared<Letter>(mGame, value, image);
             letter->SetLocation(containerLetterCol * mGame->GetTileHeight(), containerLetterRow * mGame->GetTileWidth());
             mGame->Add(letter);

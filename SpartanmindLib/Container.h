@@ -18,6 +18,7 @@ class Container : public Item
 private:
     /// List of images contained within this container.
     std::vector<std::shared_ptr<Item>> mImages;
+
     /// List of items contained within this container.
     std::vector<std::shared_ptr<Item>> mContainedItems;
 

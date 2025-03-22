@@ -224,11 +224,8 @@ void Player::Headbutt() {
         std::cout << mX << ", " << mY << std::endl;
         if (mX > 1100 && mX < 1300 && letter->IsLetter() && letter)
         {
-            letter->SetLocation(100, 100);
+            mGameWorld->ScatterLetters();
         }
-
-
-
     }
 }
 
