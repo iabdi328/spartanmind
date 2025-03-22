@@ -20,6 +20,7 @@
 #include "Given.h"
 #include <map>
 #include <set>
+#include <thread>
 
 
 using namespace std;
@@ -130,10 +131,18 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
         std::cout << "Checking solution" << std::endl;
         double currentTime = mStopWatch.Time() * 0.001;
         double secondsSinceMessage = currentTime - mAllTime;
-
+        string message;
         if(secondsSinceMessage < 3)
         {
-            mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting);
+            if (mMatched == 6)
+            {
+                // string message = "You're correct!";
+                // mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting, message);
+            } else
+            {
+                string message = "You're Incorrect!";
+                mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting, message);
+            }
         }
         else
         {
@@ -577,6 +586,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 
                    if (mWord == mUserGuess) {
                        std::cout << "You Win!" << std::endl;
+                       // sleep(3000);
                        LoadNextLevel();
                    }
                    break;

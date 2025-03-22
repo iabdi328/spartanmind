@@ -327,7 +327,7 @@ void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double curr
     }
 }
 
-void Game::CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, double currentTime, int matched, int existing)
+void Game::CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, double currentTime, int matched, int existing, string message)
 {
     // Constants for easier adjustments
     const int rectWidth = 400, rectHeight = 300, rectX = (mWidth * mTileWidth - rectWidth) / 2, rectY = (mHeight * mTileHeight - rectHeight) / 2;
@@ -357,7 +357,7 @@ void Game::CheckSolutionPopup(std::shared_ptr<wxGraphicsContext> graphics, doubl
 
     // Draw "Incorrect!" text first
     double yPos = rectY + (rectHeight - instructionFontSize) / 2;  // Start from the center
-    wxStringTokenizer tokenizer("You're incorrect!", "\n");
+    wxStringTokenizer tokenizer(message, "\n");
     while (tokenizer.HasMoreTokens()) {
         wxString instruction = tokenizer.GetNextToken();
         drawTextCentered(instruction, instructionFontSize, *wxBLACK, yPos);
