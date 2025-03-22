@@ -124,6 +124,23 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
             mInvalidPlace = false;
         }
     }
+
+    if (mCheckSolution)
+    {
+        std::cout << "Checking solution" << std::endl;
+        double currentTime = mStopWatch.Time() * 0.001;
+        double secondsSinceMessage = currentTime - mAllTime;
+
+        if(secondsSinceMessage < 3)
+        {
+            mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting);
+        }
+        else
+        {
+            // After 3 seconds, the message phase is over, so we mark it as such and move on
+            mCheckSolution = false;
+        }
+    }
 }
 
 /**
@@ -292,13 +309,6 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
            default:
                return;
            }
-
-       // mGame.SetUserGuess(0, 19);
-       // mGame.SetUserGuess(1, 20);
-       // mGame.SetUserGuess(2, 17);
-       // mGame.SetUserGuess(3, 8);
-       // mGame.SetUserGuess(4, 13);
-       // mGame.SetUserGuess(5, 6);
 
        /// Create the solution and user guess variables
        vector<int> mWord = mGame.GetWord();
@@ -502,15 +512,70 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 
                    letter->SetLocation(gridPosX * 48, gridPosY * 48);
                    mUserGuess = mGame.GetUserGuess();
-                   std::cout << endl;
-                   cout << "User Guess: ";
-                   for (auto letter : mUserGuess)
-                   {
+                   std::vector<int> mSolution = mGame.GetWord();
+                   int userGuessCount = 0;
+                   int solutionCount = 0;
+
+                   // Count the number of letters in the solution
+                   for (auto letter : mGame.GetWord()) {
+                       solutionCount++;
+                   }
+
+                   // Count the number of guessed letters (ignoring -1, which might be an empty slot)
+                   for (auto letter : mUserGuess) {
+                       if (letter != -1) userGuessCount++;
+                   }
+
+                   // Count correct placements
+                   int amountRight = 0;
+                   for (int x = 0; x < mSolution.size(); x++) {
+                       if (mSolution[x] == mUserGuess[x]) {
+                           amountRight++;
+                       }
+                   }
+
+                   // Calculate misplaced letters
+                   std::unordered_map<int, int> letterCount;
+                   int misplacedCount = 0;
+
+                   // Track available letters in solution (excluding correct positions)
+                   for (int x = 0; x < mSolution.size(); x++) {
+                       if (mSolution[x] != mUserGuess[x]) {
+                           letterCount[mSolution[x]]++; // Store available letters in solution
+                       }
+                   }
+
+                   // Check for misplaced letters in user guess
+                   for (int x = 0; x < mUserGuess.size(); x++) {
+                       if (mUserGuess[x] != mSolution[x] && letterCount[mUserGuess[x]] > 0) {
+                           misplacedCount++;
+                           letterCount[mUserGuess[x]]--; // Mark as used
+                       }
+                   }
+
+                   // Store matched and misplaced counts
+                   SetMatched(amountRight);
+                   SetExisting(misplacedCount);
+
+                   std::cout << "Amount right: " << amountRight << std::endl;
+                   std::cout << "Misplaced letters: " << misplacedCount << std::endl;
+
+                   std::cout << "\nAmount of letters guessed: " << userGuessCount << std::endl;
+                   std::cout << "\nAmount of letters in solution: " << solutionCount << std::endl;
+
+                   if (userGuessCount == solutionCount) {
+                       mAllTime = mStopWatch.Time() * 0.001;
+                       mCheckSolution = true;
+                       std::cout << "You are wrong!" << std::endl;
+                   }
+
+                   std::cout << "\nUser Guess: ";
+                   for (auto letter : mUserGuess) {
                        std::cout << letter;
                    }
-                   cout << endl;
-                   if (mWord == mUserGuess)
-                   {
+                   std::cout << std::endl;
+
+                   if (mWord == mUserGuess) {
                        std::cout << "You Win!" << std::endl;
                        LoadNextLevel();
                    }

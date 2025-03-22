@@ -22,6 +22,9 @@ private:
     /// Timer for periodic updates
 	wxTimer* mGameTimer = nullptr;
 
+    /// Whether to show popup or not
+    bool mCheckSolution = false;
+
     ///Grabbed Item
     std::shared_ptr<Item> mGrabbedItem = nullptr;
 
@@ -48,6 +51,11 @@ private:
 	void OnKeyDown(wxKeyEvent& event);
 	void OnTimer(wxTimerEvent& event);
 
+    /// Amount of letters matched
+    int mMatched = 0;
+
+    /// Amount of letters existing
+    int mExisting = 0;
 
 
 public:
@@ -116,6 +124,8 @@ public:
     void LoadNextLevel();
     void NewLevel(const wxString &filename, int levelNumber);
     void Remove10Seconds();
+    void SetMatched(int val) {mMatched = val;}
+    void SetExisting(int val) {mExisting = val;}
 
 
 };
