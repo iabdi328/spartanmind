@@ -23,20 +23,16 @@ public:
     Scoreboard();
     void Update(double deltaSeconds);
     void Draw(std::shared_ptr<wxGraphicsContext> gc) const;
+    void Reset();
+    void SubtractTime(double seconds);
 
     /**
      * Get the elapsed amount of time
      * @return elapsed time
      */
     double GetElapsedTime() const { return mElapsedTime; };
-    /**
-     *resets
-     */
-    void Reset();
-    /**
-     *subtracts time
-     */
-    void SubtractTime(double seconds);
+
+
 
 
 

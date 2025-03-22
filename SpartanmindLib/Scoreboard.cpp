@@ -28,7 +28,8 @@ Scoreboard::Scoreboard()
  * Update scoreboard
  * @param deltaSeconds time
  */
-void Scoreboard::Update(double deltaSeconds) {
+void Scoreboard::Update(double deltaSeconds)
+{
     mElapsedTime += deltaSeconds;
 }
 
@@ -48,19 +49,25 @@ void Scoreboard::Draw(std::shared_ptr<wxGraphicsContext> gc) const {
 }
 
 
-
+/**
+ * Reset
+ */
 void Scoreboard::Reset() {
  mElapsedTime = 0;
 }
 
+/**
+ * Subtracts the time by 10
+ * @param seconds
+ */
 void Scoreboard::SubtractTime(double seconds)
 {
- if (mElapsedTime >= seconds)
- {
-  mElapsedTime -= seconds;
- }
- else
- {
-  mElapsedTime = 0; // Prevent negative time
- }
+    if (mElapsedTime >= seconds)
+    {
+        mElapsedTime -= seconds;
+    }
+    else
+    {
+        mElapsedTime = 0; // Prevent negative time
+    }
 }

@@ -39,6 +39,7 @@ private:
      */
     long mTime = 0;
 
+    /// double All time
     double mAllTime;
     /// StopWatch instance
     wxStopWatch mStopWatch;

@@ -24,6 +24,8 @@
 
 using namespace std;
 
+const int DEFAULT_TILE_SIZE = 48;
+
 /**
  * Initialize the Spartanmind view class.
  * @param parent The parent window for this class
@@ -657,10 +659,12 @@ SpartanmindView::~SpartanmindView()
 void SpartanmindView::OnSolveGame()
 {
 
+    int OFFSET = 50;
+    int Spacing = 96;
+
+
     auto solution = mGame.GetWord();
-    if (solution.empty()) {
-        return;
-    }
+    if (solution.empty()) return;
 
     std::vector<std::pair<int, int>> slots;
     switch (mGame.GetLevel()) {
@@ -668,26 +672,46 @@ void SpartanmindView::OnSolveGame()
         case 1: slots = mLevelOneSlots; break;
         case 2: slots = mLevelTwoSlots; break;
         case 3: slots = mLevelThreeSlots; break;
+        default: return;
     }
 
-    if (slots.size() != solution.size()) {
-        return;
-    }
+    if (slots.size() != solution.size()) return;
 
-    // Step 1: Track "givens" so we don't touch them
+    // Track givens
     std::map<std::pair<int, int>, int> givenMap;
     for (auto& given : mGame.GetGivens()) {
-        int col = static_cast<int>((given->GetX() + 96) / 48) - 2;
-        int row = static_cast<int>((given->GetY() + 96) / 48) - 2;
+        int col = (int)((given->GetX() + Spacing) / DEFAULT_TILE_SIZE) - 2;
+        int row = (int)((given->GetY() + Spacing) / DEFAULT_TILE_SIZE) - 2;
         givenMap[{col, row}] = given->GetValue();
     }
 
-    // Step 2: Build a letter pool (value -> items)
+    TrayVisitor trayVisitor;
+    mGame.Accept(&trayVisitor);
+    auto trayLetters = trayVisitor.GetLetters();
+    int neutralX = 1500, neutralY = 100; // Off-board safe zone
+    int offset = 0;
+    for (auto& letter : trayLetters) {
+        if (letter && letter->IsLetter()) {
+            mGame.RemoveTrayItems(letter);
+            letter->SetLocation(neutralX + (offset * OFFSET), neutralY);
+            offset++;
+        }
+    }
+
+    for (auto& [col, row] : slots) {
+        if (givenMap.find({col, row}) != givenMap.end()) continue;
+        auto existing = mGame.GetItems(col * DEFAULT_TILE_SIZE, row * DEFAULT_TILE_SIZE);
+        if (existing && existing->IsLetter()) {
+            mGame.ItemToTray(existing);
+            mGame.RemoveTrayItems(existing);
+            existing->SetLocation(neutralX + (offset * OFFSET), neutralY);
+            offset++;
+        }
+    }
+
     std::multimap<int, std::shared_ptr<Item>> letterPool;
     std::set<std::shared_ptr<Item>> used;
-
-    auto allItems = mGame.GetAllItems();
-    for (auto& item : allItems) {
+    for (const auto& item : mGame.GetAllItems()) {
         if (item && item->IsLetter()) {
             letterPool.emplace(item->GetValue(), item);
         }
@@ -695,35 +719,22 @@ void SpartanmindView::OnSolveGame()
 
     mGame.ResizeUserGuess(solution.size());
 
-    // Step 3: Place each letter
-    for (size_t i = 0; i < solution.size(); ++i)
-    {
+    for (size_t i = 0; i < solution.size(); ++i) {
         auto [col, row] = slots[i];
         int targetValue = solution[i];
 
-        // Skip if it's a "given" slot
         if (givenMap.find({col, row}) != givenMap.end()) {
             mGame.SetUserGuess(i, targetValue);
             continue;
         }
 
-        // Remove anything already in the slot
-        auto existing = mGame.GetItems(col * 48, row * 48);
-        if (existing && existing->IsLetter()) {
-            mGame.ItemToTray(existing);
-        }
-
-        // Find a letter that matches and isn't used
         auto range = letterPool.equal_range(targetValue);
         bool placed = false;
         for (auto it = range.first; it != range.second; ++it) {
             auto& letter = it->second;
             if (!letter || used.count(letter)) continue;
 
-            // Force it onto the board
-            mGame.ItemToTray(letter);        // detach from container or slot
-            mGame.RemoveTrayItems(letter);   // detach from tray
-            letter->SetLocation(col * 48, row * 48);
+            letter->SetLocation(col * DEFAULT_TILE_SIZE, row * DEFAULT_TILE_SIZE);
             mGame.SetUserGuess(i, targetValue);
             used.insert(letter);
             placed = true;
@@ -731,4 +742,6 @@ void SpartanmindView::OnSolveGame()
         }
 
     }
+
+    Refresh();
 }

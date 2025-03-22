@@ -135,7 +135,6 @@ public:
     /**
     * @brief Retrieves the tray associated with this visitor.
     * @param item
-    * @return A pointer or reference to the tray.
     */
     virtual void Add(std::shared_ptr<Item> item) {};
 

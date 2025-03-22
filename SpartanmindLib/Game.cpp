@@ -284,7 +284,8 @@ void Game::FullMessage(std::shared_ptr<wxGraphicsContext> graphics)
 
 /**
  * Message for when tray is full
- * @param currentTime
+ * @param graphics context
+ * @param currentTime elapsed time
  */
 void Game::ThereMessage(std::shared_ptr<wxGraphicsContext> graphics, double currentTime)
 {
