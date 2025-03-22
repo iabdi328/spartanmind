@@ -236,14 +236,9 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
        std::shared_ptr<Item> item = mGame.HitTest(player->GetX() + 70, player->GetY() + 70);
        if (item != nullptr)
        {
+           mAllTime = mStopWatch.Time() * 0.001;
+           mInvalidPlace = true;
            cout << endl << "Letter is already there!" << endl << endl;
-           // Create the popup message dialog
-           wxMessageDialog dialog(this, "Something is already there!", "Notice", wxOK | wxICON_INFORMATION);
-
-           // Show the dialog and wait for user response
-           dialog.ShowModal();
-
-           // Return to stop further processing
            return;
        }
 
