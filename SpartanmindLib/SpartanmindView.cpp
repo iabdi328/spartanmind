@@ -73,9 +73,6 @@ void SpartanmindView::Initialize(wxFrame *parent)
  */
 void SpartanmindView::OnPaint(wxPaintEvent& event)
 {
-    auto newTime = mStopWatch.Time();
-    auto elapsed = (double)(newTime - mTime) * 0.001;
-    mTime = newTime;
 
     wxAutoBufferedPaintDC dc(this);
 
@@ -87,8 +84,7 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
     if (!gc) return;
 
     wxRect rect = GetRect();
-    // 1. Draw the game world (background, scoreboard, etc.)
-    mGame.Update(elapsed);
+
     mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
 
@@ -167,7 +163,7 @@ void SpartanmindView::OnTimer(wxTimerEvent& event)
 
     // Update game logic and scoreboard using the actual elapsed time.
     mGame.Update(elapsed);
-    mGame.UpdateScoreboard(elapsed);
+
 
     // Move Sparty
     std::shared_ptr<Player> player(mGame.GetPlayer());
