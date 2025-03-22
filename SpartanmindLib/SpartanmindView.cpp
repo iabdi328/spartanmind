@@ -191,7 +191,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
         {
             return;
         }
-        if ((mGrabbedItem->GetX() > 1000 && mGrabbedItem->GetX() < 1300) && ((mGrabbedItem->GetY() > 500 || mGrabbedItem->GetY() < 800)))
+        if ((mGrabbedItem->GetX() > 1000 && mGrabbedItem->GetX() < 1300) && ((mGrabbedItem->GetY() > 500 && mGrabbedItem->GetY() < 800)))
         {
             std::cout << "you're hitting the present mate" << std::endl;
             return;
@@ -494,6 +494,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                    {
                        std::cout << "You Win!" << std::endl;
                    }
+                   break;
                }
            }
        }

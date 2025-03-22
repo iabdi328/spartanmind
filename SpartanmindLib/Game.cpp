@@ -14,6 +14,7 @@
 #include "Item.h"
 #include "PopUps.h"
 #include "TrayVisitor.h"
+#include <cstdlib>  // For rand()
 using namespace std;
 
 
@@ -327,11 +328,19 @@ void Game::SubtractTimeFromScoreboard(double seconds)
  */
 void Game::AddContainerLetters(std::shared_ptr<Letter> letter)
 {
-    for (std::shared_ptr<Item> item : mItems)
+    cout << "Pushed back: " << letter << endl;
+    mContainerLetters.push_back(letter);
+}
+
+/**
+ * Scatters letters when present is headbutted
+ */
+void Game::ScatterLetters()
+{
+    for (auto item : mContainerLetters)
     {
-        if (item->IsContainer())
-        {
-            item->Add(letter);
-        }
+        int randomX = 1050 + std::rand() % (1300 - 1050);
+        int randomY = 200 + std::rand() % (417 - 162);
+        item->SetLocation(randomX, randomY);
     }
 }

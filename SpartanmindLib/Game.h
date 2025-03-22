@@ -68,6 +68,9 @@ private:
     /// random generatorr
     std::mt19937 mRandom;
 
+    /// All container letters
+    std::vector<std::shared_ptr<Letter>> mContainerLetters;
+
 public:
     /// Constructor and Destructor
     Game();
@@ -215,6 +218,7 @@ public:
     void RemoveTrayItems(std::shared_ptr<Item> item);
     void SubtractTimeFromScoreboard(double seconds);
     void AddContainerLetters(std::shared_ptr<Letter> letter);
+    void ScatterLetters();
 
     /**
      * Retrieves the current word as a vector of integers.
