@@ -55,7 +55,7 @@ void SpartanmindView::Initialize(wxFrame *parent)
                  IDM_LEVEL3);
 
     mStopWatch.Start();
-    const wxString filename = L"../levels/level1.xml";
+    const wxString filename = L"levels/level1.xml";
 
     LoadLevel load(&mGame);
     load.Load(filename);
@@ -641,7 +641,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
  */
 void SpartanmindView::OnLevelZero(wxCommandEvent& event)
 {
-    const wxString filename = L"../levels/level0.xml";
+    const wxString filename = L"levels/level0.xml";
     NewLevel(filename, 0);
 
 }
@@ -655,7 +655,7 @@ void SpartanmindView::OnLevelZero(wxCommandEvent& event)
  */
 void SpartanmindView::OnLevelOne(wxCommandEvent& event)
 {
-    const wxString filename = L"../levels/level1.xml";
+    const wxString filename = L"levels/level1.xml";
     NewLevel(filename, 1);
 }
 
@@ -667,7 +667,7 @@ void SpartanmindView::OnLevelOne(wxCommandEvent& event)
  */
 void SpartanmindView::OnLevelTwo(wxCommandEvent& event)
 {
-    const wxString filename = L"../levels/level2.xml";
+    const wxString filename = L"levels/level2.xml";
     NewLevel(filename, 2);
 }
 
@@ -679,7 +679,7 @@ void SpartanmindView::OnLevelTwo(wxCommandEvent& event)
  */
 void SpartanmindView::OnLevelThree(wxCommandEvent& event)
 {
-    const wxString filename = L"../levels/level3.xml";
+    const wxString filename = L"levels/level3.xml";
     NewLevel(filename, 3);
 
 }
@@ -730,15 +730,15 @@ void SpartanmindView::LoadNextLevel()
     switch (nextLevel)
     {
         case 1:
-            filename = L"../levels/level1.xml";
+            filename = L"levels/level1.xml";
             NewLevel(filename, 1);
             break;
         case 2:
-            filename = L"../levels/level2.xml";
+            filename = L"levels/level2.xml";
             NewLevel(filename, 2);
             break;
         case 3:
-            filename = L"../levels/level3.xml";
+            filename = L"levels/level3.xml";
             NewLevel(filename, 3);
             break;
         default:

@@ -175,7 +175,7 @@ public:
      */
     void SetBackground (const wxString &file)
     {
-        wxString loc = L"../images/";
+        wxString loc = L"images/";
         mBackground = std::make_unique<wxBitmap>(loc+file, wxBITMAP_TYPE_ANY);
     }
 

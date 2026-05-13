@@ -296,7 +296,7 @@ void LoadLevel::LetterNode(wxXmlNode *node)
 void LoadLevel::PlayerNode(wxXmlNode * node)
 {
     // Define the path to images
-    const wstring loc = L"../images/";
+    const wstring loc = L"images/";
 
     // Get the player ID
     auto id = node->GetAttribute(L"id");
@@ -366,7 +366,7 @@ void LoadLevel::PlayerNode(wxXmlNode * node)
  */
 void LoadLevel::ContainerNode(wxXmlNode *node)
 {
-    const wstring loc = L"../images/";
+    const wstring loc = L"images/";
 
     // A pointer for the item we are loading
     auto tagName = node->GetName();

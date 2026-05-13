@@ -8,7 +8,7 @@
 #include <iostream>
 
 /// Location of images
-const std::wstring loc = L"../images/";
+const std::wstring loc = L"images/";
 
 /**
  * Given constructor

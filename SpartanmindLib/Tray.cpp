@@ -9,7 +9,7 @@
 #include <random>
 
 /// Location of images
-const std::wstring loc = L"../images/";
+const std::wstring loc = L"images/";
 
 /**
  * Constructor

@@ -7,7 +7,7 @@
 #include "Letter.h"
 
 /// Location for the image resources.
-const std::wstring loc = L"../images/";
+const std::wstring loc = L"images/";
 
 /**
  * Constructor

@@ -6,6 +6,8 @@
 #include "pch.h"
 #include "SpartanmindApp.h"
 #include <MainFrame.h>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 
 /**
  * Initialize the application.
@@ -15,6 +17,10 @@ bool SpartanmindApp::OnInit()
 {
 	if (!wxApp::OnInit())
 		return false;
+
+	// Set working directory to the exe's location so assets are always found
+	wxFileName exePath(wxStandardPaths::Get().GetExecutablePath());
+	wxSetWorkingDirectory(exePath.GetPath());
 
 	// Add image type handlers
 	wxInitAllImageHandlers();
