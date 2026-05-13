@@ -43,3 +43,5 @@ find_package(wxWidgets COMPONENTS core base xrc html xml REQUIRED)
 include(${wxWidgets_USE_FILE})
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})

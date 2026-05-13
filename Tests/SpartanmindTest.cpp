@@ -6,8 +6,8 @@
 
 #include <pch.h>
 #include "gtest/gtest.h"
-#include <Spartanmind.h>
-#include <Sparty.h>
+#include <Game.h>
+#include <Player.h>
 #include <wx/filename.h>
 
 using namespace std;
@@ -27,15 +27,15 @@ protected:
 };
 
 TEST_F(SpartanmindTest, Construct){
-    Spartanmind spartanmind;
+    Game spartanmind;
 
     ASSERT_NE(spartanmind.GetPlayer(), nullptr) << L"Player should be initialized";
 }
 
 TEST_F(SpartanmindTest, Player) {
-    Spartanmind spartanmind;
+    Game spartanmind;
 
-    Sparty* player = spartanmind.GetPlayer();
+    std::shared_ptr<Player> player = spartanmind.GetPlayer();
 
     ASSERT_NE(player, nullptr) << L"Player should not be null";
 

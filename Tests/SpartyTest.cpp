@@ -5,26 +5,26 @@
 
 #include <pch.h>
 #include "gtest/gtest.h"
-#include <Spartanmind.h>
-#include <Sparty.h>
+#include <Game.h>
+#include <Player.h>
 
 using namespace std;
 
 class SpartyTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mGame = new Spartanmind();
+        mGame = new Game();
     }
 
     void TearDown() override {
         delete mGame;
     }
 
-    Spartanmind* mGame;
+    Game* mGame;
 };
 
 TEST_F(SpartyTest, Constructor) {
-    Sparty* sparty = mGame->GetPlayer();
+    std::shared_ptr<Player> sparty = mGame->GetPlayer();
 
     ASSERT_NE(sparty, nullptr) << L"Sparty should be initialized";
 

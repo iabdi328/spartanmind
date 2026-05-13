@@ -88,6 +88,10 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
 
     mGame.OnDraw(gc, rect.GetWidth(), rect.GetHeight());
 
+    // Popup functions use virtual game coordinates, so re-apply the game's transform
+    gc->PushState();
+    gc->Translate(mGame.GetXOffset(), mGame.GetYOffset());
+    gc->Scale(mGame.GetScale(), mGame.GetScale());
 
     TrayVisitor visitor;
     mGame.Accept(&visitor);
@@ -131,10 +135,10 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
         string message;
         if(secondsSinceMessage < 3)
         {
-            if (mMatched == 6)
+            if (mMatched == (int)mGame.GetWord().size())
             {
-                // string message = "You're correct!";
-                // mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting, message);
+                string message = "You're Correct!";
+                mGame.CheckSolutionPopup(gc, secondsSinceMessage, mMatched, mExisting, message);
             } else
             {
                 string message = "You're Incorrect!";
@@ -145,7 +149,37 @@ void SpartanmindView::OnPaint(wxPaintEvent& event)
         {
             // After 3 seconds, the message phase is over, so we mark it as such and move on
             mCheckSolution = false;
+            if (mWinPending)
+            {
+                mWinPending = false;
+                LoadNextLevel();
+            }
         }
+    }
+
+    gc->PopState();
+
+    if (mGameComplete)
+    {
+        wxRect rect = GetRect();
+        int w = rect.GetWidth();
+        int h = rect.GetHeight();
+
+        // Semi-transparent dark overlay
+        gc->SetBrush(wxBrush(wxColour(0, 0, 0, 180)));
+        gc->SetPen(*wxTRANSPARENT_PEN);
+        gc->DrawRectangle(0, 0, w, h);
+
+        // Congratulations text
+        gc->SetFont(wxFont(48, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD), *wxYELLOW);
+        wxDouble tw, th;
+        gc->GetTextExtent(L"Congratulations!", &tw, &th);
+        gc->DrawText(L"Congratulations!", (w - tw) / 2, h / 2 - th - 20);
+
+        gc->SetFont(wxFont(28, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL), *wxWHITE);
+        wxDouble tw2, th2;
+        gc->GetTextExtent(L"You completed all levels!", &tw2, &th2);
+        gc->DrawText(L"You completed all levels!", (w - tw2) / 2, h / 2 + 20);
     }
 }
 
@@ -248,6 +282,21 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
             if(mGrabbedItem != nullptr && isLetter && !visitor2.GetTray()
                 ->IsFull())
             {
+                // Clear the mUserGuess slot that this letter was occupying
+                int slotCol = (int)(mGrabbedItem->GetX() / 48);
+                int slotRow = (int)(mGrabbedItem->GetY() / 48);
+                int level = mGame.GetLevel();
+                std::vector<std::pair<int,int>>* slots = nullptr;
+                if (level == 0) slots = &mLevelZeroSlots;
+                else if (level == 1) slots = &mLevelOneSlots;
+                else if (level == 2) slots = &mLevelTwoSlots;
+                else if (level == 3) slots = &mLevelThreeSlots;
+                if (slots)
+                {
+                    auto it = std::find(slots->begin(), slots->end(), std::make_pair(slotCol, slotRow));
+                    if (it != slots->end())
+                        mGame.SetUserGuess(std::distance(slots->begin(), it), -1);
+                }
                 mGame.ItemToTray(mGrabbedItem);
             }
         }
@@ -367,7 +416,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << endl << "givenValue: " << givenValue << endl;
                                cout << endl << "givenPosX: " << givenPosX << endl;
                                cout << endl << "givenPosY: " << givenPosY << endl;
-                               auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair((int)givenPosX, (int)givenPosY));
                                if (index != mLevelZeroSlots.end())
                                {
                                    std::cout << "distance: " << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
@@ -380,25 +429,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << "Given value x: " << givenPosX << endl;
                                cout << "Given value y: " << givenPosY << endl;
                            }
-                           for (auto item : givens)
-                           {
-                               double givenPosX= floor(((*item).GetX() + 96) / 48);
-                               double givenPosY = floor(((*item).GetY() + 96) / 48);
-                               int givenValue = (*item).GetValue();
-                               auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(givenPosX, givenPosY));
-                               if (index != mLevelZeroSlots.end())
-                               {
-                                   // std::cout << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
-                                   mGame.SetUserGuess(std::distance(mLevelZeroSlots.begin(), index), givenValue);
-                               } else
-                               {
-                                   std::cout << "This is not a valid location!" << std::endl;
-                               }
-
-                               cout << "Given value x: " << givenPosX << endl;
-                               cout << "Given value y: " << givenPosY << endl;
-                           }
-                           auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           auto index = std::find(mLevelZeroSlots.begin(), mLevelZeroSlots.end(), std::make_pair((int)gridPosX, (int)gridPosY));
                            if (index != mLevelZeroSlots.end())
                            {
                                // std::cout << std::distance(mLevelZeroSlots.begin(), index) << std::endl;
@@ -406,6 +437,8 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                            } else
                            {
                                std::cout << "This is not a valid location!" << std::endl;
+                               mInvalidPlace = true;
+                               mAllTime = mStopWatch.Time() * 0.001;
                            }
                        }
                        break;
@@ -420,7 +453,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << endl << "givenValue: " << givenValue << endl;
                                cout << endl << "givenPosX: " << givenPosX << endl;
                                cout << endl << "givenPosY: " << givenPosY << endl;
-                               auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair((int)givenPosX, (int)givenPosY));
                                if (index != mLevelOneSlots.end())
                                {
                                    std::cout << "distance: " << std::distance(mLevelOneSlots.begin(), index) << std::endl;
@@ -433,7 +466,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << "Given value x: " << givenPosX << endl;
                                cout << "Given value y: " << givenPosY << endl;
                            }
-                           auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           auto index = std::find(mLevelOneSlots.begin(), mLevelOneSlots.end(), std::make_pair((int)gridPosX, (int)gridPosY));
                            if (index != mLevelOneSlots.end())
                            {
                                // std::cout << std::distance(mLevelOneSlots.begin(), index) << std::endl;
@@ -441,6 +474,8 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                            } else
                            {
                                std::cout << "This is not a valid location!" << std::endl;
+                               mInvalidPlace = true;
+                               mAllTime = mStopWatch.Time() * 0.001;
                            }
                        }
                        break;
@@ -455,7 +490,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << endl << "givenValue: " << givenValue << endl;
                                cout << endl << "givenPosX: " << givenPosX << endl;
                                cout << endl << "givenPosY: " << givenPosY << endl;
-                               auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair((int)givenPosX, (int)givenPosY));
                                if (index != mLevelTwoSlots.end())
                                {
                                    std::cout << "distance: " << std::distance(mLevelTwoSlots.begin(), index) << std::endl;
@@ -469,7 +504,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << "Given value x: " << givenPosX << endl;
                                cout << "Given value y: " << givenPosY << endl;
                            }
-                           auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           auto index = std::find(mLevelTwoSlots.begin(), mLevelTwoSlots.end(), std::make_pair((int)gridPosX, (int)gridPosY));
                            if (index != mLevelTwoSlots.end())
                            {
                                mGame.SetUserGuess(std::distance(mLevelTwoSlots.begin(), index), letterPressed);
@@ -477,6 +512,8 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                            else
                            {
                                std::cout << "This is not a valid location!" << std::endl;
+                               mInvalidPlace = true;
+                               mAllTime = mStopWatch.Time() * 0.001;
                            }
                        }
                        break;
@@ -491,7 +528,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                cout << endl << "givenValue: " << givenValue << endl;
                                cout << endl << "givenPosX: " << givenPosX << endl;
                                cout << endl << "givenPosY: " << givenPosY << endl;
-                               auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(givenPosX, givenPosY));
+                               auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair((int)givenPosX, (int)givenPosY));
                                if (index != mLevelThreeSlots.end())
                                {
                                    std::cout << "distance: " << std::distance(mLevelThreeSlots.begin(), index) << std::endl;
@@ -501,7 +538,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                                    std::cout << "This is not a valid location!" << std::endl;
                                }
                            }
-                           auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair(gridPosX, gridPosY));
+                           auto index = std::find(mLevelThreeSlots.begin(), mLevelThreeSlots.end(), std::make_pair((int)gridPosX, (int)gridPosY));
                            if (index != mLevelThreeSlots.end())
                            {
                                // std::cout << std::distance(mLevelThreeSlots.begin(), index) << std::endl;
@@ -509,6 +546,8 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
                            } else
                            {
                                std::cout << "This is not a valid location!" << std::endl;
+                               mInvalidPlace = true;
+                               mAllTime = mStopWatch.Time() * 0.001;
                            }
                        }
                        break;
@@ -583,8 +622,7 @@ void SpartanmindView::OnKeyDown(wxKeyEvent& event)
 
                    if (mWord == mUserGuess) {
                        std::cout << "You Win!" << std::endl;
-                       // sleep(3000);
-                       LoadNextLevel();
+                       mWinPending = true;
                    }
                    break;
                }
@@ -658,8 +696,15 @@ void SpartanmindView::NewLevel(const wxString& filename, int levelNumber)
     mTime = 0;
 
     mGame.Clear();
+    mCheckSolution = false;
+    mMatched = 0;
+    mExisting = 0;
     mGameIsActive = false;
     mNewLevel = true;
+    mGameComplete = false;
+    mWinPending = false;
+    if (mGameTimer && !mGameTimer->IsRunning())
+        mGameTimer->Start(30);
 
     mGame.SetLevel(levelNumber);
 
@@ -697,6 +742,9 @@ void SpartanmindView::LoadNextLevel()
             NewLevel(filename, 3);
             break;
         default:
+            mGameComplete = true;
+            if (mGameTimer)
+                mGameTimer->Stop();
             break;
     }
 

@@ -24,11 +24,6 @@ private:
     /// Game
     Game* mGameWorld;
 
-    /// Current position of the player
-    wxPoint2DDouble mLocation;
-    /// Target position of the player
-    wxPoint2DDouble mTarget;
-
     /// Movement speed in pixels per second
     const double MaxSpeed = 400.0;
 
@@ -75,11 +70,16 @@ private:
     /// height of sparty
     double hit = 96;
 
+protected:
+    wxPoint2DDouble mLocation;  ///< Current position of the player (accessible to subclasses)
+    wxPoint2DDouble mTarget;    ///< Target position of the player (accessible to subclasses)
     wxPoint2DDouble mBasePivot;  ///< Base pivot for headbutt rotation
     double mBaseAngle = 0;  ///< Headbutt angle
 
     wxPoint2DDouble mAuxPivot;  ///< Auxiliary pivot for the mouth or lid animation
     double mAuxAngle = 0;   ///< Auxiliary angle
+
+private:
 
     /// Pivot angle of sparty
     double mHeadPivotAngle= 0.8;
@@ -129,8 +129,8 @@ public:
     void SetLocation(double x, double y) override;
     void Update(double elapsedTime) override;
     void Draw(std::shared_ptr<wxGraphicsContext> graphics);
-    void Eat();
-    void Headbutt();
+    virtual void Eat();
+    virtual void Headbutt();
     wxRealPoint ComputePosition();
     void SetPosition(double x, double y);
 

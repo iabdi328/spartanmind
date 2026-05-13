@@ -37,6 +37,12 @@ private:
      */
     bool mInvalidPlace = false;
 
+    /// Whether the game is fully complete (all levels finished)
+    bool mGameComplete = false;
+
+    /// Whether a win has been detected and the next level should load after the popup
+    bool mWinPending = false;
+
     /**
      *sets time to zero
      */

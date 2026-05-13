@@ -5,17 +5,13 @@
 
 #include <pch.h>
 #include "gtest/gtest.h"
-#include <Spartanmind.h>
+#include <Game.h>
 #include <Player.h>
 
 class TestPlayer : public Player {
 public:
-    TestPlayer(Spartanmind* gameWorld)
+    TestPlayer(Game* gameWorld)
         : Player(gameWorld, L"test-image.png", L"test-image2.png") {
-    }
-
-    void Draw(wxGraphicsContext* graphics) override {
-        Player::Draw(graphics);
     }
 
     void Eat() override {
@@ -23,7 +19,7 @@ public:
     }
 
     void Headbutt() override {
-        mBaseAngle = 0.3; // Set a test angle
+        mBaseAngle = 0.3;
         mDidHeadbutt = true;
     }
 
@@ -42,7 +38,7 @@ private:
 class PlayerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mGame = new Spartanmind();
+        mGame = new Game();
         mTestPlayer = new TestPlayer(mGame);
     }
 
@@ -51,7 +47,7 @@ protected:
         delete mGame;
     }
 
-    Spartanmind* mGame;
+    Game* mGame;
     TestPlayer* mTestPlayer;
 };
 
